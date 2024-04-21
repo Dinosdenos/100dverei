@@ -1,0 +1,22 @@
+<section class="two-columns-left wrapper-960">
+    <?php $req = Fenix::getRequest() ?>
+<!--
+        <h1 class="label"><?php echo ($this->category != null ? $this->category->getSeo()->getH1() : Fenix::lang("Каталог")) ?></h1>
+-->
+        <?php $promoBlock = Fenix::getCollection('catalog/promo')->load('popular_products') ?>
+        <?php if ($promoBlock !== false): ?>
+            <div class="hot-products" style="margin-top: 20px">
+                <div class="hot-title">
+                    <div class="label">Все горячие предложения</div>
+                </div>
+                <div class="products-list">
+                    <?php //Fenix::dump($promoBlock->getProducts()) ?>
+                    <?php foreach ($promoBlock->getProducts() AS $i => $_product): ?>
+                        <?php echo $this->partial('catalog/products/block.phtml', array('i' => $i, 'product' => $_product, 'category' => null)) ?>
+                    <?php endforeach ?>
+                </div>
+            </div>
+        <?php endif ?>
+
+    <div class="clearfix"></div>
+</section>

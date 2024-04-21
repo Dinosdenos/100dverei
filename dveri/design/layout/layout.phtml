@@ -1,0 +1,263 @@
+<?php
+			function langhtml(){
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+				$lang = 'ru';
+				echo $lang;
+			} else { 
+			$lang = 'uk';
+			echo $lang;
+			}
+			}
+           
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+				$alternateua = 'https://'. $_SERVER['HTTP_HOST'] .'' . $_SERVER['REQUEST_URI'];
+				$alternateru = 'https://'. $_SERVER['HTTP_HOST'] .'' . str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+			} else { 
+				$alternateru = 'https://'. $_SERVER['HTTP_HOST'] .'' . str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+				$alternateua = 'https://'. $_SERVER['HTTP_HOST'] .'/ru' . $_SERVER['REQUEST_URI'];
+			}
+            $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            $url = explode('?', $url);
+            $url = $url[0];
+            $symbol = ',';
+            $symboldot = ';';
+
+            $url_sale = $_SERVER['REQUEST_URI'];
+            if (strpos($url, $symbol) !== true || strpos($url, $symboldot) !== true){
+	            $canon = '<link rel="canonical" href="'.$url.'"/>';
+	           }
+            if (strpos($url_sale, '?sale=sale') !== false){
+                echo $url_sale;
+                $canon = '<link rel="canonical" href="'.$url.'"/>
+	            <meta name="robots" content="noindex,nofollow">';
+            }
+            if (strpos($url, $symbol) !== false ){
+	            $url = strstr($url, $symbol, 'ru');
+	            $canon = '<link rel="canonical" href="'.$url.'"/>
+	            <meta name="robots" content="noindex,nofollow">';
+            } 
+            if (strpos($url, $symboldot) !== false ){
+            	$url = strstr($url, $symboldot, 'ru');	
+            	$canon = '<link rel="canonical" href="'.$url.'"/>
+            	<meta name="robots" content="noindex,nofollow">';
+        	} 
+?>
+<!DOCTYPE html>
+<html lang="<?php $thishtmllang = langhtml(); echo $thishtmllang;?>">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <?php echo $this->headTitle(Fenix::getConfig('general/project/name'))
+	                ->setSeparator(Fenix::getConfig('general/title/separator')) ?>
+    <?php echo $this->headMeta() ?>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="<?php echo Fenix::getModel('core/themes')->getFavicon() ?>">
+<!--    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        -->
+    <!-- Google Fonts -->
+<!--    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
+        rel="stylesheet" />
+        -->
+
+    <!-- Fontawesome CSS -->
+    <link rel="preload" href="<?php echo Fenix::getSkinUrl('css/fontawesome.min.css'); ?>" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<?php echo Fenix::getSkinUrl('css/fontawesome.min.css'); ?>">
+    </noscript>
+    <!--<link href="<?php //echo Fenix::getSkinUrl('css/fontawesome.min.css'); ?>" rel="stylesheet" media="screen" type="text/css" />-->
+    <!-- Bootstrap CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/bootstrap.min.css'); ?>" rel="stylesheet" media="screen" type="text/css" />
+    <!-- Slick CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/slick.css'); ?>" rel="stylesheet" media="screen" type="text/css" />
+    <link href="<?php echo Fenix::getSkinUrl('css/slick-theme.css'); ?>" rel="stylesheet" media="screen" type="text/css" />
+    <!-- Jquery UI CSS -->
+    <link rel="preload" href="<?php echo Fenix::getSkinUrl('css/jquery-ui.css'); ?>" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<?php echo Fenix::getSkinUrl('css/jquery-ui.css'); ?>">
+    </noscript>
+    <!--<link href="<?php echo Fenix::getSkinUrl('css/jquery-ui.css'); ?>" rel="stylesheet" media="screen" type="text/css" />-->
+    <!-- Fancybox CSS -->
+    <link rel="preload" href="<?php echo Fenix::getSkinUrl('css/jquery.fancybox.min.css'); ?>" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="<?php echo Fenix::getSkinUrl('css/jquery.fancybox.min.css'); ?>">
+    </noscript>
+    <!--<link href="<?php echo Fenix::getSkinUrl('css/jquery.fancybox.min.css'); ?>" rel="stylesheet" media="screen" type="text/css" />-->
+    <!-- Style CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/style.css?v=1.6'); ?>" rel="stylesheet" media="screen" type="text/css" />
+
+            <!-- Jquery JS -->
+            <script src="<?php echo Fenix::getSkinUrl('js/jquery-3.6.0.min.js'); ?>"></script>
+            <script>
+    jQuery.event.special.touchstart = {
+        setup: function(_, ns, handle) {
+            this.addEventListener("touchstart", handle, {
+                passive: !ns.includes("noPreventDefault")
+            });
+        }
+    };
+    jQuery.event.special.touchmove = {
+        setup: function(_, ns, handle) {
+            this.addEventListener("touchmove", handle, {
+                passive: !ns.includes("noPreventDefault")
+            });
+        }
+    };
+    jQuery.event.special.wheel = {
+        setup: function(_, ns, handle) {
+            this.addEventListener("wheel", handle, {
+                passive: true
+            });
+        }
+    };
+    jQuery.event.special.mousewheel = {
+        setup: function(_, ns, handle) {
+            this.addEventListener("mousewheel", handle, {
+                passive: true
+            });
+        }
+    };
+    </script>
+                    <!-- jquery UI JS -->
+        <script src="<?php echo Fenix::getSkinUrl('js/jquery-ui.min.js'); ?>"></script>
+        <script src="<?php echo Fenix::getSkinUrl('js/slick.min.js?v=1.5'); ?>"></script>
+    <!-- Alternate url -->
+    <link rel="alternate" href="<?php echo $alternateru; ?>" hreflang="uk-UA">
+    <link rel="alternate" href="<?php echo $alternateru; ?>" hreflang="uk">
+    <link rel="alternate" href="<?php echo $alternateua; ?>" hreflang="ru">
+    <link rel="alternate" href="<?php echo $alternateua; ?>" hreflang="ru-UA">
+    <?php	echo $canon;	?>
+
+    <?php echo $this->render('layout/blocks/google.phtml') . PHP_EOL; ?>
+    <!-- Google TAG -->
+    <!-- Google tag (gtag.js) -->
+<script src="https://www.googletagmanager.com/gtag/js?id=G-4KC9CGCV84"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-4KC9CGCV84', {
+    send_page_view: false
+});
+</script>
+<script type="text/javascript">
+(function(d, w, s) {
+var widgetHash = '9fcxgu4heiyg7cguu3q8', ctw = d.createElement(s); ctw.type = 'text/javascript';
+ctw.async = true;
+ctw.src = '//widgets.binotel.com/calltracking/widgets/'+ widgetHash +'.js';
+var sn = d.getElementsByTagName(s)[0]; sn.parentNode.insertBefore(ctw, sn);
+})(document, window, 'script');
+</script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lqxuv67e0f");
+</script>
+</head>
+
+<body>
+<!--<div class="preloader-v7">
+            <div class="sub-preloader-v7">
+                <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-preloader.png'); ?>" class="object-fit-cover w-100 h-100" alt="Regalia" />
+            </div>
+        </div>-->
+
+        <!-- Header Start -->
+        <?php echo $this->render('layout/html/header.phtml') . PHP_EOL; ?>
+        <!-- Header ENDS -->
+        <?php echo $this->layout()->content . PHP_EOL; ?>
+
+
+
+
+
+        <?php echo $this->render('layout/blocks/modals-product.phtml') . PHP_EOL; ?>
+        <!-- Footer Area start -->
+        <?php echo $this->render('layout/html/footer.phtml') . PHP_EOL; ?>
+        <!--  Footer Area End -->
+
+
+
+
+
+
+        <!-- Bootstrap Bundle JS -->
+        <script defer src="<?php echo Fenix::getSkinUrl('js/bootstrap.bundle.min.js'); ?>"></script>
+        <!-- Slick JS -->
+        
+        <!-- Countdown JS -->
+        <script async src="<?php echo Fenix::getSkinUrl('js/jquery.countdown.min.js'); ?>"></script>
+
+        <!-- Fancybox JS -->
+        <script async src="<?php echo Fenix::getSkinUrl('js/jquery.fancybox.min.js'); ?>"></script>        
+        <!-- Regalia JS -->
+        <script defer src="<?php echo Fenix::getSkinUrl('js/fenix.js'); ?>"></script>
+        <script async src="<?php echo Fenix::getSkinUrl('js/regalia.js?v=1.2'); ?>"></script>
+        <!--<script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        </script>-->
+</body>
+
+</html>
+
+<?php if(Fenix::isDev() === true) {
+		
+		echo '<div class="container-fluid">';
+		echo '<div class="row">';
+		echo '<div class="col">';
+		echo Fenix_Debug::fetch();
+		
+		echo '<div class="alert alert-info">';
+		$profiler = Zend_Registry::get('db')->getProfiler();
+		$totalTime = $profiler->getTotalElapsedSecs();
+		$queryCount = $profiler->getTotalNumQueries();
+		$longestTime = 0;
+		$longestQuery = null;
+		$list = array();
+		foreach($profiler->getQueryProfiles() as $query) {
+			if($query->getElapsedSecs() > $longestTime) {
+				$longestTime = $query->getElapsedSecs();
+				$longestQuery = $query->getQuery();
+			}
+			$list[ (string)$query->getElapsedSecs() ] = $query->getQuery();
+		}
+		$result = 'Выполнено <strong>' . $queryCount . '</strong> запросов за <strong>' . $totalTime . '</strong>  секунд' . "<br />\n";
+		$result .= 'Среднее время выполнения запроса: <strong>' . $totalTime / $queryCount . '</strong> секунд' . "<br />\n";
+		$result .= 'Запросов в секунду: <strong>' . $queryCount / $totalTime . "</strong><br />\n";
+		echo $result;
+		echo '</div>';
+		echo '<div class="alert alert-danger">';
+		$result = 'Самое длительное время запроса: <strong>' . $longestTime . "</strong><br />\n";
+		$result .= "Самый длительный запрос:<br /> \n<strong>" . $longestQuery . "</strong>\n";
+		echo $result;
+		echo '</div>';
+		ksort($list);
+		foreach($list as $key => $value) {
+			echo '----</br>';
+			echo $key;
+			echo '</br>';
+			echo $value;
+			echo '</br>----</br>';
+		}
+		
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
+		
+	}

@@ -1,0 +1,42 @@
+<?php if ($this->pageCount > 1): ?>
+    <div class="paginationControl">
+        <table border="0" cellpadding="0" cellspacing="0" border="0" align="right">
+            <tr>
+            	<td class="prev">
+                    <?php if (isset($this->previous)): ?>
+                        <a href="<?php echo sprintf($this->url, $this->previous) ?>"><?php echo Fenix::lang("&laquo;&nbsp;Назад") ?></a>
+                    <?php else: ?>
+                        <span class="disabled"><?php echo Fenix::lang("&laquo;&nbsp;Назад") ?></span>
+                    <?php endif; ?>
+                </td>
+                <td class="pages">
+                    <?php foreach ($this->pagesInRange as $page): ?>
+                        <?php if ($page != $this->current): ?>
+                            <a href="<?php echo sprintf($this->url, $page) ?>"><?php echo $page; ?></a>
+                        <?php else: ?>
+                            <strong><?php echo $page; ?></strong>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </td>
+                <td class="next">
+                    <?php if (isset($this->next)): ?>
+                        <a href="<?php echo sprintf($this->url, $this->next) ?>"><?php echo Fenix::lang("Вперёд&nbsp;&raquo;") ?></a>
+                    <?php else: ?>
+                        <span class="disabled"><?php echo Fenix::lang("Вперёд&nbsp;&raquo;") ?></span>
+                    <?php endif; ?>
+                </td>
+                <td class="selector">
+                    <?php $pages = Fenix::getPageSelector($this->total, $this->current, $this->pageCount) ?>
+                    <select onchange="self.location.href='<?php echo sprintf($this->url, '\' + this.options[this.selectedIndex].value+\'') ?>'">
+                        <?php foreach ($pages AS $page): ?>
+                            <option value="<?php echo $page ?>"<?php echo ($this->current == $page ? ' selected="selected"' : null) ?>><?php echo $page ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </td>
+                <td class="total-pages">
+                    <span><?php echo Fenix::lang("Всего записей - %s", $this->total) ?>&nbsp;</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+<?php endif ?>

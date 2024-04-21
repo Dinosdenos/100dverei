@@ -1,0 +1,42 @@
+<?php $total = 0 ?>
+<table class="checkout-table small" width="100%" border="0" style="border-collapse: collapse;">
+    <tbody>
+    <?php foreach ($this->products AS $i => $_product): ?>
+        <?php $total+= ($_product->getOrderUnitPrice() * $_product->getOrderQty()) ?>
+        <tr>
+            <td class="checkout-image" style="border: 1px solid #b9b9b9;padding:10px;">
+                <a href="<?php echo $_product->getUrl() ?>"><img width="80" height="80" src="<?php echo $_product->getImageFrame(80, 80) ?>" alt="<?php echo $this->escape($_product->getTitle()) ?>" /></a>
+            </td>
+            <td class="checkout-title" style="border: 1px solid #b9b9b9;padding:10px;">
+                <a href="<?php echo $_product->getUrl() ?>"><?php echo $_product->getTitle() ?></a>
+                <div class="price-block">
+                    <div class="label">Цена:</div>
+                    <div class="price">&nbsp;<?php echo $_product->getOrderUnitPrice() ?> <span>грн</span></div>
+                </div>
+            </td>
+            <td class="checkout-qty" style="border: 1px solid #b9b9b9;padding:10px;">
+                <?php echo $_product->getOrderQty() ?>
+            </td>
+            <td style="width: 30px;text-align: center;border: 1px solid #b9b9b9;padding:10px;">x</td>
+            <td class="checkout-item-total" style="width: 130px;border: 1px solid #b9b9b9;padding:10px;">
+                <div class="price"><strong id="price_<?php echo $_product->getOrderUnitId() ?>"><?php echo ($_product->getOrderUnitPrice() * $_product->getOrderQty()) ?></strong> <span>грн</span></div>
+            </td>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5"  align="right" style="border: 1px solid #b9b9b9;padding:10px;">
+                <div class="checkout-total">
+                    <div class="info">
+                        <div class=""> товаров на сумму: <strong id="checkoutTotalSum"><?php echo $total ?></strong> <span>грн</span></span></div>
+                        <?php if ($this->orderInfo->getCouponId() > 0): ?>
+                            <div class="">Скидка по купону №<?php echo $this->orderInfo->getDiscountCoupon() ?>: <span style="color:#dd0507;"><?php echo $this->orderInfo->getDiscount() ?>%</span></div>
+                            <div class="">Итого: <span style="color:#dd0507;"><?php echo Fenix::getHelper('catalog/decorator')->decoratePrice($total - ($total / 100 * $this->orderInfo->getDiscount())) ?></span></div>
+                        <?php endif ?>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

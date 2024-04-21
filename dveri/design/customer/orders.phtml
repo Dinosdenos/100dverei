@@ -1,0 +1,21 @@
+<?php $total = 0 ?>
+<table class="checkout-table small order-list">
+    <tbody>
+        <tr>
+            <td class="checkout-qty" style="font-weight: bold">№ заказа</td>
+            <td class="checkout-qty" style="font-weight: bold">Дата</td>
+            <td class="checkout-qty" style="font-weight: bold" colspan="5">Статус</td>
+        </tr>
+        <?php foreach ($this->ordersList AS $i => $_order): ?>
+            <tr>
+                <td class="checkout-qty"><a href="<?php echo $this->getUrl('customer/orders/details/id/' . $_order->id) ?>">№ <?php echo $_order->id ?></a></td>
+                <td class="checkout-qty"><?php echo Fenix::getDate($_order->create_date)->format('d.m.Y H:i') ?></td>
+                <td class="checkout-qty"><?php echo Fenix::getModel('checkout/order')->decorateStatus($_order->status) ?></td>
+                <td class="checkout-qty"><?php echo $_order->total_qty ?></td>
+                <td style="width: 30px;text-align: center">x</td>
+                <td class="checkout-item-total" style="width: 130px;text-align:left;"><div class="price"><?php echo ($_order->total_qty * $_order->total_sum) ?></strong> <span>грн</span></div></td>
+                <td class="checkout-qty" style="width:100px"><a href="<?php echo $this->getUrl('customer/orders/details/id/' . $_order->id) ?>">Детали заказа</a></td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

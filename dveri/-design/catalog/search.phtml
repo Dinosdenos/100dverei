@@ -1,0 +1,40 @@
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+<?php $totalcounts = $this->productsList->count() 
+		?>
+<section class="homepage-v7-features-area">
+    <div class="common-title3"><?php echo Fenix::lang('Результаты поиска, всего страниц') ?> - <span
+            style="color: #ef1e1e"><?php echo $totalcounts ?></span></div>
+</section>
+
+<section class="homepage-v7-features-area">
+    <div class="common-title3"><?php echo Fenix::lang('Товары соответствующие запросу:') ?></div>
+</section>
+<section class="shoppage-v1-shop p-t-50 p-b-20">
+    <div class="container">
+        <div style="align-content: center; justify-content: center" class="shop-content row">
+
+            <div class="main-content">
+
+                <div class="product-wrapper row">
+                    <?php
+                    $i = 0;
+                    foreach ($this->products AS $product) {
+                        echo $this->partial('catalog/products/block.phtml', array('i' => $i,'sku' => $sku, 'product' => $product, 'category' => $this->category));
+                        $i++;
+						}
+						
+                    ?>
+                </div>
+
+                <?php
+    if (empty($this->emptySearchString)) {
+        echo $this->paginationControl($this->productsList, 'Sliding', 'layout/blocks/paginator.phtml',
+            array(
+                'uri' => '?page=%s&q=' . Fenix::getRequest()->getQuery('q')
+            ));
+    }
+    ?>
+            </div>
+        </div>
+    </div>
+</section>

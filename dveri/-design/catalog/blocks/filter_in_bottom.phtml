@@ -1,0 +1,92 @@
+<?php
+$availableAttributes = Fenix::getHelper('catalog/service_filter')->getAttributeInBottomBlock($this->category);
+if ($availableAttributes->count() <= 0) {
+    return '';
+} else {
+
+//$is_mobile_device = Fenix::check_mobile_device();
+
+?>
+<span style="text-align: center; display: block;" class="h1 main-heading"><?php echo Fenix::lang('Теги') ?></span>
+<hr style="margin-top: 0px;" class="blog-details-v1-shapret-line">
+<div class="sidebar-widget-tag filters-block-bottom">
+    
+        <?php 
+        $i = 0;
+        foreach ($availableAttributes AS $attribute) {
+        $valueList = Fenix::getModel('catalog/filter')->getAvailableValues($this->category, $attribute);
+        
+
+          if ($valueList->count() > 0) {
+              foreach ($valueList as $value) {
+                 $display = 'none'; //к проверке
+                 $inSitemap = '';
+                 $class = '';
+                 $reled_filter_arr = explode(',', $this->category->related_filter);
+                 $val = $value->value;
+                 foreach($reled_filter_arr as $key => $reled_filter){
+                     if ($val == $reled_filter) {
+                         $display = '';
+                         $inSitemap = '';
+                         
+                     } 
+                 }
+
+                 $hide_filter_arr = explode(',', $this->category->hide_filter);
+                 foreach($hide_filter_arr as $key => $hide_filter){
+                    if ($val == $hide_filter) {
+                        $display = 'none';
+                        $inSitemap = 'rel="nofollow"';
+                        
+                    } 
+                }
+                 //echo $attribute->sys_title;
+                 if ($attribute->sys_title == 'subtype'){
+                    $display = '';
+                    foreach($hide_filter_arr as $key => $hide_filter){
+                        if ($val == $hide_filter) {
+                            $display = 'none';
+                            $inSitemap = 'rel="nofollow"';
+                            
+                        } 
+                    }
+                    
+                 }
+                 if ($attribute->sys_title == 'region'){
+                    $display = '';
+                 }                
+
+                  $isSelected = Fenix::getModel('catalog/filter')->isAttributeSelected($attribute, $value);
+                     if ($isSelected) {
+                      $class = 'active';
+                        }
+                    if ($display == '') {
+                        $i++;
+                    }
+                    ?>
+                    <a style="margin-top: 5px; margin-right: 0px;" class="common-btn2-hover" href="<?php echo Fenix::getModel('catalog/filter')->prepareFilterUrl($attribute, $value) ?>" role="button"><span><?php echo Fenix::lang($value->value); ?></span></a>
+       
+        <?php 
+			    }
+            }
+    }
+    ?>
+    
+</div>
+<hr style="margin-top: 10px;" class="blog-details-v1-shapret-line">    
+<?php 
+
+          if ($i > 8) { 
+            ?>
+        
+<!--<div class="sidebar-widget-tag seo-open">
+        <ul>
+            <li id="open-bottom-filters"><a href="javascript: void(0);"><?php echo Fenix::lang('Посмотреть все теги') ?></a></li>
+        </ul>
+</div>-->
+<?php 
+          }
+        }
+?>
+
+

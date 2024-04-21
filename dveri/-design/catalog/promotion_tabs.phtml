@@ -1,0 +1,67 @@
+<?php
+$blockList = Fenix::getCollection('catalog/promo')->loadPromoBlockList();
+
+if ($blockList->count() <= 0) {
+    return '';
+} ?>
+
+<?php
+$navItem = [];
+$tabPane = [];
+$i = 0;
+
+foreach ($blockList as $block) {
+    $products = $block->getProducts();
+    $html = '';
+    $htmlTab = '';
+    $active = '';
+    $activeTab = '';
+
+    if ($products->count() > 0) {
+        if ($i == 0) {
+            $active = 'active';
+            $activeTab = 'show active';
+        }
+        $html .= '<li class="nav-item">';
+        $html .= '    <a class="nav-link ' . $active . '" id="pills-' . $block->name . '-tab" data-toggle="pill" href="#' . $block->name . '" role="tab" aria-controls="' . $block->name . '" aria-selected="true">' . $block->title . '</a>';
+        $html .= '</li>';
+        $navItem[$block->id] = $html;
+
+        $htmlTab .= '<div class="tab-pane fade ' . $activeTab . '" id="' . $block->name . '" role="tabpanel" aria-labelledby="pills-' . $block->name . '-tab">';
+        $htmlTab .= '    <div class="swiper-container promotion-slider">';
+        $htmlTab .= '        <div class="swiper-wrapper">';
+
+        foreach ($products as $product) {
+            $htmlTab .= '        <div class="swiper-slide">';
+            $htmlTab .= $this->partial('catalog/products/block.phtml', array('product' => $product));
+            $htmlTab .= '        </div>';
+        }
+
+        $htmlTab .= '        </div>';
+        $htmlTab .= '    </div>';
+
+        $htmlTab .= '<div class="product-viewed-next swiper-button-next"><i class="icon-arrow_right"></i></div>';
+        $htmlTab .= '<div class="product-viewed-prev swiper-button-prev"><i class="icon-arrow_left"></i></div>';
+
+        $htmlTab .= '</div>';
+        $tabPane[$block->id] = $htmlTab;
+    }
+    $i++;
+} ?>
+<?php
+if ($navItem && $tabPane) { ?>
+    <section class="promotion-products">
+        <div class="container">
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <?php foreach ($navItem as $nav) {
+                    echo $nav;
+                } ?>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <?php foreach ($tabPane as $tab) {
+                    echo $tab;
+                } ?>
+            </div>
+        </div>
+    </section>
+<?php } ?>

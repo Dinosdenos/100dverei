@@ -1,0 +1,864 @@
+<section class="product-detail" data-selector_name="<?php echo $this->product->title ?>"
+    data-selector_url="<?php echo Fenix::getUrl($this->product->url_key); ?>"
+    data-selector_img="<?php echo Fenix::getUploadImageUrl($this->product->image); ?>">
+    <?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+    <div class="container">
+        <p class="h1"><?php echo $this->product->getSeo()->getH1() ?></p>
+        <style>
+        .product-widget.new.cards {
+            left: 203px !important;
+            max-width: 122px;
+            top: 26px !important;
+            top: 26px !important;
+        }
+
+        @media(max-width:1024px) {
+            .product-widget.new.cards {
+                left: 0px !important;
+            }
+        }
+        </style>
+        <div class="row" itemscope itemtype="https://schema.org/Product">
+            <span style="display: none;" itemprop="brand"><?php echo $brandproduct; ?></span>
+            <div class="col-12 col-lg-6">
+                <div class="product-slider-images">
+                    <?php
+                        if ($this->product->is_promo > 0 or $this->product->price_old > $this->product->price) { ?>
+                    <span class="product-widget sale"><?php echo Fenix::lang('Акция') ?></span>
+                    <?php }
+                        if ($this->product->real_foto > 0) { ?>
+                    <?php if ($this->product->sku == '123277' or $this->product->sku == '123276' or $this->product->sku == '122500' or $this->product->sku == '122499' or $this->product->sku == '122498' or $this->product->sku == '122497' or $this->product->sku == '122496' or $this->product->sku == '122495' or $this->product->sku == '123099' or $this->product->sku == '123098') {
+                            } else { ?>
+                    <span class="product-widget realfoto"><?php echo Fenix::lang('Фото в интерьере') ?></span>
+                    <?php }
+                        }
+
+                        if ($this->product->is_bestseller > 0) { ?>
+                    <span class="product-widget bestseller"><?php echo Fenix::lang('Хит продаж') ?></span>
+                    <?php }
+
+                        if ($this->product->is_new > 0) { ?>
+                    <span class="product-widget new cards"><?php echo Fenix::lang('Новинка') ?></span>
+                    <?php }
+                        /********/
+                        if (/*$this->product->sku == '123277' or $this->product->sku == '123276' or $this->product->sku == '122500' or $this->product->sku == '122499' or $this->product->sku == '122498' or $this->product->sku == '122497' or $this->product->sku == '122496' or $this->product->sku == '122495' or $this->product->sku == '123099' or $this->product->sku == '123098'*/$this->product->sku == '2') { ?>
+                    <span style="font-size: 15px!important; max-width: 232px;"
+                        class="product-widget discount"><?php echo Fenix::lang('*Бесплатная доставка!') ?></span>
+                    <?php
+                            $this_lang = Fenix_Language::getInstance()->getCurrentLanguage()->name;
+                            if ($this_lang == 'russian') {
+                                $kley = '<div style="    display: inline-block;    max-width: 600px;"><b style="color:red; font-size: 20px;">* Условия акции - БЕСПЛАТНАЯ ДОСТАВКА! :</b> <br>При покупке <b>от 20шт</b> панелей - ДОСТАВКА "НОВОЙ ПОЧТОЙ" до отделения - <b>БЕСПЛАТНО!</b> <br></div>
+		<div style="  text-align:center;  display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/images/logo_ua_0.png"></div>';
+                            } else {
+                                $kley = '<div style="    display: inline-block;    max-width: 600px;"><b style="color:red; font-size: 20px;">* Умови акції - БЕЗКОШТОВНА ДОСТАВКА! :</b> <br>При покупці <b>від 20шт</b> панелей - ДОСТАВКА "Новою Поштою" до відділення - <b>БЕЗКОШТОВНО!</b> <br></div>
+		<div style="   text-align:center; display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/images/logo_ua_0.png"></div>';
+                            } ?>
+                    <?php
+                        }
+                        
+                        /***********/
+                        $find    = 'Пластмаркет';
+                        $nameproduct = $this->product->title;
+                        $findname = stripos($nameproduct, $find);
+
+                        if ($this->product->brand_name == '2'/*'ПластМаркет' or $findname == true*/) { ?>
+                    <span style="font-size: 15px!important;"
+                        class="product-widget discount"><?php echo Fenix::lang('*Бесплатная доставка!') ?></span>
+                    <?php
+                            $this_lang = Fenix_Language::getInstance()->getCurrentLanguage()->name;
+                            if ($this_lang == 'russian') {
+                                $kley = '<div style="    display: inline-block;    max-width: 600px;"><b style="color:red; font-size: 20px;">* Условия акции - БЕСПЛАТНАЯ ДОСТАВКА! :</b> <br>При покупке <b>от 30шт</b> панелей - ДОСТАВКА "НОВОЙ ПОЧТОЙ" до отделения - <b>БЕСПЛАТНО!</b> <br></div>
+		<div style="  text-align:center;  display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/images/logo_ua_0.png"></div>';
+                            } else {
+                                $kley = '<div style="    display: inline-block;    max-width: 600px;"><b style="color:red; font-size: 20px;">* Умови акції - БЕЗКОШТОВНА ДОСТАВКА! :</b> <br>При покупці <b>від 30шт</b> панелей - ДОСТАВКА "Новою Поштою" до відділення - <b>БЕЗКОШТОВНО!</b> <br></div>
+		<div style="   text-align:center; display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/images/logo_ua_0.png"></div>';
+                            } 
+//                            if ($this_lang == 'russian') {
+//                                $kley = '<div style="    display: inline-block;    max-width: 490px;"><b style="color:red; font-size: 20px;">* Условия акции - КЛЕЙ В ПОДАРОК! :</b> <br>При покупке <b>от 5шт</b> панелей - <a href="https://dev.100dverei.com.ua/klejj_dufa_universalnyjj_prikleit_vse_d621_280ml">КЛЕЙ DUFA 280мл (61 грн)</a> - <b>1шт в подарок!</b> <br>
+//		При покупке <b>от 15шт</b> панелей - <a href="https://dev.100dverei.com.ua/klejj_dufa_universalnyjj_prikleit_vse_d621_1kg">КЛЕЙ DUFA 1кг (113 грн)</a> - <b>1шт в подарок!</b><br>
+//		При покупке <b>от 30шт</b> панелей - <a href="https://dev.100dverei.com.ua/klejj_dufa_universalnyjj_prikleit_vse_d621_25kg">КЛЕЙ DUFA 2,5кг (272 грн)</a> - <b>1шт в подарок!</b><br>
+//		</div> <div style="    display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/tmp/cache/images/d2/013/d20134b1ccd39e010607f0a3d92d679b.jpg" width="60"></div>';
+//                            } else {
+//                                $kley = '<div style="    display: inline-block;    max-width: 510px;"><b style="color:red; font-size: 20px;">* Умови акції - КЛЕЙ В ПОДАРУНОК! :</b> <br>При покупці <b>від 5шт</b> панелей - <a href="https://dev.100dverei.com.ua/ua/klejj_dufa_universalnyjj_prikleit_vse_d621_280ml">КЛЕЙ DUFA 280мл (61 грн)</a> - <b>1шт в подарунок!</b> <br>
+//		При покупці <b>від 15шт</b> панелей - <a href="https://dev.100dverei.com.ua/ua/klejj_dufa_universalnyjj_prikleit_vse_d621_1kg">КЛЕЙ DUFA 1кг (113 грн)</a> - <b>1шт в подарунок!</b><br>
+//		При покупці <b>від 30шт</b> панелей - <a href="https://dev.100dverei.com.ua/ua/klejj_dufa_universalnyjj_prikleit_vse_d621_25kg">КЛЕЙ DUFA 2,5кг (272 грн)</a> - <b>1шт в подарунок!</b><br>
+//		</div> <div style="    display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/tmp/cache/images/d2/013/d20134b1ccd39e010607f0a3d92d679b.jpg" width="60"></div>';
+//                            } ?>
+                    <?php }
+                    if (/*$this->product->sku == '126144'or $this->product->sku == '126148' or $this->product->sku == '126145' or $this->product->sku == '126146' or $this->product->sku == '126147' or 
+                    $this->product->sku == '126189'or $this->product->sku == '126188' or $this->product->sku == '126187' or $this->product->sku == '126186' or $this->product->sku == '126184'*/$this->product->sku == '2') {
+                        ?>
+                        <span style="font-size: 15px!important; max-width: 232px;"
+                            class="product-widget discount"><?php echo Fenix::lang('*Бесплатная доставка!') ?></span>
+                        <?php
+                                $this_lang = Fenix_Language::getInstance()->getCurrentLanguage()->name;
+                                if ($this_lang == 'russian') {
+                                    $kley = '<div style="    display: inline-block;    max-width: 640px;"><b style="color:red; font-size: 20px;">* Условия акции - БЕСПЛАТНАЯ ДОСТАВКА! :</b> <br>При покупке <b>от 3 упаковок</b> панелей - ДОСТАВКА "НОВОЙ ПОЧТОЙ" до отделения - <b>БЕСПЛАТНО!</b> <br></div>
+            <div style="  text-align:center;  display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/images/logo_ua_0.png"></div>';
+                                } else {
+                                    $kley = '<div style="    display: inline-block;    max-width: 640px;"><b style="color:red; font-size: 20px;">* Умови акції - БЕЗКОШТОВНА ДОСТАВКА! :</b> <br>При покупці <b>від 3 упаковок</b> панелей - ДОСТАВКА "Новою Поштою" до відділення - <b>БЕЗКОШТОВНО!</b> <br></div>
+            <div style="   text-align:center; display: inline-flex;    /* position: absolute; */"> <img style="/* -webkit-user-select: none; *//* margin: auto; *//* cursor: zoom-in; */background-color: hsl(0, 0%, 90%);transition: background-color 300ms;top: 0;" src="https://dev.100dverei.com.ua/images/logo_ua_0.png"></div>';
+                                } ?>
+                        <?php
+                    }
+
+                        /*if($this->product->is_discount > 0) { ?>
+                    <span class="product-widget discount"><?php echo Fenix::lang('Скидки') ?></span>
+                    <?php }*/
+
+                        $video = Fenix::getYouTubeVideoId(trim(strip_tags($this->product->video)));
+
+                        if ($video != '') { ?>
+                    <span class="product-widget video"><?php echo Fenix::lang('Есть видео') ?></span>
+                    <?php }
+
+                        $imageMain = $this->product->getImageResize(600, 455, true);
+                        $nameImage = stristr($imageMain, 'no_image.png');
+
+                        $images = Fenix::getHelper('catalog/service_product')->setProduct($this->product)->getImages();
+                        ?>
+                    <div class="slider-for slider-product">
+                        <?php if ($imageMain && ($nameImage != 'no_image.png')) { ?>
+                        <div>
+                            <a href="<?php echo $this->product->getImageResize(1000, 1000, true) ?>">
+                                <?php
+								
+                                        $imgwebp1 = str_replace('.jpg', '.webp', $imageMain);
+                                        if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei', $imgwebp1))) { ?>
+                                <picture style="margin: 0 auto;">
+                                    <source type="image/webp" data-srcset="<?php echo $imgwebp1; ?>">
+                                    <img itemprop="image" class="img-fluid rounded lazyload"
+                                        data-src="<?php echo $this->product->getImageResize(600, 455, true); ?>"
+                                        title="<?php echo $this->product->getSeo()->getH1() ?>"
+                                        alt="<?php echo $this->product->getSeo()->getH1() ?>" />
+                                </picture>
+                                <?php } else { ?>
+                                <img class="rounded img-fluid lazyload"
+                                    data-src="<?php echo $this->product->getImageResize(600, 455, true); ?>"
+                                    title="<?php echo $this->product->getSeo()->getH1() ?>"
+                                    alt="<?php echo $this->product->title; ?>" />
+                                <?php } ?>
+                            </a>
+                        </div>
+                        <?php } else { ?>
+                        <img data-src="<?php echo Fenix_Image::frame($nameImage, 600, 455); ?>" />
+                        <?php } ?>
+                        <?php $ii = 0; ?>
+                        <?php foreach ($images as $image) { ?>
+                        <?php $ii++; ?>
+                        <div>
+                            <a href="<?php echo Fenix_Image::resizeWatermark($image->image, 1000, 1000) ?>">
+                                <?php
+                                        $imgwebp2 = str_replace('.jpg', '.webp', Fenix_Image::resizeWatermark($image->image, 600, 455));
+                                        if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei', $imgwebp2))) { ?>
+                                <picture style="margin: 0 auto;">
+                                    <source type="image/webp" data-srcset="<?php echo $imgwebp2; ?>">
+                                    <img data-src="<?php echo Fenix_Image::resizeWatermark($image->image, 600, 455); ?>"
+                                        title="<?php echo $this->product->getSeo()->getH1() . ' ' . $ii; ?>"
+                                        alt="<?php echo $this->product->getSeo()->getH1() . ' Изображение ' . $ii; ?>"
+                                        class="img-fluid rounded lazyload">
+                                </picture>
+                                <?php } else { ?>
+                                <img data-src="<?php echo Fenix_Image::resizeWatermark($image->image, 600, 455); ?>"
+                                    title="<?php echo $this->product->getSeo()->getH1() . ' ' . $ii; ?>"
+                                    alt="<?php echo $this->product->getSeo()->getH1() . ' Изображение ' . $ii; ?>"
+                                    class="img-fluid rounded lazyload">
+                                <?php } ?>
+                            </a>
+                        </div>
+                        <?php } ?>
+                    </div>
+                    <?php if ($imageMain && ($nameImage != 'no_image.png') && count($images) > 0) { ?>
+                    <div class="slider-nav slider-product order-first d-none d-lg-block">
+                        <div>
+                            <?php
+                                    $imgwebp3 = str_replace('.jpg', '.webp', $this->product->getImageAdapt(187, 120));
+                                    if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei', $imgwebp3))) { ?>
+                            <picture style="margin: 0 auto;">
+                                <source type="image/webp" data-srcset="<?php echo $imgwebp3; ?>">
+                                <img data-src="<?php echo $this->product->getImageAdapt(187, 120); ?>"
+                                    class="rounded lazyload">
+                            </picture>
+                            <?php } else { ?>
+                            <img data-src="<?php echo $this->product->getImageAdapt(187, 120); ?>"
+                                class="rounded lazyload">
+                            <?php } ?>
+
+                        </div>
+                        <?php foreach ($images as $image) { ?>
+                        <div>
+                            <?php
+                                        $imgwebp4 = str_replace('.jpg', '.webp', Fenix_Image::adapt($image->image, 187, 120));
+                                        if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei', $imgwebp4))) { ?>
+                            <picture style="margin: 0 auto;">
+                                <source type="image/webp" data-srcset="<?php echo $imgwebp4; ?>">
+                                <img data-src="<?php echo Fenix_Image::adapt($image->image, 187, 120); ?>"
+                                    class="rounded lazyload">
+                            </picture>
+                            <?php } else { ?>
+                            <img data-src="<?php echo Fenix_Image::adapt($image->image, 187, 120); ?>"
+                                class="rounded lazyload">
+                            <?php } ?>
+                        </div>
+                        <?php } ?>
+                    </div>
+                    <?php } ?>
+                    <?php
+                        if ($video != '') { ?>
+                    <div class="product-video">
+                        <a data-fancybox
+                            href="https://www.youtube.com/watch?v=<?php echo $video; ?>"><?php echo Fenix::lang("Просмотреть видео") ?></a>
+                    </div>
+                    <?php } ?>
+                </div>
+                <?php
+                    if ($video != '') { ?>
+                <div class="product-video-mobile d-block d-lg-none">
+                    <a data-fancybox
+                        href="https://www.youtube.com/watch?v=<?php echo $video; ?>"><?php echo Fenix::lang("Просмотреть видео") ?></a>
+                </div>
+                <?php } ?>
+            </div>
+            <div class="col-12 col-lg-6">
+                <h1 itemprop="name"><?php echo $this->product->getSeo()->getH1() ?></h1>
+                <div id="product" class="row">
+                    <div class="col-12 col-sm-4">
+                        <?php
+                            $freeShipping = $this->product->free_shipping;
+                            if ($freeShipping > 0) { ?>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span
+                                    class="free-shipping text-uppercase d-inline-block"><?php echo Fenix::lang('Бесплатная доставка') ?></span>
+                            </li>
+                        </ul>
+                        <?php } ?>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <ul class="list-group">
+                            <li class="list-group-item"><b><?php echo Fenix::lang('Артикул:') ?></b> <span style="background: #4f95da;    font-weight: 900;    width: 70px;    display: inline-block;    text-align: center;"
+                                    itemprop="sku"><?php echo $this->product->getSku() ?></span>
+									<span style="display: none;" itemprop="productID"><?php echo $this->product->getSku() ?></span></li>
+                            <!--                            <li class="list-group-item">Размер:</li>-->
+                        </ul>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <ul class="list-group">
+                            <?php if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) { ?>
+                            <li class="list-group-item in-stock">
+                                <i class="icon-checkbox2"></i>
+                                <?php if ($this->product->getPreorder() == 0){ 
+                                echo Fenix::lang('Есть в наличии');
+                                } else { 
+                                    if($this->product->parent == 402) {
+                                        echo Fenix::lang('Доставка в течении 3 дней');            
+                                    } else {
+                                echo Fenix::lang('Ожидается через 7 дней');
+                                    }
+                                }
+                                ?>
+                            </li>
+                            <!--                                --><?php //if ($this->product->getDelivery() != '') { 
+                                                                            ?>
+                            <!--                                    <li class="list-group-item">--><?php //echo $this->product->getDelivery() 
+                                                                                                            ?>
+                            <!--</li>-->
+                            <!--                                --><?php //} 
+                                                                            ?>
+                            <?php } else { ?>
+                            <li class="list-group-item"><?php echo Fenix::lang('Нет в наличии') ?></li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 col-sm-6">
+                        <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                            <ul style="display: none;" itemprop="availability" href="https://schema.org/InStock"
+                                class="list-group">
+                                <?php if ($this->product->getInStock()) { ?>
+                                <li class="list-group-item in-stock">
+                                    <i class="icon-checkbox2"></i>
+                                    InStock
+                                </li>
+                                <!--                                --><?php //if ($this->product->getDelivery() != '') { 
+                                                                                ?>
+                                <!--                                    <li class="list-group-item">--><?php //echo $this->product->getDelivery() 
+                                                                                                                ?>
+                                <!--</li>-->
+                                <!--                                --><?php //} 
+                                                                                ?>
+                                <?php } else { ?>
+                                <li class="list-group-item">OutOfStock</li>
+                                <?php } ?>
+                            </ul>
+                            <link style="display: none;" itemprop="url"
+                                href="<?php echo Fenix::getUrl($this->product->url_key); ?>">
+
+
+                            <?php
+                                $unit = $this->product->getUnit();
+                                if ($this->product->price_old > $this->product->price) { ?>
+                            <p class="old"><?php echo Fenix::getHelper('catalog/decorator')
+                                                        ->decoratePrice($this->product->price_old) ?></p>
+                            <p itemprop="price" class="autocalc-product-price new"
+                                content="<?php echo $this->product->getPrice(); ?>"
+                                data-selector_amount="<?php echo $this->product->getPrice(); ?>">
+                                <?php echo Fenix::getHelper('catalog/decorator')
+                                            ->decoratePrice($this->product->getPrice()) ?><?php echo $unit ?>
+                            </p>
+                            <?php } else { ?>
+                            <p itemprop="price" class="autocalc-product-price cost"
+                                content="<?php echo $this->product->getPrice(); ?>"
+                                data-selector_amount="<?php echo $this->product->getPrice(); ?>">
+                                <?php echo Fenix::getHelper('catalog/decorator')
+                                            ->decoratePrice($this->product->getPrice()) ?><?php echo $unit ?>
+                            </p>
+                            <?php } ?><span style="display: none;" itemprop="priceCurrency" content="UAH">грн</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <?php if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) { ?>
+                        <a class="btn btn-to-cart" href="#" role="button" onclick="f0();f1();f2();f3();f4();">
+                            <i class="demo-icon icon-cart"></i>
+                            <?php 
+                            if ($this->product->getPreorder() == 0){
+                                echo Fenix::lang('Добавить в корзину');
+                                } else {
+                                echo Fenix::lang('Предзаказ');
+                                }
+                             ?>
+                        </a>
+                        <?php } else { ?>
+                        <button class="btn btn-notify"
+                            onclick="return FenixCheckout.notifyStockProduct(<?php echo $this->product->getId() ?>)">
+                            <?php echo Fenix::lang('Уведомить о наличии') ?>
+                        </button>
+                        <?php } ?>
+
+                    </div>
+                    <!--Вариации -->
+                    <?php
+                        $link = mysqli_connect('localhost', 'u_dvereijl', '7iF218IxALtA', 'dvereijl');
+                        $variable_num = mysqli_query($link, "SELECT * FROM `fe_catalog_products` where `variable_sku` = '" . $this->product->getSku() . "' and `its_dop` IS NULL or `sku` = '" . $this->product->getVariableSku() . "' and `its_dop` IS NULL");
+                        if ($variable_num->num_rows > 0) {
+                            echo $this->render('catalog/products/variable.phtml');
+                        }
+                        ?>
+                    <?php
+                        mysqli_close($link)
+                        ?>
+                    <!--Вариации конец-->
+                    <?php if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) { ?>
+                    <div class="w-100"></div>
+                    <!--Счетчик -->
+                    <!-- КОД ДЛЯ ВРЕМЕННОГО БАНЕРА ЕСЛИ АРТИКУЛ РАВЕН cent -->
+
+
+                    <?php
+                            if ($this->product->is_promo > 0 or $this->product->price_old > 0 /*or $this->product->brand_name == 'ПластМаркет'*/) { ?>
+                    <?php if (strpos($_SERVER['REQUEST_URI'], '/ua') !== false) { ?>
+                    <link rel="stylesheet" media="screen" href="https://dev.100dverei.com.ua/schetchik-ua/css/style.css" />
+                    <script src="https://dev.100dverei.com.ua/schetchik-ua/js/newcountdown.js"></script>
+                    <?php } else { ?>
+                    <link rel="stylesheet" media="screen" href="https://dev.100dverei.com.ua/schetchik/css/style.css" />
+                    <script src="https://dev.100dverei.com.ua/schetchik/js/newcountdown.js"></script>
+                    <?php } ?>
+
+                    <div style="display: block; width: 100%; text-align: center; font-size: 20px;">
+                        <?php echo Fenix::lang('До конца АКЦИИ:') ?></div><br>
+                    <div id="CDT"></div>
+                    <?php }
+                            ?>
+
+
+                    <!--Калькулятор -->
+                    <?php if ($this->product->parent == 397) {
+                                echo $this->render('catalog/products/doorcalc.phtml');
+                            } ?>
+                    <!--Калькулятор -->
+                    <div class="col-12">
+                        <div class="bg-info rounded">
+                            <?php
+                                    echo $kley;
+                                    ?>
+                        </div>
+                        <div class="bg-info rounded">
+                            <div class="title"><?php echo Fenix::lang('Купить в 1 клик') ?></div>
+                            <div class="text">
+                                <?php echo Fenix::lang('Можно оставив свой номер телефона. Наш менеджер свяжется с Вами и уточнит детали заказа в ближайшее время') ?>
+                            </div>
+                            <?php echo Fenix::getHelper('checkout/forms')
+                                        ->getBuyOneClickForm($this->product->getId())
+                                        ->fetch(); ?>
+                        </div> <?php
+
+                                        ?>
+                    </div>
+                    <?php } ?>
+                    <div class="w-100"></div>
+                    <?php if ($this->utpItems) { ?>
+                    <div class="col-12">
+                        <div class="row product-utp-container">
+                            <?php foreach ($this->utpItems as $utpItem) { ?>
+                            <div class="col-12 col-sm-6 product-block-utp">
+                                <div class="h4 text-uppercase">
+                                    <?php echo $utpItem['title']; ?>
+                                </div>
+                                <div class="text"><?php echo $utpItem['content'] ?></div>
+                                <?php
+                                            if (isset($utpItem['image'])) { ?>
+                                <div class="image">
+                                    <img data-src="<?php echo $utpItem['image']; ?>">
+                                </div>
+                                <?php } ?>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-12 col-lg-6">
+                <?php
+                    $productDescription = Fenix::getHelper('catalog/service_product')
+                        ->setProduct($this->product)
+                        ->getContent();
+
+                    $chars = $this->product->getCardFeatures();
+                    ?>
+                <?php if (trim($productDescription != '') || !empty($chars)) { ?>
+                <ul class="nav nav-tabs" id="productTab" role="tablist">
+                    <?php if (trim($productDescription != '')) { ?>
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#description" role="tab"
+                            aria-controls="home" aria-selected="true"><?php echo Fenix::lang('Описание') ?>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php if (!empty($chars)) { ?>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#attributes" role="tab"
+                            aria-controls="profile" aria-selected="false"><?php echo Fenix::lang('Характеристики') ?>
+                        </a>
+                    </li>
+                    <?php } 
+                    /****************вывод статей в таб в товаре */
+                    if ($this->product->articles_cardp !== '') {
+                        //echo $_POST["search"];
+                        try{
+                        $dbh=new PDO ("mysql:dbname=dvereijl;host=localhost","u_dvereijl","7iF218IxALtA", array(    // Наименование базы; Хост; Имя пользователя; Пароль.
+                    
+                        ));
+                    }catch(PDOException $e){
+                      
+                        echo 'Подключение не удалось: ' . $e->getMessage();
+                    }
+                    
+                    $articles = explode(',', $this->product->articles_cardp);
+                    foreach($articles as $article)
+                    {
+                            $pre_array[] = "`fe_articles`.`id` = ".$article."";
+                    }
+                    $search_article = implode (' OR ',$pre_array);
+                    //echo $search_article;
+                    
+                    $sth = $dbh->prepare("SELECT `fe_articles`.`url_key` as `url`, `fe_articles`.`title_". Fenix_Language::getInstance()->getCurrentLanguage()->name ."` as `title` FROM `fe_articles` WHERE ".$search_article." ORDER BY `fe_articles`.`id` DESC");
+                    //print_r ($sth);
+                    $sth->execute();
+                    $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+                    echo '<li class="nav-item">';
+                    echo '<a class="nav-link" id="article-tab" data-toggle="tab" href="#articles" role="tab"
+                        aria-controls="article" aria-selected="false">'. Fenix::lang('Статьи на тему этого товара') .'
+                    </a>
+                    </li>';
+                    }
+                    /****************вывод статей в таб в товаре */
+                    ?>
+                </ul>
+                <?php } ?>
+                <?php if (trim($productDescription != '') || !empty($chars)) { ?>
+                <div class="tab-content" id="productTabContent">
+                    <?php if (trim($productDescription != '')) { ?>
+                    <div class="tab-pane fade show active" id="description" role="tabpanel"
+                        aria-labelledby="description">
+                        <div class="inner-container" style="min-height: 50px;">
+                            <div class="swiper-container">
+                                <!--<div class="swiper-wrapper">-->
+
+                                <!-- РАскрывающийся див-->
+                                <div itemprop="description" id="opisanie">
+                                    <?php
+                                                $h1text = $this->product->getSeo()->getH1();
+                                                $seotext = str_replace('<img', '<img class="lazyload"', $productDescription);
+                                                $seotext = str_replace('src="', 'data-src="', $seotext);
+                                                $seotext = str_replace('%title', $h1text, $seotext);
+                                                $seotext = str_replace('%title%', $h1text, $seotext);
+                                                echo $seotext;
+                                                ?>
+                                </div>
+
+                                <!--</div>-->
+
+                                <!-- Add Scroll Bar -->
+                                <!--<div class="swiper-scrollbar"></div>-->
+                            </div>
+                            <button id="open"><?php echo Fenix::lang('Читать далее') ?></button>
+
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <?php if (!empty($chars)) { ?>
+                    <div class="tab-pane fade" id="attributes" role="tabpanel" aria-labelledby="attributes">
+                        <div style="padding: 15px">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <?php foreach ($chars as $char) {
+                                                    $charValue = trim($char->value);
+                                                    if ($charValue == '') {
+                                                        continue;
+                                                    }
+                                                ?>
+                                    <tr>
+                                        <td><?php echo trim($char->name) ?></td>
+                                        <td><?php echo $charValue ?></td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <?php
+                    /****************вывод статей в таб в товаре */
+                    if ($this->product->articles_cardp !== '') { ?>
+                    <div class="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles">
+                    <div style="padding-top: 10px;">
+                         
+                         <?php
+                         foreach ($result as $row) {
+                             $title = $row['title'];
+                             if (Fenix_Language::getInstance()->getCurrentLanguage()->name == 'russian'){
+                                 $url = 'https://dev.100dverei.com.ua/articles/'.$row['url'];
+                             } else {
+                                $url = 'https://dev.100dverei.com.ua/ua/articles/'.$row['url'];
+                             }
+                             echo '<div style=" padding-left:10px; font-size: .9375rem;    border-bottom: 1px solid #cddce5;    padding-bottom: 1.5rem;    margin-bottom: 1.5rem;">';
+                             echo '<a href="'.$url.'"><strong style="font-size: 16px;" class="title-product-line">'.$title.'</strong></a>';
+                             echo '</div>';
+                         }
+                        
+                        
+                        ?>    
+                    </div>
+                    </div>
+                    <?php 
+                /****************вывод статей в таб в товаре */
+                } ?>                    
+                </div>
+                <?php } ?>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="header-reviews">
+                    <div class="row">
+                        <div class="col-4">
+                            <p class="h4 text-uppercase"><?php echo Fenix::lang('Отзывы') ?></p>
+                        </div>
+                        <div class="col-8 text-right">
+                            <a href="javascript:void(0);" role="button"
+                                id="buttonSendReview"><?php echo Fenix::lang('Написать отзыв') ?></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="forms">
+                    <div class="container-form-review" id="reviewForm">
+                        <?php echo $this->render('catalog/products/reviews/index.phtml') ?>
+                    </div>
+                </div>
+                <div class="reviews">
+                    <?php echo $this->render('catalog/products/reviews/list.phtml') ?>
+                </div>
+            </div>
+            <!--призыв к действию -->
+            <section style="display: flex; margin-top: 20px; width: 100%; " class="bg-light">
+                <div style="text-align: center;" class="container">
+                    <div class="voznikli">
+                        <?php echo Fenix::lang('Возникли сложности при выборе товара?? Вам необходима консультация?') ?>
+                    </div>
+                    <br>
+                    <div class="zadat">
+                        <div class="zadatpotel"><?php echo Fenix::lang('Задайте вопрос по телефону:') ?> </div>
+                        <div class="telefonchiki">
+                            <a href="tel:0966418746"
+                                class="list-group-item list-group-item-action operator kyivstar">(096)<b>
+                                    641-87-46</b></a><br>
+                            <a href="tel:0662815901"
+                                class="list-group-item list-group-item-action operator vodafone">(066)<b>
+                                    281-59-01</b></a><br>
+                            <a href="tel:0934349243"
+                                class="list-group-item list-group-item-action operator lifecell">(093)<b>
+                                    434-92-43</b></a><br>
+                        </div>
+                    </div>
+                    <div class="iliili">
+                        <div class="ilivos"><?php echo Fenix::lang('Или воспользуйтесь услугой обратный звонок:') ?>
+                        </div>
+                        <div>
+                            <a href="javascript: void(0);" class="callback text-uppercase"
+                                onclick="FenixUI.callbackDialog()"><?php echo Fenix::lang('Оформить заявку на обратный звонок') ?></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <?php
+                //$relatedProducts = $this->product->getRelated();
+                /*if($relatedProducts->count() > 0) { ?>
+
+            <div class="w-100"></div>
+            <div class="col related-products-container">
+                <p class="h1"><?php echo Fenix::lang('Сопутствующие товары') ?></p>
+                <div class="swiper-container related-products">
+                    <div class="swiper-wrapper">
+                        <?php foreach($relatedProducts AS $relatedProduct) { ?>
+                        <div class="swiper-slide">
+                            <?php echo $this->partial('catalog/products/block.phtml', ['product' => $relatedProduct]); ?>
+                        </div>
+                        <?php } ?>
+                    </div>
+                </div>
+                <!-- Add Arrows -->
+                <div class="product-viewed-next swiper-button-next">
+                    <!--<i class="icon-arrow_right"></i>-->
+                </div>
+                <div class="product-viewed-prev swiper-button-prev">
+                    <!--<i class="icon-arrow_left"></i>-->
+                </div>
+            </div>
+            <?php }*/ ?>
+            <?php echo $this->render('catalog/viewed.phtml'); ?>
+        </div>
+    </div>
+
+    <!-- подписка в товарах-->
+
+    <!-- подписка в товарах-->
+    <!--	
+	<section style="margin-top: 10px; "class="news-subscription">
+    <div class="container rounded">
+        <div class="row">
+            <div class="col-12 col-md-7 first-column">
+                <p style="font-size: 35px; color: #fff;"class="text-uppercase"><b>Подпишитесь на новости</b></p>
+                <p class="h2">И получайте всегда только свежую и актуальную информацию</p>
+				<p style="margin-top:35px;" class="h2">Подписались? Вводите при заказе промокод "NEWS" (в поле "КОММЕНТАРИЙ") и получайте <em style="color: red;">20грн</em> к заказу в подарок!</p>
+            </div>
+            <div class="col-12 col-md-5 second-column">
+                <form id="subscribeForm">
+                    <div class="row">
+                        <div class="col w-75">
+                            <input type="email" name="email" class="form-control form-control-lg"
+                                   placeholder="Ваш email">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-yellow"><i class="icon-letter"></i></button>
+                        </div>
+						
+                    </div>
+                </form>
+<div style="margin-top: 10px; margin-left: 10px;">
+						Пример ввода промокода:
+						<img style="max-width: 300px;" data-src="prom.png" alt="Пример заполнения промокода"></p>
+						</div>
+                <script>
+                    $(function () {
+                        $("#subscribeForm").validate({
+                            rules: {
+                                email: {
+                                    email: true,
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                email: "Введите email"
+                            },
+                            ignore: "div:hidden input, div:hidden select",
+                            submitHandler: function () {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "<?php echo Fenix::getUrl('customer/subscriber/subscribe'); ?>",
+                                    data: {
+                                        email: $("#subscribeForm input[type='email']").val()
+                                    },
+                                    success: function (responseText) {
+                                        if (responseText == 0) {
+                                            $("#subscribeForm input[type='email']").after("<label for='email' class='error'></label>");
+                                            $('#subscribeForm .error').html('Данный email уже существует в нашей базе!');
+                                        }
+                                        else {
+                                            $('#subscribeForm').html(responseText);
+                                        }
+
+                                    },
+                                    error: function (jqXHR, text, error) {
+                                        $('#subscribeForm .error').html('Данный email уже существует в нашей базе!');
+                                    }
+                                });
+                                return false;
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+    <?php if (stripos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) !== false) { ?>
+    <div class="container d-block d-md-none">
+        <button onclick="history.back(); return false;" class="btn btn-back rounded">&laquo;
+            <?php echo Fenix::lang('назад') ?></button>
+    </div>
+    <?php } ?>
+</section>
+<?php
+    $productCost = $this->product->price;
+    if ($this->product->price_old > 0) {
+        $productCost = $this->product->price_old;
+    }
+    ?>
+<script>
+$(function() {
+    $("#buttonSendReview").click(function() {
+        $('#reviewForm').dialog({
+            width: 640,
+            modal: true,
+            title: 'Написать отзыв',
+            open: function() {
+                $('.ui-widget-overlay').click(function() {
+                    $('#reviewForm').dialog('close');
+                });
+            }
+        });
+    });
+});
+
+carrotquest.track('$product_viewed', {
+    "$name": "<?php echo $this->product->title; ?>",
+    "$url": "<?php echo Fenix::getUrl($this->product->getUrl()); ?>",
+    "$amount": "<?php echo $productCost; ?>",
+    "$img": "<?php echo Fenix::getUploadImageUrl($this->product->image); ?>",
+});
+carrotquest.identify([{
+    op: "union",
+    key: "$viewed_products",
+    value: "<?php echo $this->product->title; ?>"
+}]);
+</script>
+<script>
+function f0() {
+    return FenixCheckout.addProduct('<?php echo $this->product->getBuy() ?>/qty/1');
+}
+
+function f1() {
+    var val = $('#corob').val();
+    return FenixCheckout.addProduct('https://dev.100dverei.com.ua/checkout/process/add/pid/' + val + '/qty/1');
+}
+
+function f2() {
+    var val2 = $('#nali').val();
+    return FenixCheckout.addProduct('https://dev.100dverei.com.ua/checkout/process/add/pid/' + val2 + '/qty/1');
+}
+
+function f3() {
+    var val3 = $('#dobor').val();
+    return FenixCheckout.addProduct('https://dev.100dverei.com.ua/checkout/process/add/pid/' + val3 + '/qty/1');
+}
+
+function f4() {
+    gtag('event', 'add_to_cart', {
+        currency: 'UAH',
+        items: [{
+			id: '<?php echo $this->product->sku; ?>',
+            item_id: '<?php echo $this->product->sku; ?>',
+            item_name: '<?php echo $this->product->title; ?>',
+            price: <?php echo $this->product->getPrice(); ?>,
+            currency: 'UAH',
+            quantity: 1
+        }],
+        value: <?php echo $this->product->getPrice(); ?>
+    });
+	window.clarity("event", "add_to_cart");
+}
+
+/*function f5() {
+    gtag('event', 'purchase', {
+        currency: 'UAH',
+        items: [{
+            item_id: '<?php echo $this->product->sku; ?>',
+            item_name: '<?php echo $this->product->title; ?>',
+            price: <?php echo $this->product->getPrice(); ?>,
+            currency: 'UAH',
+            quantity: 1
+        }],
+        transaction_id: '1 click',
+        value: <?php echo $this->product->getPrice(); ?>
+    })
+}*/
+</script>
+<script>
+gtag('event', 'view_item', {
+    currency: 'UAH',
+    items: [{
+		id: '<?php echo $this->product->sku; ?>',
+        item_id: '<?php echo $this->product->sku; ?>',
+        item_name: '<?php echo $this->product->title; ?>',
+        price: <?php echo $this->product->getPrice(); ?>,
+        currency: 'UAH',
+        quantity: 1
+    }],
+    value: <?php echo $this->product->getPrice(); ?>
+});
+</script>
+<script>
+    gtag('event', 'page_view', {
+  ecomm_pagetype: 'product',
+  ecomm_prodid: <?php echo $this->product->sku; ?>,
+  ecomm_totalvalue: <?php echo $this->product->getPrice(); ?>,
+  isSaleItem: <?php if ($this->product->price_old > 0) { 
+echo 'true';
+  } else {
+      echo 'false';
+  }?>
+});
+</script>
+<script>
+gtag('event', 'page_view', {
+  dynx_itemid: '<?php echo $this->product->sku; ?>',
+  dynx_pagetype: 'offerdetail',
+  dynx_totalvalue: <?php echo $this->product->getPrice(); ?>
+});
+</script>
+<?php
+$user_id = @$_COOKIE['_ga'];
+$user_id = str_replace ('GA', '', $user_id);
+
+
+$pieces = explode('.', $user_id);
+    // Get the last two pieces
+$user = array_slice($pieces, -2);
+    // Join them back using dot as delimiter and return
+$user_id = implode('.', $user);
+
+
+?>
+<script>
+  gtag('event', 'page_view', {
+    'value': '<?php echo $this->product->getPrice(); ?>',
+    'items': [{
+      'id': '<?php echo $this->product->sku; ?>',
+      'google_business_vertical': 'retail'
+    }, {
+      'id': '<?php echo $this->product->sku; ?>',
+      'google_business_vertical': 'custom'
+    }]
+  });
+</script>

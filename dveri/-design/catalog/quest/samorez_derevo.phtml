@@ -1,0 +1,87 @@
+<?php 
+$searchurl = $_SERVER['REQUEST_URI'];
+$region = urldecode(strstr($searchurl, '='));
+    $region = str_replace('=', '', $region);
+    
+    $maxprices = Fenix::getHelper('catalog/service_categories')->getMaxprice($this->category->id);
+    $maxprices = mysqli_fetch_array($maxprices);
+    $maxprices = array($maxprices);
+    foreach ($maxprices as $max){
+        $maxprice = $max['max'];
+        
+    }
+    $minprices = Fenix::getHelper('catalog/service_categories')->getMinprice($this->category->id);
+    $minprices = mysqli_fetch_array($minprices);
+    $minprices = array($minprices);
+    
+    foreach ($minprices as $min){
+        $minprice = $min['min'];
+        
+    }
+
+/*Вопросы и ответы */
+if (strpos($_SERVER['REQUEST_URI'], '/ua') !== false) { 
+    $quest1 = 'Як купити саморізи по дереву?';
+    $answe1 = '<p>Купити саморізи по дереву з доставкою по Україні ви можете оформивши замовлення на сайті, або зателефонувавши за телефоном <a href="tel:0966418746"> (096) <b> 641-87-46 </b> </a>. Оплата товару - накладений платіж, Приват24, оплата готівкою (самовивезення)</p>';
+    $quest2 = 'Скільки коштують саморізи по дереву в місті '. Fenix::lang($region) .'?';
+    $answe2 = '<p>Вартість саморізів по дереву від '.$minprice.'грн за шт. до '.$maxprice.'грн за упаковку.</p>';
+    $quest3 = 'Чи є доставка в місто '. Fenix::lang($region) .' і її вартість?';
+    $answe3 = '<p>Ми здійснюємо доставку по всіх регіонах України. Вартість доставки до міста '. Fenix::lang($region) .' залежить від ваги (обсягу) товару, що доставляється згідно тарифів Нової Пошти.</p>';
+    $quest4 = 'Яке мінімально можливе замовлення саморізів?';
+    $answe4 = '<p>Мінімальне замовлення саморізів по дереву з доставкою 10шт.</p>';
+} else {
+$quest1 = 'Как купить саморезы по дереву?';
+$answe1 = '<p>Купить саморезы по дереву с доставкой по Украине вы можете оформив заказ на сайте, или позвонив по телефону <a href="tel:0966418746">(096)<b> 641-87-46</b></a>.</p>';
+$quest2 = 'Сколько стоят саморезы по дереву в городе '. Fenix::lang($region) .'?';
+$answe2 = '<p>Стоимость саморезов по дереву от '.$minprice.'грн за шт. до '.$maxprice.'грн за упаковку.</p>';
+$quest3 = 'Есть ли доставка в город '. Fenix::lang($region) .' и ее стоимость?';
+$answe3 = '<p>Мы осуществляем доставку по всем регионам Украины. Стоимость доставки до города '. Fenix::lang($region) .' зависит от веса(объема) доставляемого товара согласно тарифов Новой Почты. Оплата товара - наложенный платеж, Приват24, оплата наличными(самовывоз)</p>';
+$quest4 = 'Какой минимально возможный заказ саморезов?';
+$answe4 = '<p>Минимальный заказ саморезов по дереву с доставкой 10шт.</p>';
+}
+?>
+<br>
+<div class="voznikli" style="text-align: center;"><?php echo Fenix::lang('Ответы на часто задаваемые вопросы') ?></div>
+<br>
+<div itemscope itemtype="https://schema.org/FAQPage" class="accordion">
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-1" name="checkbox-1" />
+        <label for="checkbox-1" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest1;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe1;?></div>
+        </div>
+    </div>
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-2" name="checkbox-2" />
+        <label for="checkbox-2" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest2;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe2;?></div>
+        </div>
+    </div>
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-3" name="checkbox-3" />
+        <label for="checkbox-3" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest3;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe3;?></div>
+        </div>
+    </div>
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-4" name="checkbox-4" />
+        <label for="checkbox-4" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest4;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe4;?></div>
+        </div>
+    </div>
+    <?php
+
+?>
+</div>
+<script src="https://dev.100dverei.com.ua/var/themes/modern171130/skin/js/faq.js"></script>

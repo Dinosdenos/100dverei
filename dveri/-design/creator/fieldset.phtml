@@ -1,0 +1,8 @@
+<fieldset<?php echo $this->Plugin->getAttributeSet('creator.fieldset') ?>>
+    <?php if ($this->Plugin->getLegend() != ""): ?>
+        <legend<?php echo $this->Plugin->getAttributeSet('creator.fieldset.legend') ?>><?php echo $this->Plugin->getLegend() ?></legend>
+    <?php endif ?>
+    <div<?php echo $this->Plugin->getAttributeSet('creator.fieldset.content') ?>>
+        <?php echo $this->Plugin->renderContent($this->Plugin->getContent()) ?>
+    </div>
+</fieldset>

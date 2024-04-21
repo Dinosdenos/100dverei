@@ -1,0 +1,75 @@
+<?php $blocks = Fenix::getCollection('catalog/promo')->loadAllImage();
+$lang = Fenix_Language::getInstance()->getCurrentLanguage()->name;
+$i = 0;
+foreach ($blocks as $blockValue) {
+    $block = $blockValue['name'];
+    $title = $blockValue['title_'.$lang.''];
+    $text_for_image_h1 = $blockValue['text_for_image_h1_'.$lang.''];
+    $text_for_image_h2 = $blockValue['text_for_image_h2_'.$lang.''];
+    $image = Fenix_Image::adapt($blockValue['image_'.$lang.''], 634, 700);
+    $url = $blockValue['url_'.$lang.''];
+    //echo $block;
+    //echo $title;
+    //echo $image;
+    //echo $text_for_image_h1;
+    //echo $text_for_image_h2;
+
+    if ($i%2 == 0) { ?>
+        <section class="homepage-v7-discount-collection gray-bg">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-xxl-8 col-xl-7 col-lg-7 col-md-7 col-sm-7 position-relative order-sm-last">
+                    <div class="homepage-v7-discount-collection-images">
+                        <img src="<?php echo $image; ?>" class="h-100" alt="<?php echo $title; ?>" />
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-5 col-sm-5 order-sm-first">
+                    <div
+                        class="homepage-v7-discount-collection-content h-100 d-flex flex-wrap align-items-end align-content-end">
+                        <div class="homepage-v7-discount-collection-title1"><?php echo $text_for_image_h1; ?></div>
+                        <div class="homepage-v7-discount-collection-title2"><?php echo $text_for_image_h2; ?></div>
+                        <a class="common-btn1-hover" href="<?php echo $url; ?>"><span>Перейти к предложению</span> <img
+                                src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow2.png'); ?>" class="mw-100" alt="Перейти к предложению" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+        
+        <?php 
+        }
+        else { ?>
+        <section class="homepage-v7-discount-collection gray-bg">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-xxl-8 col-xl-7 col-lg-7 col-md-7 col-sm-7 position-relative">
+                    <div class="homepage-v7-discount-collection-images homepage-v7-discount-collection-images-two">
+                        <img src="<?php echo $image; ?>" class="h-100" alt="<?php echo $title; ?>" />
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-5 col-sm-5">
+                    <div
+                        class="homepage-v7-discount-collection-content homepage-v7-discount-collection-content-two h-100 d-flex flex-wrap align-items-end align-content-end">
+                        <div class="homepage-v7-discount-collection-title1"><?php echo $text_for_image_h1; ?></div>
+                        <div class="homepage-v7-discount-collection-title2"><?php echo $text_for_image_h2; ?></div>
+                        <a class="common-btn1-hover" href="<?php echo $url; ?>"><span>Перейти к предложению</span> <img
+                                src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow2.png'); ?>" class="mw-100" alt="Перейти к предложению" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+        <?php
+        }
+        $i++;
+
+}
+
+
+?>
+
+
+
+
+
+

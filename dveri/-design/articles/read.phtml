@@ -1,0 +1,206 @@
+<!-- Breadcrumb Area start -->
+<?php 
+echo $this->render("layout/html/breadcrumbs.phtml"); 
+$image = $this->article->getImageAdapt(450, 277);
+$title = $this->article->getTitle();
+$lastArticles = Fenix::getCollection('articles/articles')->getLastArticles2();
+$dbСonfigFile = ETC_DIR_ABSOLUTE . "database.xml";
+$database = new Zend_Config_Xml($dbСonfigFile, "database");
+try {
+    $dbh = new PDO("mysql:dbname=".$database->params->dbname.";host=".$database->params->host."", "".$database->params->username."", "".$database->params->password."", array(    // Наименование базы; Хост; Имя пользователя; Пароль.
+
+    ));
+}catch(PDOException $e){
+
+echo 'Подключение не удалось: ' . $e->getMessage();
+}
+
+if ($this->article->getCategory_in_art() !== '') {
+	//echo $_POST["search"];
+	$search = $this->article->getCategory_in_art();
+        $search_words = explode(',',$search);
+        foreach($search_words as $word)
+        {
+                $pre_array[] = "`fe_catalog`.`id` = ".$word."";
+        }
+        $search_string = implode (' OR ',$pre_array);
+		$sth1 = $dbh->prepare("SELECT `fe_catalog`.`image` as `imagecat`, `fe_catalog`.`title_". Fenix_Language::getInstance()->getCurrentLanguage()->name ."` as `title_russian`, `fe_catalog`.`url_key` as `url_key`, `fe_catalog`.`id` as `id` FROM `fe_catalog` WHERE ".$search_string." and `fe_catalog`.`is_public` = '1';");
+		
+	$sth1->execute();
+
+	$result2 = $sth1->fetchAll(PDO::FETCH_ASSOC);
+}
+/************************************* */        
+if ($this->article->getProduct_in_art() !== '') {
+	//echo $_POST["search"];
+
+	$search2 = $this->article->getProduct_in_art();
+        $search_words2 = explode(',',$search2);
+        foreach($search_words2 as $word2)
+        {
+                $pre_array2[] = "`fe_catalog_products`.`sku` = ".$word2."";
+        }
+        $search_string2 = implode (' OR ',$pre_array2);
+		$sth12 = $dbh->prepare("SELECT `fe_catalog_products`.`image` as `imagecat2`, `fe_catalog_products`.`title_". Fenix_Language::getInstance()->getCurrentLanguage()->name ."` as `title_russian2`, `fe_catalog_products`.`url_key` as `url_key2`, `fe_catalog_products`.`sku` as `id2` FROM `fe_catalog_products` WHERE ".$search_string2.";");
+		
+	$sth12->execute();
+
+	$result22 = $sth12->fetchAll(PDO::FETCH_ASSOC);
+
+	}	
+		
+?>
+        <!-- Breadcrumb Area End -->
+        <!-- Shop Category Area End -->
+        <div class="shop-category-area single-blog">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 col-md-12">
+                        <div class="blog-posts">
+                            <div class="single-blog-post blog-grid-post">
+                                <div class="blog-post-media">
+                                    <div class="blog-image single-blog">
+                                        <a href="#"><img class="lazyload" data-src="<?php echo $image; ?>"
+                                                alt="<?php echo $title; ?>" /></a>
+                                    </div>
+                                </div>
+                                <div class="blog-post-content-inner">
+                                    <h1 class="blog-title">
+                                        <?php echo $title; ?>
+                                    </h1>
+                                    <ul class="blog-page-meta">
+                                        <li>
+                                            <i class="ion-calendar"></i>
+                                            <?php echo Fenix::getDate($this->article->getCreateDate())->format('d.m.Y'); ?>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="single-post-content">
+                                    <?php echo $this->article->getContent() ?>
+                                </div>
+                            </div>
+                            <!-- single blog post -->
+                        </div>
+                        <!--<div class="blog-single-tags-share d-sm-flex justify-content-between">
+                    <div class="blog-single-share d-flex">
+                        <span class="title">Share:</span>
+                        <ul class="social">
+                            <li>
+                                <a href="#"><i class="ion-social-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="ion-social-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="ion-social-google"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="ion-social-instagram"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>-->
+                        <div class="blog-related-post">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <!-- Section Title -->
+                                    <div class="section-title underline-shape">
+                                        <h4>
+                                            <?php echo Fenix::lang('Еще статьи')?>
+                                        </h4>
+                                    </div>
+                                    <!-- Section Title -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <?php foreach ($lastArticles AS $article) { 
+                                echo $this->partial('articles/blocks/article2.phtml', ['article' => $article]);
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sidebar Area Start -->
+                    <div class="col-lg-3 col-md-12 mb-res-md-60px mb-res-sm-60px">
+                        <div class="left-sidebar">
+                            <!-- Sidebar single item -->
+                            <?php    if ($this->article->getCategory_in_art() !== '') { ?>
+                            <div class="sidebar-widget mt-40">
+                                <div class="main-heading">
+                                    <div><?php echo Fenix::lang('Выбрать товар в категории')?></div>
+                                </div>
+                                <div class="category-post">
+                                    <ul>
+                                        <?php 
+			                            $i = 0;
+			                            $categarray = array();
+			                            foreach ($result2 as $row1) {
+				                            if (in_array ($row1['title_russian'], $categarray)){
+					                            continue;
+				                            }
+				                            else {
+				                            	$categarray[] = $row1['title_russian'];
+				                            	$i++;
+				                            }
+                                            if ($i < '8') { ?>
+                                            <li>
+                                                <a href="https://<?php echo $_SERVER['HTTP_HOST']?>/<?php echo $row1['url_key']; ?>">
+                                                <?php echo $row1['title_russian']; ?>
+                                                </a>
+                                            </li>
+                                            <?php    }
+                                        } 
+                                    ?>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <!-- Sidebar single item -->
+                            <?php  if ($this->article->getProduct_in_art() !== '') { ?>
+                            <div class="sidebar-widget mt-40">
+                                <div class="main-heading">
+                                    <h4><?php echo Fenix::lang('Рекомендуемые товары')?></h4>
+                                </div>
+                                <div class="recent-post-widget">
+                                    <?php 
+			                        $i2 = 0;
+			                        $categarray2 = array();
+			                        foreach ($result22 as $row12) {
+			                        	if (in_array ($row12['title_russian2'], $categarray2)){
+			                        		continue;
+			                        	}
+			                        	else {
+			                        		$categarray2[] = $row12['title_russian2'];
+			                        		$i2++;
+			                        	}
+			                        	?>
+                                    <?php if ($i2 < '8') { ?>
+                                    <div class="recent-single-post d-flex">
+                                        <div class="thumb-side">
+                                            <a
+                                                href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $row12['url_key2']; ?>"><img
+                                                    class="lazyload" data-src="<?php echo Fenix_Image::resize($row12['imagecat2'], 100, 100); ?>"
+                                                    alt="<?php echo $row12['title_russian2']; ?>" /></a>
+                                        </div>
+                                        <div class="media-side">
+                                            <h5><a
+                                                    href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $row12['url_key2']; ?>"><?php echo $row12['title_russian2']; ?></a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <?php }
+                                    } ?>
+
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <!-- Sidebar single item -->
+                            <!-- Sidebar single item -->
+                        </div>
+                    </div>
+                    <!-- Sidebar Area End -->
+                </div>
+            </div>
+        </div>
+        <!-- Shop Category Area End -->

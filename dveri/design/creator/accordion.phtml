@@ -1,0 +1,15 @@
+<script>
+    $(function(){
+        $('#<?php echo $this->Plugin->getId() ?>').accordion(<?php echo $this->Plugin->getOptionsJson() ?>);
+    });
+</script>
+
+
+<div id="<?php echo $this->Plugin->getId() ?>">
+    <?php foreach ($this->Plugin->getItems() AS $_item): ?>
+        <h3><span class="dotted"><?php echo $_item['label'] ?></span></h3>
+        <div>
+            <?php echo $this->Plugin->renderContent($_item['content']) ?>
+        </div>
+    <?php endforeach ?>
+</div>

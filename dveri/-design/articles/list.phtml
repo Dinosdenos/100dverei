@@ -1,0 +1,95 @@
+<?php
+if ($this->articles->count() < 1) {
+    return '';
+}
+?>
+<?php if ($this->rubric == null) {
+            $titleH1 = Fenix::lang("Новости");
+        }
+        else {
+            $titleH1 = $this->rubric->title;
+        } ?>
+<!-- Shop Category Area End -->
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+<div class="shop-category-area blog-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
+                <div class="blog-posts">
+                    <div class="row">
+                        <?php 
+                                    foreach ($this->articles AS $article) { ?>
+                        <?php
+                    $article = Fenix::getCollection('articles/article')->load($article, $this->rubric);
+                    echo $this->partial('articles/blocks/article.phtml', array('article' => $article, 'rubric' => $this->rubric));
+                    ?>
+
+                        <?php } ?>
+                    </div>
+                </div>
+                <!--  Pagination Area Start -->
+                <?php
+    echo $this->paginationControl($this->articles, 'Sliding', 'layout/blocks/paginator.phtml',
+        array(
+            'uri' => Fenix::getUrl('articles' . ($this->rubric != null ? '/' . $this->rubric->getUrl() : null) . '?page=%s')
+        ));
+    ?>
+                <!--  Pagination Area End -->
+            </div>
+            <!-- Sidebar Area Start -->
+            <div class="col-lg-3 order-lg-first col-md-12 order-md-last mb-res-md-60px mb-res-sm-60px">
+                <div class="left-sidebar sticky">
+                    <!-- Sidebar single item -->
+                    <!--<div class="sidebar-widget">
+                        <div class="main-heading">
+                            <h2>Search</h2>
+                        </div>
+                        <div class="search-widget">
+                            <form action="#">
+                                <input placeholder="Search entire store here ..." type="text" />
+                                <button type="submit"><i class="ion-ios-search-strong"></i></button>
+                            </form>
+                        </div>
+                    </div>-->
+                    <!-- Sidebar single item -->
+                    <!-- Sidebar single item -->
+                    <!--<div class="sidebar-widget mt-40">
+                        <div class="main-heading">
+                            <h2>Categories</h2>
+                        </div>
+                        <div class="category-post">
+                            <ul>
+                                <li><a href="#">Dresses (20)</a></li>
+                                <li><a href="#">Jackets & Coats (9)</a></li>
+                                <li><a href="#">Sweaters (5)</a></li>
+                                <li><a href="#">Jeans (11)</a></li>
+                                <li><a href="#">Blouses & Shirts (3)</a></li>
+                                <li><a href="#">Electronic Cigarettes (6)</a></li>
+                                <li><a href="#">Bags & Cases (4)</a></li>
+                            </ul>
+                        </div>
+                    </div>-->
+                    <!-- Sidebar single item -->
+                    <?php echo $this->render('articles/last-in-list.phtml') . PHP_EOL; ?>
+                    <!-- Sidebar single item -->
+                    <!--<div class="sidebar-widget mt-40">
+                        <div class="main-heading">
+                            <h2>Tag</h2>
+                        </div>
+                        <div class="sidebar-widget-tag">
+                            <ul>
+                                <li><a href="#">Fresh Fruit</a></li>
+                                <li><a href="#"> Fresh Vegetables</a></li>
+                                <li><a href="#">Fresh Salad</a></li>
+                                <li><a href="#"> Butter & Eggs</a></li>
+                            </ul>
+                        </div>
+                    </div>-->
+                    <!-- Sidebar single item -->
+                </div>
+            </div>
+            <!-- Sidebar Area End -->
+        </div>
+    </div>
+</div>
+<!-- Shop Category Area End -->

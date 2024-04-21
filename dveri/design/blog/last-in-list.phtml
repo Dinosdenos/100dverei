@@ -1,0 +1,34 @@
+<?php
+$lastArticles = Fenix::getCollection('blog/blog')->getLastArticles();
+
+if ($lastArticles->count() <= 0) {
+    return '';
+}
+?>
+
+<aside class="sidebar right-sidebar blog-sidebar sidebar-fixed sticky-sidebar-wrapper">
+    <div class="blog-sidebar-box" style="position: sticky; top: 80px;">
+        <div class="sidebar-overlay">
+            <a href="javascript:void(0)" class="sidebar-close">
+                <i class="close-icon"></i>
+            </a>
+        </div>
+        <a href="javascript:void(0)" class="sidebar-toggle">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="sidebar-content">
+            <div class="sticky-sidebar">
+                <hr class="widget-shapret-line" />
+                <div class="widget widget-posts">
+                    <div class="widget-title blogpage-title"><?php echo Fenix::lang('Последние статьи') ?></div>
+                    <div class="widget-body widget-mb-0">
+
+                        <?php foreach ($lastArticles AS $article) { ?>
+                        <?php echo $this->partial('blog/blocks/article-last-in-list.phtml', ['article' => $article]) ?>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>

@@ -1,0 +1,33 @@
+<?php $req  = Fenix::getRequest() ?>
+<?php $lang = Fenix_Language::getInstance() ?>
+
+<ul class="head-menu reset-list">
+    <li><a href="<?php echo Fenix::getUrl('about') ?>">О нас</a></li>
+    <li><a href="<?php echo Fenix::getUrl('delivery') ?>">Доставка</a></li>
+    <!--<li><a href="<?php echo Fenix::getUrl('discount') ?>">Дисконтная программа</a></li>-->
+    <li><a href="<?php echo Fenix::getUrl('contacts') ?>">Контакты</a></li>
+    <!--
+        <li class="reviews"><a href="<?php echo Fenix::getUrl('guestbook') ?>">Отзывы клиентов</a></li>
+        -->
+</ul>
+
+<div class="logo">
+    <a href="<?php echo Fenix::getUrl() ?>"><img src="<?php echo Fenix::getSkinUrl('images/logo.png') ?>" alt="" /></a>
+</div>
+
+<div class="contacts">
+    <div class="icon"></div>
+    <div class="text"><a href="tel:+380567491046">749 10 46</a></div>
+    <form class="search" method="get" action="<?php echo Fenix::getUrl('search') ?>">
+        <input type="text" name="q" value="<?php echo $this->escape($req->getQuery('q')) ?>" placeholder="Поиск по сайту" class="q" />
+        <input type="submit" value="" class="s" />
+    </form>
+    <div class="warning-price">ВНИМАНИЕ! ВСЕ ЦЕНЫ НА САЙТЕ АКТУАЛЬНЫЕ.</div>
+</div>
+
+<div class="cellphone">
+    <a href="tel:+380971427164">Киевстар (096) 641 87 46</a>
+    <a href="tel:+380992259827">Vodafon (066) 281 59 01</a>
+    <a href="tel:+380934349243">Life (093) 434 92 43</a>
+</div>
+

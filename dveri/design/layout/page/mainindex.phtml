@@ -1,0 +1,163 @@
+<?php Fenix::getHelper('catalog/service_categories')->renderColumnMenu(); ?>
+<!-- Slider Arae Start -->
+<div class="slider-area">
+    <div class="slider-active-3 owl-carousel slider-hm8 owl-dot-style">
+        <!-- Slider Single Item Start -->
+        <?php
+                            $count = count($this->slideItems);
+                            for ($i = 0; $i < $count; $i++) {
+
+                                $image = $this->slideItems[$i]['image'];
+								$h1_1 = $this->slideItems[$i]['h1_1'];
+								$h1_2 = $this->slideItems[$i]['h1_2'];
+                                $url = $this->slideItems[$i]['url'];
+                                $url_name = $this->slideItems[$i]['button'];
+								$content = $this->slideItems[$i]['content'];
+                                 ?>
+            <?php if ($url != '') { ?>
+            <a href="<?php echo $url; ?>">
+            <?php } 
+            $domain = 'https://'.$_SERVER['HTTP_HOST'].'/';
+            $image = str_replace($domain, '', $image);
+            ?>
+            <div class="slider-height-10 d-flex align-items-start justify-content-start bg-img"
+            style="background-image: url(<?php echo Fenix_Image::adapt($image, 1920, 630);?>);">
+            <div class="container">
+                <div class="slider-content-13 slider-animated-1 text-left">
+                    
+                    <h1 class="animated">
+                    <?php echo $h1_1; ?><br />
+                        <strong><?php echo $h1_2;?></strong>
+                    </h1>
+                        <?php echo $content;?>
+                    <?php 
+                    if ($url != '' and $url_name != '') { ?>
+                        <a href="<?php echo $url; ?>" class="shop-btn animated"><span style="padding: 10px; margin-bottom: 0px;"><?php echo $url_name; ?></span></a>
+                   <?php 
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php if ($url != '') { ?>
+        </a>
+        <?php } ?>
+                            <?php } ?>
+        <!-- Slider Single Item End -->
+    </div>
+</div>
+<!-- Slider Arae End -->
+<!-- Category Area Start -->
+<section class="categorie-area categorie-area-2 ptb-20px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <!-- Section Title -->
+                <div class="section-title mt-res-sx-30px mt-res-md-30px underline-shape">
+                    <div><?php echo Fenix::lang('Популярные категории')?></div>
+                    <p><?php echo Fenix::lang('Самоклейка рекомендует')?></p>
+                </div>
+                <!-- Section Title -->
+            </div>
+        </div>
+        <!-- Category Slider Start -->
+        <div class="category-slider-2 owl-carousel owl-nav-style-3">
+            <!-- Single item -->
+            <?php
+$categories = Fenix::getHelper('catalog/service_categories')->getCategoriesForCard();
+
+if ( ! $categories) {
+    return '';
+}
+?>
+            <?php foreach ($categories as $category) { ?>
+            <div class="category-item">
+                <div class="category-list">
+                    <div class="category-thumb">
+                        <?php if ($category['image']) { ?>
+                        <a href="<?php echo $category['url']; ?>">
+                            <img class="lazyload" src="<?php echo $category['image']; ?>" alt="<?php echo $category['title'] ?>">
+                        </a>
+                        <?php } ?>
+                    </div>
+                    <div class="desc-listcategoreis">
+                        <div class="name_categories">
+                            <h4><?php echo $category['title'] ?></h4>
+                        </div>
+                        <!--<span class="number_product">кол-во продуктов вывести</span>-->
+                        <a href="<?php echo $category['url'] ?>"><?php echo Fenix::lang('Перейти к товарам')?><i class="ion-android-arrow-dropright-circle"></i></a>
+                    </div>
+                </div>
+            </div>
+            <?php } ?>
+            <!-- Single item -->
+        </div>
+    </div>
+</section>
+<!-- Category Area End  -->
+<!-- Banner Area Start -->
+<div class="banner-3-area mt-30px mb-100px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mb-res-xs-30 mb-res-sm-30">
+                <div class="banner-wrapper banner-box">
+                <?php echo $this->render('catalog/blocks/promo-blocks-image-left.phtml')  . PHP_EOL; ?>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="banner-wrapper banner-box">
+                <?php echo $this->render('catalog/blocks/promo-blocks-image-right.phtml')  . PHP_EOL; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Banner Area End -->
+<!-- Recent Add Product Area Start -->
+<?php echo $this->render('catalog/top-product.phtml') . PHP_EOL; ?>
+<!-- Recent product area end -->
+<!-- Blog area Start -->
+<?php echo $this->render('blog/last.phtml') . PHP_EOL; ?>
+
+<!-- Blog Area End -->
+<!-- Category Product  Area start-->
+<section class="category-product-area home-10 mt-40px mb-70px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12 col-xl-9">
+                <div class="row">
+                    <!--Section start-->
+                    <?php echo $this->render('catalog/blocks/promo-blocks.phtml')  . PHP_EOL; ?>
+                    <!--Section end-->
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-12 d-lg-none d-xl-block col-xl-3 mtb-res-sm-30 mtb-res-md-30">
+                <div class="banner-inner">
+                <?php echo $this->render('catalog/blocks/promo-blocks-image.phtml')  . PHP_EOL; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Category Product  Area end-->
+<!-- SEO TEXT -->
+<section class="seo-content">
+    <div class="container seo-text">
+    <h1 style="text-align: center;" class="main-heading">
+            <?php echo $this->current->getSeoH1() ?>
+
+        </h1>
+        <p class="h1 d-block d-md-none">
+            <?php echo $this->current->getSeoH1() ?>
+        </p>
+    <?php 
+		$seotext = str_replace ('<img', '<img class="lazyload"', $this->current->getContent());
+		echo $seotext;
+		?>
+    </div>
+    <div class="sidebar-widget-tag seo-open">
+        <ul>
+            <li id="open-bottom"><a href="javascript: void(0);"><?php echo Fenix::lang('Читать всю статью')?></a></li>
+        </ul>
+    </div>
+</section>

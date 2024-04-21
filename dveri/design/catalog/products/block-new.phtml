@@ -1,0 +1,81 @@
+<?php 
+            //echo $this->product->image;
+            $img = Fenix_Image::adapt($this->product->image, 0, 360);
+            $rname = str_replace('.jpg', 'a.jpg', $this->product->image);
+            $img_a = Fenix_Image::adapt($rname, 0, 360);
+
+?>
+<div class="homepage-v7-featured-products-item">
+    <div class="homepage-v7-popular-products-shop-layout">
+        <div class="homepage-v7-popular-products-shop-image-wrap">
+            <div class="homepage-v7-popular-products-shop-image-main">
+                <div class="homepage-v7-popular-products-shop-image">
+                    <a href="<?php echo $this->product->url_key; ?>">
+                        <img style="height: 100%; margin: 0 auto; display: block;" src="<?php echo $img; ?>" class="object-fit-cover h-100 lazyload"
+                            alt="<?php echo $this->product->title; ?>" />
+                    </a>
+                </div>
+            </div>
+            <?php if ($this->product->sale == 1 or $this->product->recomend == 1 or $this->product->is_new == 1 or $this->product->install == 1) { ?>
+            <ul class="homepage-v7-popular-products-badge-group-main">
+                <?php if ($this->product->sale == 1) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-sale-products-badge"><?php echo Fenix::lang('Aкция') ?></span></li>
+                <?php } ?>
+                <?php if ($this->product->recomend == 1) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-recomend-products-badge"><?php echo Fenix::lang('Мы рекомендуем') ?></span>
+                </li>
+                <?php } ?>
+                <?php if ($this->product->is_new == 1) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-new-products-badge"><?php echo Fenix::lang('Новинка') ?></span></li>
+                <?php } ?>
+                <?php if ($this->product->install == 1) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-install-products-badge"><?php echo Fenix::lang('Монтаж на завтра') ?></span>
+                </li>
+                <?php } ?>
+            </ul>
+            <?php } ?>
+            <ul class="homepage-v7-popular-products-action-btns-group">
+                <!--<li class="homepage-v7-popular-products-action-btns">
+                                <a class="homepage-v7-popular-products-action" data-bs-toggle="tooltip"
+                                    data-bs-placement="Top" title="" href="wishlist.html"
+                                    data-bs-original-title="Whishlist" aria-label="Whishlist"><i
+                                        class="fas fa-heart"></i></a>
+                            </li>-->
+                <li class="homepage-v7-popular-products-action-btns" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">
+                    <a class="homepage-v7-popular-products-action" data-bs-toggle="tooltip" data-bs-placement="Top"
+                        title="<?php echo $this->product->title; ?>" href="javascript:void(0)"
+                        onclick="return FenixCheckout.quickview('<?php echo $this->product->url_key; ?>')"
+                        data-bs-original-title="Quick View" aria-label="Quick View"><i class="fas fa-search"></i></a>
+                </li>
+                <li class="homepage-v7-popular-products-action-btns">
+                    <a class="homepage-v7-popular-products-action" data-bs-toggle="tooltip" data-bs-placement="Top"
+                        title="<?php echo $this->product->title; ?>"
+                        onclick="return FenixCheckout.addProduct('https://<?php echo $_SERVER['HTTP_HOST'];?>/checkout/process/add/pid/<?php echo $this->product->id; ?>/qty/1')"
+                        href="javascript: void(0);" data-bs-original-title="Добавить в корзину"
+                        aria-label="Добавить в корзину"><i class="fas fa-shopping-cart"></i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="shop-content">
+            <ul class="homepage-v7-popular-products-rating-star">
+                <?php 
+                            for ($a = 0; $a < $this->product->rating; $a++) { ?>
+                <li class="active"><i class="fas fa-star"></i></li>
+                <?php } ?>
+            </ul>
+            <div class="homepage-v7-popular-products-shop-title-main">
+                <a class="homepage-v7-popular-products-shop-title"
+                    href="<?php echo $this->product->getUrl() ?>"><?php echo $this->product->title; ?></a>
+            </div>
+
+            <div class="homepage-v7-popular-products-shop-price">
+                <?php echo ($this->product->price_old <= 0 or $this->product->price_old <= $this->product->price) ? '<span class="homepage-v7-popular-products-sale-price">'.$this->product->price.' UAH</span>' : '<del>'.$this->product->price_old.'</del><span class="homepage-v7-popular-products-sale-price">'.$this->product->price.' UAH</span>';?>
+            </div>
+        </div>
+    </div>
+</div>

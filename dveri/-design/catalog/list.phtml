@@ -1,0 +1,294 @@
+<?php
+$productsfor = $this->products;
+$countProduct = $productsfor->count() > 0;
+$is_mobile_device = Fenix::check_mobile_device();
+?>
+
+<script>
+gtag('event', 'view_item_list', {
+	'user_id': '<?php echo Fenix::gaParseCookie(); ?>',
+	'send_to': 'AW-803037648',
+    items: [<?php
+                $s = 0;
+                foreach ($productsfor as $product) {
+                    if ($s <= 0) {
+                        $s++;
+                        echo "{
+				id: '" . $product->sku . "', \n
+                item_id: '" . $product->sku . "', \n
+				google_business_vertica : 'retail', \n
+                item_name: '" . $product->title . "', \n
+                item_list_name: '" . $this->category->title . "',\n
+                item_list_id: '" . $this->category->id . "',\n
+                price: " . $product->price . " , \n
+                currency: 'UAH', \n
+                quantity: '1' \n
+                } ";
+                    } else {
+                        echo ", {
+				id: '" . $product->sku . "', \n			
+                item_id: '" . $product->sku . "', \n
+				google_business_vertica : 'retail', \n
+                item_name: '" . $product->title . "', \n
+                item_list_name: '" . $this->category->title . "',\n
+                item_list_id: '" . $this->category->id . "',\n
+                price: " . $product->price . " , \n
+                currency: 'UAH', \n
+                quantity: '1' \n
+                }";
+                    }
+                }
+                ?>],
+    item_list_name: '<?php echo $this->category->title; ?>',
+    item_list_id: '<?php echo $this->category->id; ?>'
+})
+</script>
+<script>
+    gtag('event', 'page_view', {
+  'send_to' : 'G-4KC9CGCV84',
+  'user_id' : '<?php echo Fenix::gaParseCookie(); ?>',
+  'ecomm_pagetype' : 'category',
+  'ecomm_prodid' : [
+      <?php
+      $s = 0;
+    foreach ($productsfor as $product) {
+                    if ($s <= 0) {
+                        $s++;
+                        echo "'$product->sku'";
+                    } else {
+                        echo ', \'' . $product->sku . '\'';
+                    } 
+                }?>
+  ],
+  'ecomm_category' : '<?php echo $this->category->title; ?>',
+});
+</script>
+
+
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+
+
+<!-- About Page v2 Breadcrumb -->
+
+<!-- About Page v2 Breadcrumb -->
+
+<!-- Shop v1 Page The Hottest Collection -->
+<!--<section class="shoppage-v1-the-hottest-collection">
+            <div class="the-hottest-collection-img">
+                <img src="images/shop-v1-hottest-collection-banner-img.jpg" class="object-fit-cover w-100 h-100" alt="Regalia" />
+            </div>
+            <div class="the-hottest-collection-cuntent">
+                <div class="container h-100">
+                    <div class="row h-100 justify-content-start align-items-center">
+                        <div class="the-hottest-collection-text col-lg-5 col-md-5 col-sm-12">
+                            <h1 class="the-hottest-collection-title">The Hottest Collection</h1>
+                            <p class="the-hottest-collection-sub-desc">Get Up To 50% Off</p>
+                        </div>
+                        <div class="the-hottest-collection-btn col-lg-4 col-md-4 col-sm-12">
+                            <a class="common-btn2-hover-large" href="shop-left-sidebar.html" role="button"><span>Shop Now</span><img src="images/common-btn-green-arrow.png" class="mw-100" alt="Regalia"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>-->
+<!-- Shop v1 Page The Hottest Collection -->
+
+<!-- Shop v1 Page Shop -->
+<section class="shoppage-v1-shop p-t-50 p-b-20">
+    <div class="container">
+        <div class="shop-content row">
+            <?php if ($productsfor->count() > 0) { ?>
+
+            <?php
+               
+              
+                //echo $this->render('catalog/blocks/v2/filter.phtml');
+                echo Fenix::getHelper('core/cache')
+                ->partialCache(
+                    'core/render',
+                    'catalog/blocks/v2/filter.phtml',
+                    'list_filter_pc_' . md5($_SERVER['REQUEST_URI']),
+                    array()
+                );
+              
+                    //                    if (Fenix::isDev() === false) {
+
+                    //                    } else {
+                    //                        echo $this->render('catalog/blocks/v2/filter.phtml');
+                    //                    }
+
+
+                    ?>
+
+
+
+
+            <?php } ?>
+            <div class="main-content">
+                <?php if ($productsfor->count() > 0) { ?>
+                <nav class="toolbox sticky-toolbox sticky-content fix-top">
+                    <div class="toolbox-left">
+                        <a href="javascript:void(0)" class="btn btn-primary left-sidebar-toggle d-block d-lg-none"><i
+                                class="w-icon-category"></i><span><?php echo Fenix::lang('Фильтр товаров') ?></span></a>
+                        <?php echo $this->render('catalog/blocks/sorting.phtml'); ?>
+
+                    </div>
+                    <!--<div class="toolbox-right">
+                                <div class="toolbox-item select-box">
+                                    <select name="count" class="form-control form-select" aria-label="Default select example">
+                                        <option selected="">Show 32</option>
+                                        <option value="48">Show 48</option>
+                                        <option value="55">Show 55</option>
+                                        <option value="60">Show 60</option>
+                                    </select>
+                                </div>
+                                <div class="toolbox-item toolbox-layout position-relative">
+                                    <a href="javascript:void(0)" class="icon-mode-grid btn-layout active">
+                                        <i class="w-icon-grid"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="icon-mode-list btn-layout">
+                                        <i class="w-icon-list"></i>
+                                    </a>
+                                </div>
+                            </div>-->
+                </nav>
+                <?php } ?>
+                <div class="product-wrapper row">
+                    <?php if ($productsfor->count() > 0) { ?>
+                    <?php  
+                                        foreach ($productsfor as $product) {
+                                    
+                                    
+                                    /*echo Fenix::getHelper('core/cache')
+                                    ->partialCache(
+                                        'core/render',
+                                        'catalog/products/block.phtml',
+                                        'product_block_' . $product->id . md5($_SERVER['REQUEST_URI']),
+                                        [
+                                            'i'        => $i,
+                                            'product'  => $product,
+                                            'category' => $this->category,
+                                        ]
+                                    );*/
+                                echo $this->partial('catalog/products/block.phtml', array('i' => $i, 'product' => $product, 'category' => $this->category));
+                                $i++;
+                            }
+                                        ?>
+                    <?php } else {
+                                echo "Нет продуктов!";
+                            }
+                                ?>
+                </div>
+                <?php
+                                        $filter = Fenix::getRequest()->getUriSegment(1) . '/' . Fenix::getRequest()->getUriSegment(2);
+
+                                        if (Fenix::getRequest()->getQuery('sort')) {
+                                            $sortstart = 'sort';
+                                            $sort = Fenix::getRequest()->getQuery('sort');
+                                        }
+                                        if (Fenix::getRequest()->getQuery('sale')) {
+                                            $sortstart = Fenix::getRequest()->getQuery('sale');
+                                            $sort = Fenix::getRequest()->getQuery('sale');
+                                        }
+                                        if (Fenix::getRequest()->getQuery('sale-plast')) {
+                                            $sortstart = Fenix::getRequest()->getQuery('sale-plast');
+                                            $sort = Fenix::getRequest()->getQuery('sale-plast');
+                                        }
+                    ?>
+                <?php 
+                    $currentUrl = ($this->category ? '' . Fenix::getUrl($this->category->getUrlKey()) : '/catalog') . ($filter && $filter != '/' ? '/' . urldecode($filter) : '');
+                    echo $this->paginationControl($this->productsZend, 'Sliding', 'layout/blocks/paginator.phtml', array(
+                        'uri' => $currentUrl . '?page=%s' . ($sort ? '&' . $sortstart . '=' . $sort : ''),
+                    ));
+                    if (isset($this->bannerToPagination)) {
+                        echo $this->bannerToPagination;
+                    }
+                    ?>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop v1 Page Shop -->
+<section class="seo-content">
+    <div class="container">
+        <div class="container seo-text">
+            <h1 style="text-align: center;" class="main-heading h2">
+                <?php echo ($this->category != null ? $this->category->getSeo()->getH1() : Fenix::lang("Каталог")) ?>
+                
+            </h1>
+            <hr class="blog-details-v1-shapret-line">
+            <?php
+        $seotext = str_replace('<img', '<img class="lazyload"', $this->category->getSeo()->getSeoText());
+        $seotext = str_replace('src="', 'data-src="', $seotext);
+        $seotext = str_replace('.jpg', '.webp', $seotext);
+        echo $seotext;
+        ?>
+        <?php 
+//echo '---------' . $_SERVER['REQUEST_URI'];   
+
+$findme    = 'Region=Metallicheskie_Dnepr';
+$findme2    = 'Region=Vkhodnye_dveri_Dnepr';
+$findme3    = 'Region=Vkhodnye_dveri_ulichnye_Dnepr';
+$findme4    = 'Region=Dveri_v_dom_Dnepr';
+$findme5    = 'Region=Mezhkomnatnye_dveri_Dnepr';
+$findme6    = 'Region=Bronirovannye_dveri_Dnepr';
+$findme7    = 'Region=Dveri_skrytogo_montazha_Dnepr';
+$findme8    = 'Region=Razdvizhnye_dveri_Dnepr';
+$findme9    = 'Region=Kachestvennye_vkhodnye_dveri_Dnepr';
+$findme10    = 'Region=Nedorogo_vkhodnye_dveri_Dnepr';
+$mystring = $_SERVER['REQUEST_URI'];
+
+
+$pos = stripos($mystring, $findme);
+$pos2 = stripos($mystring, $findme2);
+$pos3 = stripos($mystring, $findme3);
+$pos4 = stripos($mystring, $findme4);
+$pos5 = stripos($mystring, $findme5);
+$pos6 = stripos($mystring, $findme6);
+$pos7 = stripos($mystring, $findme7);
+$pos8 = stripos($mystring, $findme8);
+$pos9 = stripos($mystring, $findme9);
+$pos10 = stripos($mystring, $findme10);
+
+
+if ($pos !== false or $pos2 !== false or $pos3 !== false or $pos4 !== false or $pos5 !== false or $pos6 !== false or $pos7 !== false or $pos8 !== false or $pos9 !== false or $pos10 !== false) {
+$productsdesc = $this->productsdesc;
+if ($productsdesc->count() > 0) { ?>
+<table class="table_price" style="width: 100%;"><caption><h2><?php echo Fenix::lang('Топ продаж дверей в магазине 100dverei'); ?></h2></caption><tbody>
+<?php 
+
+
+foreach ($productsdesc as $product) {
+    
+echo $this->partial('catalog/products/table.phtml', array('i' => $i, 'product' => $product, 'category' => $this->category));
+$i++;
+}
+
+?>
+</tbody></table>
+<?php } 
+
+}
+
+?>
+        </div>
+    </div>
+</section>
+<?php 
+if ($this->category->getSeo()->getQuestion1() != '' or $this->category->getSeo()->getQuestioncat1() != ''){
+	?>
+<section class="seo-content">
+    <div class="container filter-bottom">
+        <?php echo $this->render('catalog/quest.phtml'); ?>
+    </div>
+</section>
+<?php 
+}
+?>
+<section class="seo-content">
+    <div class="container filter-bottom">
+        <?php echo $this->render('catalog/blocks/filter_in_bottom.phtml'); ?>
+    </div>
+</section>
+
+

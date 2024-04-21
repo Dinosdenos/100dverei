@@ -1,0 +1,38 @@
+<?php
+if ( ! $this->article) {
+    return '';
+}
+$article = $this->article;
+$image = $article->getImageAdapt(370, 280);
+$title = $article->getTitle();
+$announce = $article->getContent();
+$date = $article->getCreateDate();
+?>
+
+
+
+<div class="col-xxl-6 col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+    <div class="blog-listing-v1-two-img-main">
+        <img src="<?php echo $image; ?>" class="object-fit-cover w-100 h-100" alt="<?php echo $title;?>" />
+    </div>
+    <div class="blog-listing-v1-one-detail">
+        <div class="blog-listing-v1-one-box">
+            <div class="blog-listing-v1-meta d-flex align-items-center">
+                <div class="blog-listing-v1-meta-left">
+                    <span class="blog-listing-v1-meta-text h2"><i
+                            class="far fa-calendar-alt"></i><?php echo $date;?></span>
+                </div>
+            </div>
+            <h3 class="blog-listing-v1-one-meta-title"><a
+                    href="<?php echo $article->getUrl() ?>"><?php echo $title; ?></a></h3>
+            <p class="blog-listing-v1-meta-subdecs">
+                <?php echo Fenix::getHelper('core/service_text')->characterLimiter(strip_tags($announce), 350); ?></p>
+            <div class="d-flex align-items-center d-block-responsive">
+                <a class="common-btn2-hover-small" href="<?php echo $article->getUrl() ?>"
+                    role="button"><span><?php echo Fenix::lang('Подробнее')?></span><img
+                        src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow.png'); ?>" class="mw-100"
+                        alt="<?php echo $title; ?>"></a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div id="container" class="ui-multiuploder">
+    <div id="filelist" class="fileslist">
+        
+        <?php $files = $this->Plugin->getFiles() ?>
+        <?php foreach ($files AS $file): ?>
+            <?php if (file_exists($file['path'] . $file['name'])): ?>
+                <?php $fileinfo = mb_pathinfo($file['name']) ?>
+                <div class="file" id="<?php echo $file['id'] ?>">
+                    <input type="hidden" name="<?php echo $this->Plugin->getName() ?>[]" value="<?php echo $file['name'] ?>" />
+                    <a href="#" onclick="$(this).parent('.file').remove();return false;" class="dotted">Удалить</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                    <a target="_blank" href="<?php echo UPLOAD_FILES_URI . $file['name'] ?>"><?php echo $fileinfo['basename'] ?></a> (<?php echo Fenix_Utils::formatSize(filesize($file['path'] . $file['name'])) ?>) <b class="fileprogress"></b>
+                </div>
+            <?php endif ?>
+        <?php endforeach ?>
+    </div>
+    <button class="btn btn-primary" type="Button" value="Прикрепить" id="pickfiles"><?php echo Fenix::lang("Прикрепить файлы") ?><span></span></button>
+</div>
+<script type="text/javascript">
+    function __tpl(file)
+    {
+        var _tmp = '';
+        _tmp+= '<div class="file" id="' + file.id + '"><input type="hidden" name="<?php echo $this->Plugin->getName() ?>[]" value="' + file.name + '" /><a href="#" onclick="$(this).parent(\'.file\').remove();return false;" class="dotted">Удалить</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;' + file.name + ' (' + plupload.formatSize(file.size) + ') <b class="fileprogress"></b></div>';
+        return _tmp;
+    }
+    var uploader = new plupload.Uploader({
+        runtimes : 'gears,html5,flash,silverlight,browserplus',
+        browse_button : 'pickfiles',
+        container: 'container',
+        max_file_size : '30mb',
+        url : '/var/plupload/upload.php?f=u<?php echo session_id() ?>',
+        flash_swf_url : '<?php echo $this->getSkinUrl("js/plupload/plupload.flash.swf") ?>',
+        silverlight_xap_url : '<?php echo $this->getSkinUrl("js/plupload/plupload.silverlight.xap") ?>'
+    });
+    uploader.init();
+    uploader.bind('FilesAdded', function(up, files) {
+        for (var i in files) {
+            $('#filelist').append(__tpl(files[i]));
+        }
+        uploader.start();
+    });
+    uploader.bind('UploadProgress', function(up, file) {
+        $('#' + file.id).find('b').html('<span>' + file.percent + "%</span>");
+    });
+</script>

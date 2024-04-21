@@ -1,0 +1,26 @@
+<?php
+if ( ! $this->article) {
+    return '';
+}
+$article = $this->article;
+$image = $article->getImageAdapt(450, 277);
+$title = $article->getTitle();
+$announce = $article->getContent();
+?>
+<article class="blog-post">
+                <div class="blog-post-top">
+                    <div class="blog-img banner-wrapper">
+                        <a href="<?php echo $article->getUrl() ?>"><img class="lazyload" data-src="<?php echo $image; ?>"
+                                alt="<?php echo $title; ?>" /></a>
+                    </div>
+                    <a href="<?php echo $article->getUrl() ?>" class="blog-meta"><?php echo Fenix::getDate($article->getCreateDate())->format('d.m.Y'); ?></a>
+                </div>
+                <div class="blog-post-content">
+                    <h4 class="blog-post-heading"><a href="<?php echo $article->getUrl() ?>"><?php echo $title; ?></a></h4>
+                    <p class="blog-text">
+                    <?php echo Fenix::getHelper('core/service_text')->characterLimiter(strip_tags($announce), 350); ?>
+                    </p>
+                    <a class="read-more-btn" href="<?php echo $article->getUrl() ?>"><?php echo Fenix::lang('Подробнее')?><i
+                            class="ion-android-arrow-dropright-circle"></i></a>
+                </div>
+</article>

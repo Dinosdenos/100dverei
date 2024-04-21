@@ -1,0 +1,7 @@
+<section>
+    <?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+    <div class="container">
+        <h1><?php echo $this->current->getSeo()->getH1() ?></h1>
+        <?php echo $this->current->getContent() ?>
+    </div>
+</section>

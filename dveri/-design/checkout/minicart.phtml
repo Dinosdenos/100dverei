@@ -1,0 +1,98 @@
+<?php $order = Fenix::getCollection('checkout/order')->getOrderInfo() ?>
+<?php $products = Fenix::getCollection('checkout/order')->getProducts() ?>
+<?php $total = 0 ?>
+<?php if ($products->count() > 0) { ?>
+
+    <div id="dropdown-cart-products">
+        <div class="dropdown-cart-products">
+            <?php foreach ($products as $i => $_product) { ?>
+                <?php $total += ($_product->getOrderUnitPrice() * $_product->getOrderQty()) ?>
+                <div class="product li_product_<?php echo $_product->getOrderUnitId() ?>">
+                    <div class="product-cart-details">
+                        <h4 class="product-title">
+                            <a href="<?php echo $_product->getUrl() ?>" class=""><?php echo $_product->getTitle() ?></a>
+                        </h4>
+                        <div class="cart-product-info">
+                            <div class="quantity-price">
+                                <div class="qty-block">
+                                    <div onclick="return FenixCheckout.minusQty($('#qty_<?php echo $_product->getOrderUnitId() ?>'), $('#price_<?php echo $_product->getOrderUnitId() ?>'))" class="dec qtybutton">-</div>
+                                    <!--<div class="dec qtybutton">-</div>-->
+                                    <input tabindex="<?php echo $i + 1 ?>" onkeyup="if (this.value < 0 || this.value == ''){return false;
+									       } if (this.value > 10000){this.value=10000;
+									       } if (this.value > 0 && this.value < 10000){FenixCheckout.updateCheckoutItemTotal($(this), $('#price_<?php echo $_product->getOrderUnitId() ?>'));FenixCheckout.updateCheckoutTotalQty()}" class="checkout-item-qty" data-unitid="<?php echo $_product->getOrderUnitId() ?>" data-unitprice="<?php echo $_product->getOrderUnitPrice() ?>" id="qty_<?php echo $_product->getOrderUnitId() ?>" type="text" name="qty[]" value="<?php echo $_product->getOrderQty() ?>" />
+                                    <div onclick="return FenixCheckout.plusQty($('#qty_<?php echo $_product->getOrderUnitId() ?>'), $('#price_<?php echo $_product->getOrderUnitId() ?>'))" class="inc qtybutton">+</div>
+                                    <!--<div class="inc qtybutton">+</div>-->
+                                </div>
+                                <div class="product-price">
+                                    <!--<span class="text-price cart-product-qty"><del>71.98</del></span>-->
+                                    <span class="text-price cart-product-qty">X <?php echo $_product->getOrderUnitPrice() ?> UAH
+                                    </span>
+                                </div>
+                            </div>
+
+                            <figure class="product-image-container">
+                                <a href="single-product-v1.html" class="product-image">
+                                    <img class="object-fit-cover w-100 h-100 lazyload" data-src="<?php echo $_product->getImageAdapt(60, 53) ?>" alt="<?php echo $_product->getTitle() ?>" />
+                                </a>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <a href="javascript:void(0)" onclick="return FenixCheckout.removeProduct(<?php echo $_product->getOrderUnitId() ?>)" title="Remove Product" class="btn-remove">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+
+            <?php
+            }
+            ?>
+        </div>
+        <div class="dropdown-cart-total"><span><?php echo Fenix::lang('Итого') ?></span><span class="cart-total-price total-sum"><?php echo number_format($total, 2, ',', ''); ?> UAH</span></div>
+        <div class="dropdown-cart-action">
+            <!--<a href="cart-v1.html" class="common-btn1-hover-small"><span>View Cart</span></a>-->
+            <a href="<?php echo $this->getUrl('checkout') ?>" class="common-btn1-hover-small"><span><?php echo Fenix::lang('Оформить заказ') ?></span></a>
+        </div>
+    </div>
+
+
+<?php } else { ?>
+    <div id="dropdown-cart-products">
+        <div class="dropdown-cart-products">
+            Нет товаров
+        </div>
+    </div>
+    <!-- OffCanvas Cart End -->
+<?php } ?>
+<!--
+<script>
+    /*----------------------------
+       Cart Plus Minus Button
+   ------------------------------ */
+    var CartPlusMinus = $('.qty-block');
+    CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
+    CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+    $(".qtybutton").on("click", function() {
+        var e = {};
+        var $button = $(this);
+        var oldValue = $button.parent().find("input").val();
+        if ($button.text() === "+") {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {
+            // Don't allow decrementing below zero
+            if (oldValue > 1) {
+                var newVal = parseFloat(oldValue) - 1;
+            } else {
+                newVal = 1;
+            }
+        }
+        e = {
+            order_unit_id: parseInt($button.data("unitid")),
+            qty: parseInt($button.val())
+        }
+        $.post("checkout/process/update", {
+            data: e
+        });
+
+        $button.parent().find("input").val(newVal);
+    });
+</script>-->

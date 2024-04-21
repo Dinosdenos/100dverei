@@ -1,0 +1,123 @@
+<?php $cellList = $this->Plugin->getCellList() ?>
+<?php if ($this->Plugin->getForm() !== false): ?>
+    <script>
+        function testSubmit(form) {
+            var _form = $(form);
+            _form.find('.gui-table-filter input, .gui-table-filter select').each(function(){
+                if ($(this).val() == '') {
+                    $(this).attr('disabled', 'disabled');
+                }
+            });
+        }
+    </script>
+    <form action="" method="get" onsubmit="return testSubmit(this)">
+    <?php foreach ($this->Plugin->buildFormQuery() AS $_key => $_value): ?>
+        <input type="hidden" name="<?php echo $_key ?>" value="<?php echo $_value ?>" />
+    <?php endforeach ?>
+<?php endif ?>
+<script>
+    $(function(){
+        <?php if ($this->Plugin->getCheckall() !== false): ?>
+            $('#<?php echo $this->Plugin->getTableId() ?> tbody td').shiftcheckbox({
+                checkboxSelector: ':checkbox',
+                selectAll: $('#<?php echo $this->Plugin->getTableId() ?> thead th :checkbox')
+            });
+        <?php endif ?>
+        /*var _table = $("table#<?php echo $this->Plugin->getAttributes('creator.table')->id ?>");
+        _table.stickyTableHeaders({
+            fixedOffset: 46
+        })*/
+    });
+</script>
+
+<?php if ($this->Plugin->getTitle() != null || $this->Plugin->getButtonset() != null): ?>
+    <div class="panel panel-default">
+        <div class="panel-heading" style="overflow:hidden;">
+            <h4 class="pull-left">
+                <?php echo $this->Plugin->getTitle() ?>
+            </h4>
+            <?php if ($this->Plugin->getButtonset() != null): ?>
+                <div class="btn-group pull-right"><?php echo $this->Plugin->renderContent($this->Plugin->getButtonset()) ?></div>
+            <?php endif ?>
+        </div>
+<?php endif ?>
+
+<table<?php echo $this->Plugin->getAttributeSet('creator.table') ?>>
+    <?php if (array_key_exists('header', $cellList) || array_key_exists('filter', $cellList)): ?>
+        <thead>
+    <?php endif ?>
+    <?php $colspan = 1; if (array_key_exists('header', $cellList)): ?>
+        <?php foreach ($cellList['header'] AS $rowId => $_headerCell): ?>
+            <?php $colspan = count($_headerCell) ?>
+            <tr id="<?php echo $rowId ?>">
+                <?php if ($this->Plugin->getCheckall() !== false): ?>
+                    <th class="gui-table-header" style="width:10px;"><input type="checkbox" name="<?php echo $this->Plugin->getCheckall()->name ?>_all" /></th>
+                <?php endif ?>
+                <?php foreach ($_headerCell AS $cellId => $_cell): ?>
+                    <th<?php echo $this->Plugin->getAttributeSet('creator.table.' . $rowId . '.' . $cellId) ?>><?php echo $_cell['content'] ?></th>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    <?php endif ?>
+    <?php if (array_key_exists('filter', $cellList)): ?>
+        <?php foreach ($cellList['filter'] AS $rowId => $_filterCell): ?>
+            <tr id="<?php echo $rowId ?>">
+                <?php if ($this->Plugin->getCheckall() !== false): ?>
+                    <th class="gui-table-filter">&nbsp;</th>
+                <?php endif ?>
+                <?php foreach ($_filterCell AS $cellId => $_cell): ?>
+                    <th<?php echo $this->Plugin->getAttributeSet('creator.table.' . $rowId . '.' . $cellId) ?>><?php echo $_cell['content'] ?></th>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    <?php endif ?>
+    <?php if (array_key_exists('header', $cellList) || array_key_exists('filter', $cellList)): ?>
+        </thead>
+    <?php endif ?>
+        
+    <?php if ($this->Plugin->getUpLevel() != null): ?>
+        <tbody>
+            <tr>
+                <td colspan="<?php echo $colspan ?>" class="gui-table-cell-uplevel">
+                    <a href="<?php echo $this->Plugin->getUpLevel() ?>">[<?php echo Fenix::lang("На уровень вверх") ?>]</a>
+                </td>
+            </tr>
+        </tbody>
+    <?php endif ?>
+
+    <?php if (array_key_exists('cell', $cellList)): ?>
+        <tbody>
+            <?php $i = 0; foreach ($cellList['cell'] AS $rowId => $_headerCell): ?>
+                <tr<?php echo $this->Plugin->getAttributeSet('creator.table.row.' . $rowId) ?> id="<?php echo $rowId ?>">
+                    <?php if ($this->Plugin->getCheckall() !== false): ?>
+                        <td class="gui-table-cell">
+                            <input type="checkbox" name="<?php echo $this->Plugin->getCheckall()->name ?>[<?php echo $this->Plugin->getTableId() ?>][]" value="<?php echo $this->Plugin->getSmarty()->fetchString('{$dataRowId[' . $i . ']}') ?>" /></td>
+                    <?php endif ?>
+                    <?php foreach ($_headerCell AS $cellId => $_cell): ?>
+                        <td<?php echo $this->Plugin->getAttributeSet('creator.table.' . $rowId . '.' . $cellId) ?>><?php echo $_cell['content'] ?></td>
+                    <?php endforeach ?>
+                </tr>
+            <?php $i++; endforeach ?>
+        </tbody>
+    <?php endif ?>
+</table>
+                
+<?php if ($this->Plugin->getTitle() != null || $this->Plugin->getButtonset() != null): ?>
+    </div>
+<?php endif ?>
+                
+<?php if ($this->Plugin->getForm() !== false): ?>
+    </form>
+<?php endif ?>
+
+<?php if ($this->dataList != null): ?>
+    <?php echo $this->paginationControl(
+        $this->dataList,
+        'Elastic',
+        'creator/paginator.phtml', array(
+            'url'            => $this->url,
+            'paginator'      => $this->dataList,
+            'total'          => $this->dataList->getTotalItemCount(),
+            'currentPerPage' => 1
+      )); ?>
+ <?php endif ?>

@@ -1,0 +1,38 @@
+<?php
+$viewedProducts = Fenix::getModel('catalog/products')->getViewed();
+
+if (count($viewedProducts) <= 0) {
+    return '';
+}
+?>
+<section class="homepage-v7-featured-products">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-6">
+                <div class="homepage-v7-featured-products-title-main">
+                    <div class="common-title2"><?php echo Fenix::lang('Просмотренные товары'); ?></div>
+                </div>
+            </div>
+            <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-6">
+                <div class="d-flex justify-content-end clearfix homepage-v7-featured-products-slicknavholdercustom">
+                    <div
+                        class="homepage-v7-featured-products-slicknavbtnbig homepage-v7-featured-products-slicknavbtnprev">
+                        <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-prev.png'); ?>" class="mw-100" alt="prev" />
+                    </div>
+                    <div
+                        class="homepage-v7-featured-products-slicknavbtnbig homepage-v7-featured-products-slicknavbtnnext">
+                        <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-next.png'); ?>" class="mw-100" alt="next" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="homepage-v7-featured-products-wrap">
+            
+        <!--Product card-->
+        <?php
+            foreach ($viewedProducts as $product) { ?>
+            <?php echo $this->partial('catalog/products/related_product_card.phtml', ['product' => $product]); ?>
+            <?php } ?>
+        </div>
+    </div>
+</section>

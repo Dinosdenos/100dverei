@@ -1,0 +1,202 @@
+<div class="col-12">
+    <style>
+    select {
+        text-transform: none;
+        /* line-height: 46px; */
+        width: 320px;
+        height: 37px;
+        color: #434343;
+        background: #ebf2f6;
+        border-color: #ff9000;
+        border-radius: 5px;
+    }
+    </style>
+    <?php
+$Lang = Fenix_Language::getInstance();
+$parametr1 = 'Дверная коробка';
+$parametr2 = 'Наличник';
+$parametr3 = 'Доборная планка';
+	//Погнал скрипт
+$series = $this->product->series;
+$link = mysqli_connect('localhost', 'u_dvereijl', '7iF218IxALtA', 'dvereijl');
+$sqlecho = mysqli_query($link,"SELECT * FROM `fe_catalog_products` where `its_dop` = 1 AND `dop_collection` = '".$series."'");
+
+?>
+    <!--Параметр 1-->
+    <?php $sqlechotest = mysqli_query($link,"SELECT * FROM `fe_catalog_products` where `its_dop` = 1 AND `dopcateg` = '".$parametr1."' and `dop_collection` = '".$series."'"); 
+if ($sqlechotest->num_rows != 0) {
+?>
+    <b style="text-transform: uppercase;"><?php echo Fenix::lang('Дверная коробка') ?></b><br>
+    <select class="selected" id="corob" name="corob" size="1">
+        <option><?php echo Fenix::lang('Выберите один из вариантов'); ?></option>
+        <?php 
+foreach  ($sqlecho as $result) {
+	if ($result['dopcateg'] == $parametr1 and $result['price'] != ''){
+?>
+        <option data-prefix="+" data-price="<?php echo $result['price'];?>" value="<?php echo $result['id'] ?>">
+            <?php echo $result['title_'. $Lang->getCurrentLanguage()->name .'']; ?>(<?php echo $result['doprazmer'];?>)
+            + <?php echo $result['price'];?> грн.</option>
+        <?php
+	}
+}
+
+?>
+    </select>
+    <br>
+    <br>
+    <?php } ?>
+    <!--Параметр 2-->
+    <?php $sqlechotest = mysqli_query($link,"SELECT * FROM `fe_catalog_products` where `dopcateg` = '".$parametr2."' and `dop_collection` = '".$series."'"); 
+if ($sqlechotest->num_rows != 0) {
+?>
+    <b style="text-transform: uppercase;"><?php echo Fenix::lang('Наличник') ?></b><br>
+    <select class="selected" id="nali" name="nali" size="1">
+        <option><?php echo Fenix::lang('Выберите один из вариантов'); ?></option>
+        <?php 
+foreach  ($sqlecho as $result) {
+	if ($result['dopcateg'] == $parametr2 and $result['price'] != ''){
+?>
+        <option data-prefix="+" data-price="<?php echo $result['price'];?>" value="<?php echo $result['id'] ?>">
+            <?php echo $result['title_'. $Lang->getCurrentLanguage()->name .'']; ?>(<?php echo $result['doprazmer'];?>)
+            + <?php echo $result['price'];?> грн.</option>
+        <?php
+	}
+}
+
+?>
+    </select>
+    <br>
+    <br>
+    <?php } ?>
+    <!--Параметр 3-->
+    <?php $sqlechotest = mysqli_query($link,"SELECT * FROM `fe_catalog_products` where `dopcateg` = '".$parametr3."' and `dop_collection` = '".$series."'"); 
+if ($sqlechotest->num_rows != 0) {
+?>
+    <b style="text-transform: uppercase;"><?php echo Fenix::lang('Доборная планка') ?></b><br>
+    <select class="selected" id="dobor" name="dobor" size="1">
+        <option><?php echo Fenix::lang('Выберите один из вариантов'); ?></option>
+        <?php 
+foreach  ($sqlecho as $result) {
+	if ($result['dopcateg'] == $parametr3 and $result['price'] != ''){
+?>
+        <option data-prefix="+" data-price="<?php echo $result['price'];?>" value="<?php echo $result['id'] ?>">
+            <?php echo $result['title_'. $Lang->getCurrentLanguage()->name .'']; ?>(<?php echo $result['doprazmer'];?>)
+            + <?php echo $result['price'];?> грн.</option>
+        <?php
+	}
+}
+
+?>
+    </select>
+    <br>
+    <br>
+    <?php } ?>
+</div>
+<?php
+mysqli_close($link)
+?>
+<script>
+<!--
+function price_format(price) {
+    c = 2;
+    d = ',';
+    t = '';
+    sl = '';
+    sr = ' <span style="font-weight: 400; font-size: 1rem;"> грн</span>';
+    n = price * 1;
+    i = parseInt(n = Math.abs(n).toFixed(c)) + '';
+    j = ((j = i.length) > 3) ? j % 3 : 0;
+    price_text = sl + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math
+        .abs(n - i).toFixed(c).slice(2) : '') + sr;
+    return price_text;
+}
+
+function points_format(v) {
+    return v.toFixed(0);
+}
+
+function process_discounts(price, quantity) {
+    return price;
+}
+
+function calculate_tax(price) {
+    var p = price;
+    return p;
+}
+
+function autocalc_aap(s, p, ff) {
+    $(s).each(function() {
+        var $t = $(this);
+        $({
+            value: $t.data('value') || 0
+        }).animate({
+            value: p
+        }, {
+            easing: 'swing',
+            duration: 500,
+            step: function(value) {
+                $t.html(ff(value));
+                $t.data('value', value);
+            }
+        });
+    });
+}
+
+function recalculateprice() {
+    var main_price = <?php echo $this->product->getPrice()?>;
+    var special = 0;
+    var option_price = 0;
+
+    $('#product input:checked,#product option:selected').each(function() {
+        if ($(this).data('prefix') == '=') {
+            option_price += Number($(this).data('price'));
+            main_price = 0;
+            special = 0;
+        }
+    });
+
+    $('#product input:checked,#product option:selected').each(function() {
+        if ($(this).data('prefix') == '+') {
+            option_price += Number($(this).data('price'));
+        }
+        if ($(this).data('prefix') == '-') {
+            option_price -= Number($(this).data('price'));
+        }
+    });
+
+    special += option_price;
+    main_price += option_price;
+
+    tax = main_price;
+
+
+
+    autocalc_aap('.autocalc-product-price', main_price, price_format);
+}
+
+$(document).ready(function() {
+    $('#product input[type="checkbox"],#product input[type="radio"],#product select').each(function() {
+        if ($(this).data('autocalc')) return;
+        $(this).data('autocalc', 1).on('change', function() {
+            recalculateprice();
+        });
+    });
+    $('#product input[name="quantity"]').each(function() {
+        if ($(this).data('autocalc')) return;
+        var $q = $(this);
+        $q.data('autocalc', 1).data('val', $q.val());
+        (function() {
+            if ($q.val() != $q.data('val')) {
+                $q.data('val', $q.val());
+                recalculateprice();
+            }
+            setTimeout(arguments.callee, 250);
+        })();
+    });
+
+
+    recalculateprice();
+});
+//
+-->
+</script>

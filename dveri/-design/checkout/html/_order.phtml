@@ -1,0 +1,87 @@
+<?php $req = Fenix::getRequest() ?>
+<?php $order = Fenix::getCollection('checkout/order')->getOrderInfo() ?>
+<script>
+    $(function(){
+
+        $("#order-form").validate({
+            rules: {
+                name: "required",
+                cellphone: {
+                    required: true
+                }
+            },
+            ignore: "div:hidden input, div:hidden select",
+            messages: {
+                name: "Введите имя",
+                cellphone: {
+                    required: "Введите номер телефона"
+                }
+            }
+        });
+
+        $('#delivery_type').change(function(){
+            if ($(this).val() == 'city' || $(this).val() == 'city2') {
+                $('#pickup').hide();
+                $('#city').show();
+            }
+            else {
+                $('#pickup').show();
+                $('#city').hide();
+            }
+        })
+        $('input[name=cellphone]').inputmask({
+            mask : "+38 (999) 999 99 99",
+            clearMaskOnLostFocus: false
+        });
+
+        //$("select").chosen({width : '330px'});
+    });
+</script>
+
+<div style="display:none" id="loginContainer" title="Вход для постоянных клиентов">
+    <div id="loginFormContainer">
+        <?php $Form = Fenix::getHelper('customer/profile')->getSessionForm(array('hideTitle' => true)) ?>
+        <?php echo $Form->fetch() ?>
+    </div>
+</div>
+<section class="one-column wrapper-960 checkout-order">
+    <h1 class="page-title"><span>Оформить заказ</span></h1>
+    <article>
+        <form class="order-form" action="" method="post" id="order-form">
+            <div class="row">
+                <label>*Имя</label>
+                <input type="text" name="name" value="<?php echo $this->escape($req->getPost('name')) ?>" />
+            </div>
+            <div class="row">
+                <label>*Номер телефона</label>
+                <input type="text" id="cellphone" name="cellphone" value="<?php echo $this->escape($req->getPost('cellphone')) ?>" />
+            </div>
+            <div class="row">
+                <label>Город</label>
+                <input type="text" name="city" value="<?php echo $this->escape($req->getPost('city')) ?>" />
+            </div>
+            <div class="row">
+                <label>Адрес e-mail:</label>
+                <input type="text" name="email" value="<?php echo $this->escape($req->getPost('email')) ?>" />
+            </div>
+            <div class="row">
+                <label>Комментарий</label>
+                <textarea id="orderComment" name="comment"></textarea>
+            </div>
+            <div class="row">
+                <button type="submit" class="">
+                    <img src="<?php echo Fenix::getSkinUrl('images/checkout-btn.png') ?>" alt="">
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </form>
+        <div class="order-table-info" id="orderTable" style="padding-top: 0">
+            <p><span style="font-size:16px;">Уважаемые клиенты!</span></p>
+            <p><span style="font-size:16px;">После оформления заказа мы просчитаем стоимость доставки, и свяжемся с Вами для согласования деталей заказа.</span></p>
+            <p><span style="font-size:16px;">Удобное для Вас время доставки указывайте в поле примечания к заказу.</span></p>
+            <p><span style="font-size:16px;">Приятных Вам покупок!</span></p>
+
+            <?php //echo $this->partial('checkout/table.phtml', array('type' => 'small')); ?>
+        </div>
+    </article>
+</section>

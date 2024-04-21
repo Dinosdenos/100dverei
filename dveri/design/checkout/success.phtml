@@ -1,0 +1,110 @@
+<?php $req = Fenix::getRequest() ?>
+<?php $block = $this->block('checout_pickup_info'); ?>
+<?php if($this->orderInfo === false) { ?>
+<p class="alert alert-info"><?php echo Fenix::lang('Ваша корзина пуста'); ?></p>
+<?php } else { ?>
+<!-- checkout area start -->
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+<div class="checkout-area mt-20px mb-40px">
+    <div class="container">
+
+
+        <div class="row" id="FenixCart">
+            <div class="col-lg-8">
+
+            <div class="order-complete-page">
+                                <div class="order-complete-page-images">
+                                    <img src="<?php echo Fenix::getSkinUrl('images/order-complete-page-img.png'); ?>" class="mw-100" alt="<?php echo Fenix::lang('Благодарим за заказ')?>">
+                                </div>
+                                <h1 class="order-complete-page-title"><?php echo Fenix::lang('Заказ оформлен') ?></h1>
+                                <span class="order-complete-page-subtitle"><?php echo Fenix::lang('Благодарим за заказ')?>, <?php echo $this->orderInfo->name; ?></span>
+                            </div>
+                <?php echo $this->render('checkout/table-with-out-edit.phtml') . PHP_EOL; ?>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="cart-page-v2-pricing-table">
+                    <h3 class="cart-page-v2-table-title checkout-page-table-title">
+                        <?php echo Fenix::lang('Благодарим за заказ')?></h3>
+                    <ul class="cart-page-v2-ul-total-cost checkout-page-ul-total-cost">
+                        <li class="cart-page-v2-li-total-cost">
+                            <span><?php echo Fenix::lang('Сумма Вашего заказа:') ?></span> <span
+                                class="total-sum"><?php echo $this->orderInfo->total_price ?> UAH</span></li>
+                    </ul>
+                    <div class="accordion checkout-page-payment-accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="headingOne">
+                                <button class=""
+                                    style="color: var(--white-color);    background-color: transparent;    box-shadow: none;"
+                                    type="button"><?php echo Fenix::lang('№ вашего заказа').':' ?></button>
+                            </div>
+                            <div class="accordion-collapse collapse show">
+                                <div class="accordion-body" style="font-size: 1.5rem; color: #1db954;">
+                                    <?php echo $this->orderInfo->getId() ?>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="headingTwo">
+                                <button class="" type="button"
+                                    style="color: var(--white-color);    background-color: transparent;    box-shadow: none;"
+                                    type="button"><?php echo Fenix::lang('Ваш контактный номер') ?>:</button>
+                            </div>
+                            <div id="" class="accordion-collapse collapse show">
+                                <div class="accordion-body" style="font-size: 1.5rem; color: #1db954;"><?php echo $this->orderInfo->cellphone ?></div>
+                            </div>
+                        </div>
+                        <?php if ($this->orderInfo->pay_variants == 'Оплата на карту'){ ?>
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="headingTree">
+                                <button class="" type="button"
+                                    style="color: var(--white-color);    background-color: transparent;    box-shadow: none;"
+                                    type="button"><?php echo Fenix::lang('Реквизиты для оплаты на карту') ?>:</button>
+                            </div>
+                            <div id="" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div id="method2" class="panel-collapse collapse show">
+                                        <div class="panel-body" style="color: var(--white-color);    background-color: transparent;    box-shadow: none; font-size: 1.5rem;">
+                                            <p>
+                                            <p><?php echo Fenix::lang('Получатель:') ?><br>
+                                                <span style=" color: #1db954;"><?php echo Fenix::getConfig('general/fiocard');?></span></p>
+                                            <p><?php echo Fenix::lang('Карта') .' -  <span style=" color: #1db954;">'.Fenix::getConfig('general/bank') ?></span>:
+                                                <span style="cursor: pointer;  color: #1db954;" class="numbercard-btn"
+                                                    id="numbercard"><?php echo Fenix::getConfig('general/numbercard');?></span>
+                                                    <p><span class="numbercard-btn" id="numbercard" style="cursor: pointer;">
+                                                    <a class="common-large-btn1-hover w-100" href="javascript:void(0)"
+                            role="button"><span><?php echo Fenix::lang('Скопировать карту') ?></span><img
+                                src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow.png'); ?>"
+                                class="mw-100" alt="<?php echo Fenix::lang('Скопировать карту') ?>"></a></span></p>
+                                            </p>
+                                            <p class="coupon-alert alert fade in alert-success">
+                                                <?php echo Fenix::lang('Номер карты скопирован успешно!') ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                    </div>
+                    <div class="cart-page-v2-check-out-btn">
+                        <a class="common-large-btn1-hover w-100" href="<?php echo Fenix::getUrl('') ?>"
+                            role="button"><span><?php echo Fenix::lang('Продолжить покупки') ?></span><img
+                                src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow.png'); ?>"
+                                class="mw-100" alt="<?php echo Fenix::lang('Продолжить покупки') ?>"></a>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    <!-- checkout area end -->
+    <?php } ?>
+    <?php
+$orderId = $this->orderInfo->getId();
+if(isset($_SESSION['viwedOrder'][ $orderId ]) && $_SESSION['viwedOrder'][ $orderId ] == 0) { ?>
+    <?php
+	$_SESSION['viwedOrder'][ $orderId ] = 1;
+}
+?>

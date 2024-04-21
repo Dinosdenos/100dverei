@@ -1,0 +1,68 @@
+<?php if ($this->Plugin->getDetails() != null): ?>
+    <div class="gui-field-details-container">
+<?php endif ?>
+        
+<?php if ($this->Plugin->getId() != null): ?>
+    <script>
+        $(function(){
+            $('#<?php echo $this->Plugin->getId() ?>');
+
+            <?php if($this->Plugin->getMask()): //Маска для input ?>
+            $('#<?php echo $this->Plugin->getId() ?>').inputmask({
+                mask: "<?php echo $this->Plugin->getMask() ?>",
+                clearMaskOnLostFocus: false
+            });
+            <?php endif ?>
+        });
+    </script>
+<?php endif ?>
+    
+<?php if ($this->Plugin->getType() == 'file'): ?>
+    <?php if ($this->Plugin->getImage() != null): ?>
+        <?php if ($this->Plugin->getStorage() == 'database'): ?>
+            <?php $imageUrl = Fenix::createImageFromStreamInfo($this->Plugin->getImage(), $this->Plugin->getImageInfo()) ?>
+        <?php else: ?>
+            <?php $imageUrl = $this->Plugin->getImage() ?>
+        <?php endif ?>
+    
+        <script>
+            $(function(){
+                $('#<?php echo $this->Plugin->getName() ?>_delete');
+            });
+        </script>
+    
+        <div class="gui-current-image">
+            <div class="gui-current-image-container">
+                <img src="<?php echo $imageUrl ?>" width="50" alt="" />
+            </div>
+            <div class="gui-current-image-controls">
+                <input type="checkbox" id="<?php echo $this->Plugin->getName() ?>_delete" name="<?php echo $this->Plugin->getName() ?>_delete" value="1" />
+                <label for="<?php echo $this->Plugin->getName() ?>_delete"><?php echo Fenix::lang("Удалить") ?></label>
+            </div>
+        </div>
+    <?php endif ?>
+<?php endif ?>
+
+<?php if ($this->Plugin->getSplitByLang() === true): ?>
+    <?php $lang = $this->Plugin->getLang() ?>
+    <?php $name = $this->Plugin->getName() ?>
+    <?php foreach ($lang->getLanguagesList() AS $_lang): ?>
+        <?php $this->Plugin->setName($name . '_' . $_lang->name) ?>
+        <?php $this->Plugin->setValue($this->Plugin->getRequest()->getPost($this->Plugin->getName())) ?>
+        <div class="field-text-language">
+            <?php $this->Plugin->setStyle('background:url(' . LNG_DIR_URL . $_lang->icon->src . ') no-repeat 3px center;padding-left:30px;margin:2px 0;"') ?>
+            <input<?php echo $this->Plugin->getAttributeSet('creator.form.input') ?>>
+        </div>
+    <?php endforeach ?>
+<?php else: ?>
+    <input<?php echo $this->Plugin->getAttributeSet('creator.form.input') ?>>
+<?php endif ?>
+        
+<?php if ($this->Plugin->getDetails() != null): ?>
+        <div class="gui-details"><?php echo $this->Plugin->getDetails() ?></div>
+    </div>
+<?php endif ?>
+
+<?php if ($this->Error != null): ?>
+    <?php echo $this->render('creator/form/error.phtml') ?>
+<?php endif ?>

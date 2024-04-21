@@ -1,0 +1,13 @@
+<form class="order-form" action="<?php Fenix::getUrl('catalog/notify/process') ?>" method="post">
+    <div class="form-group">
+        <input type="text" class="form-control" id="notifyCellphone" name="cellphone"
+               placeholder="<?php echo Fenix::lang('Введите Ваш номер телефона') ?>">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="notifyEmail" name="email"
+               placeholder="<?php echo Fenix::lang('Введите Ваш email') ?>">
+    </div>
+
+    <button type="submit" class="btn btn-primary"
+            id="notifySubmit"><?php echo Fenix::lang('Сообщить') ?></button>
+</form>

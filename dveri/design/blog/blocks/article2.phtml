@@ -1,0 +1,29 @@
+<?php
+if ( ! $this->article) {
+    return '';
+}
+
+    $article = $this->article;
+    $image = $article->getImageAdapt(450, 277);
+    $title = $article->getTitle();
+    //$announce = $article->getAnnounce();
+
+?>
+
+<div class="col-md-4 mb-res-md-30px mb-res-sm-30px">
+    <div class="blog-post-media">
+        <div class="blog-image single-blog">
+            <a href="<?php echo $article->getUrl() ?>"><img class="lazyload" src="<?php echo $image; ?>"
+                    alt="<?php echo $title; ?>" /></a>
+        </div>
+    </div>
+    <div class="blog-post-content-inner">
+        <h4 class="blog-title"><a href="<?php echo $article->getUrl() ?>"><?php echo $title; ?></a></h4>
+        <ul class="blog-page-meta">
+            <li>
+                <a href="<?php echo $article->getUrl() ?>"><i class="ion-calendar"></i>
+                    <?php echo Fenix::getDate($article->getCreateDate())->format('d.m.Y'); ?></a>
+            </li>
+        </ul>
+    </div>
+</div>

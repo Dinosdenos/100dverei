@@ -1,0 +1,30 @@
+<div class="variable-mini">
+
+<div class='button-selected'>
+        <?php
+$variableSku = $this->product->getVariableSku();
+$sku = $this->product->getSku();
+$GetVariableNum = $this->product->getVariableMini($variableSku, $sku);
+
+foreach  ($GetVariableNum as $resultvar) {
+	$selected = 'class="button2"';
+	if ($resultvar['sku'] == $this->product->getSku()){
+		$selected = 'class="button3"';
+	}
+    #добавление условий параметров вариативности
+    if ($resultvar['variable_settings'] == 'default' || $resultvar['variable_settings'] == '') {
+        ?>
+        <a <?php echo $selected;?>href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $resultvar['url_key']; ?>"><? echo $resultvar['width'];?> </a>
+        <?php
+    } elseif ($resultvar['variable_settings'] == 'цвет') { ?>
+			<a <?php echo $selected;?>href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $resultvar['url_key']; ?>"><? echo $resultvar['color'];?></a>
+        <?php } elseif ($resultvar['variable_settings'] == 'свой параметр') { ?>
+				<a <?php echo $selected;?>href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $resultvar['url_key']; ?>"><? echo $resultvar['my_param_variable'];?></a>
+        <?php } ?>
+
+        <?php
+    }
+	?>
+
+    </div>
+</div>

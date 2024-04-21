@@ -1,0 +1,531 @@
+<!--/******************************************* */-->
+<?php
+                $ratingproduct = $this->product->total_rating;
+                $brandproduct = $this->product->brand_name;
+                $producttitle = $this->product->title;
+                $sku = $this->product->sku;
+                $price = $this->product->price;
+                $oldprice = $this->product->price_old;
+                $video = Fenix::getYouTubeVideoId(trim(strip_tags($this->product->video)));
+                $is_mobile_device = Fenix::check_mobile_device();
+                
+                if ($this->product->parent == '6642'){
+                    $firstImage = $this->product->adaptWatermarkMegkom(0, 800);
+                    
+                    $styleImg = 'style="height: 100%;width: 100%;margin: 0 auto;/* display: block; */object-fit: contain;display: flex;justify-content: center;align-items: center;"';
+                } if ($this->product->parent == '6596'){
+                    $firstImage = $this->product->adaptWatermarkVhodnie(0, 800);
+                    
+                    $styleImg = 'style="height: 100%;width: 100%;margin: 0 auto;/* display: block; */object-fit: contain;display: flex;justify-content: center;align-items: center;"';
+                } else {
+                    $firstImage = $this->product->adaptWatermark(0, 800);
+                    $styleImg = 'style="height: 100%; margin: 0 auto; display: block;"';
+                }
+
+                $imageMain = $this->product->adaptWatermark(258, 290, true);
+                $nameImage = stristr($imageMain, 'no_image.png');
+                $images = Fenix::getHelper('catalog/service_product')->setProduct($this->product)->getImages();
+                $productDescription = Fenix::getHelper('catalog/service_product')
+                ->setProduct($this->product)
+                ->getContent();
+                $chars = $this->product->getCardFeatures();
+                
+                            $stock = '';
+                            if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) {
+                                if ($this->product->getPreorder() == 0){ 
+                                    $stock = Fenix::lang('Есть в наличии');
+                                    $check = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: green;" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                                  </svg>';
+                                  $style = 'style="color: green;;font-weight: 700;"';
+                                } else {
+                                    $stock = Fenix::lang('Ожидается через 7 дней');
+                                    $style = 'style="color: red;font-weight: 700;"';
+                                    $check = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: green;" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                                  </svg>';
+                                }
+                                } else {
+                                    $stock = Fenix::lang('Нет в наличии');
+                                    $style = 'style="color: red;font-weight: 700;"';
+                                    $check = '';
+                                }
+                               $reviewsList = $this->product->getReviews(); 
+                               $reviewsCount = $reviewsList->count();
+                                ?>
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+<section class="single-product-v3-detail-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-6 col-lg-6 col-md-12 col-sm-12 order-lg-2">
+                <div class="single-product-v3-detail-page-slider-main">
+                    <div class="slider single-product-v3-detail-page-slider-large">
+                        <div class="slick-slide">
+                            <div class="easyzoom easyzoom--overlay slider-img">
+                                <a href="javascript: void(0);">
+                                    <img <?php echo $styleImg; ?> src="<?php echo $firstImage; ?>"
+                                        class="object-fit-cover h-100" alt="<?php echo $producttitle; ?>" />
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <?php
+                        
+                        $ii = 1;
+                        //$active = '';
+                        
+                        foreach ($images as $image) {
+                        $ii++; 
+                        //if ($ii == 2) {
+                        //    $active = 'class="active"';
+                        //} else {
+                        //    $active = '';
+                        //}
+                        ?>
+
+                        <div class="slick-slide">
+                            <div class="easyzoom easyzoom--overlay slider-img">
+                                <a href="javascript: void(0);">
+                                    <img style="height: 100%; margin: 0 auto; display: block;"
+                                        src="<?php echo Fenix_Image::adaptWatermark($image->image, 0, 1100); ?>"
+                                        class="object-fit-cover h-100" alt="<?php echo $producttitle . '_' . $ii; ?>" />
+                                </a>
+                            </div>
+                        </div>
+                        <?php } ?>
+
+                    </div>
+                    <div class="d-flex clearfix single-product-v3-slicknavholdercustom">
+                        <div class="single-product-v3-slicknavbtnbig single-product-v3-slicknavbtnprev">
+                            <img src="<?php echo Fenix::getSkinUrl('images/single-product-v2-slicknavbtnprev.png'); ?>"
+                                alt="Назад" />
+                        </div>
+                        <div class="single-product-v3-slicknavbtnbig single-product-v3-slicknavbtnnext">
+                            <img src="<?php echo Fenix::getSkinUrl('images/single-product-v2-slicknavbtnnext.png'); ?>"
+                                alt="Вперед" />
+                        </div>
+                    </div>
+                    <div class="slider single-product-v3-detail-page-slider-thumbnail">
+                        <div class="slick-slide">
+                            <div class="slider-thumbnail-img">
+                                <img style="height: 100%; margin: 0 auto; display: block;"
+                                    src="<?php echo $this->product->adaptWatermark(0, 134); ?>" class="object-fit-cover h-100"
+                                    alt="<?php echo $producttitle; ?>" />
+                            </div>
+                        </div>
+                        <?php
+                        
+                        $ii = 1;
+                        //$active = '';
+                        
+                        foreach ($images as $image) {
+                        $ii++; 
+                        //if ($ii == 2) {
+                        //    $active = 'class="active"';
+                        //} else {
+                        //    $active = '';
+                        //}
+                        ?>
+                        <div class="slick-slide">
+                            <div class="slider-thumbnail-img">
+                                <img src="<?php echo Fenix_Image::adaptWatermark($image->image, 0, 134); ?>"
+                                    class="object-fit-cover w-100 h-100"
+                                    alt="<?php echo $producttitle . '_' . $ii; ?>" />
+                            </div>
+                        </div>
+                        <?php } ?>
+                    </div>
+                    <div class="d-flex clearfix single-product-v3-slicknavholdercustom2">
+                        <div class="single-product-v3-slicknavbtnbig single-product-v3-slicknavbtnprev">
+                            <img src="<?php echo Fenix::getSkinUrl('images/single-product-v2-slicknavbtnprev.png'); ?>"
+                                alt="Назад" />
+                        </div>
+                        <div class="single-product-v3-slicknavbtnbig single-product-v3-slicknavbtnnext">
+                            <img src="<?php echo Fenix::getSkinUrl('images/single-product-v2-slicknavbtnnext.png'); ?>"
+                                alt="Вперед" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-lg-6 col-md-12 col-sm-12 order-lg-1">
+                <div class="single-product-v3-detail">
+                    <h1 class="title-3"><?php echo $this->product->title; ?></h1>
+                    <?php
+                    if ($this->product->parent == "6596" or $this->product->parent == "6642") { ?>
+                    <div class="price-3">
+                        <?php echo ($oldprice <= 0 or $oldprice <= $price) ? '<span class="text-price-3">'.$price.' UAH</span>'  . '<span class="title-3">' .Fenix::lang(' или') . '</span>' : '<span class="text-price-3"><del>'.$oldprice.'</del></span><span class="text-price-3">'.$price.' UAH</span>' . Fenix::lang(' или');?>
+                    </div>
+
+                    <div class="price-3">
+                        <?php $pricechast = round($price / 3, 0); ?>
+                        <?php echo '<span class="text-price-3">'. $pricechast .' UAH х 3' . Fenix::lang('мес.') .'</span>';?>
+                    </div>
+                    <?php            
+                    } else { ?>
+                    <div class="price-3">
+                        <?php echo ($oldprice <= 0 or $oldprice <= $price) ? '<span class="text-price-3">'.$price.' UAH</span>'  . '<span class="title-3">' . '</span>' : '<span class="text-price-3"><del>'.$oldprice.'</del></span><span class="text-price-3">'.$price.' UAH</span>';?>
+                    </div>
+                    <?php
+                    }
+                    ?>
+
+                    <!--<div class="color-swatch-3 flex-wrap d-flex align-items-center">
+                        <div class="color-title-3">Color:</div>
+                        <div class="flex-wrap d-flex align-items-center">
+                            <a href="javascript:void(0)" class="color-3 active" style="background-color: #dfe7f1;"><span class="tt-text">Gray</span></a>
+                            <a href="javascript:void(0)" class="color-3" style="background-color: #ca6d00;"><span class="tt-text">Red</span></a>
+                            <a href="javascript:void(0)" class="color-3" style="background-color: #1c93cb;"><span class="tt-text">Blue</span></a>
+                            <a href="javascript:void(0)" class="color-3" style="background-color: #ffc300;"><span class="tt-text">Yellow</span></a>
+                            <a href="javascript:void(0)" class="color-3" style="background-color: #333333;"><span class="tt-text">Black</span></a>
+                        </div>
+                    </div>-->
+                    <!--<div class="size-swatch-3 flex-wrap d-flex align-items-center">
+                        <div class="size-title-3">Size:</div>
+                        <div class="flex-wrap d-flex align-items-center">
+                            <a href="javascript:void(0)" class="size-3">S</a>
+                            <a href="javascript:void(0)" class="size-3">M</a>
+                            <a href="javascript:void(0)" class="size-3 active">XS</a>
+                            <a href="javascript:void(0)" class="size-3">L</a>
+                            <a href="javascript:void(0)" class="size-3">XL</a>
+                        </div>
+                    </div>-->
+                    <div class="info-list-3">
+                        <div class="sku-3">
+                            Код:
+                            <span><?php echo $sku; ?></span>
+                        </div>
+                        <div class="categories-3">
+                            <?php echo Fenix::lang('Наличие') ?>:
+                            <span <?php echo $style; ?>><?php echo $check; ?><?php echo $stock; ?></span>
+                        </div>
+                    </div>
+                    <?php 
+                            if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) {
+                                ?>
+                    <div class="quantity-form-3">
+                        <div class="d-flex action">
+                            <div class="control-3">
+                                <button class="bttn bttn-left">
+                                    <span>-</span>
+                                </button>
+                                <input type="number" class="input input-center cart-plus-minus-box" />
+                                <button class="bttn bttn-right">
+                                    <span>+</span>
+                                </button>
+                            </div>
+
+                            <a class="common-btn2-hover-small-2" href="javascript: void(0);"
+                                onclick="f<?php echo $this->product->sku; ?>();"
+                                role="button"><span><?php echo Fenix::lang('Добавить в корзину') ?></span><img
+                                    src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow.png'); ?>"
+                                    class="mw-100" alt="<?php echo Fenix::lang('Добавить в корзину') ?>"></a>
+
+                        </div>
+                    </div>
+                    <?php 
+                            } 
+                        ?>
+                    <div class="d-flex align-items-center text-center infolinks-3">
+                        <img <?php echo Fenix_Image::adapt('e.png', 360, 0); ?> class="lazyload"
+                            data-src="<?php echo Fenix_Image::adapt('e.png', 360, 0); ?>"
+                            alt='Участник програми "єВідновлення"' />
+                    </div>
+                    <div class="d-flex align-items-center text-center infolinks-3">
+                        <img <?php echo Fenix_Image::adapt('oc.png', 360, 0); ?> class="lazyload"
+                            data-src="<?php echo Fenix_Image::adapt('oc.png', 360, 0); ?>"
+                            alt='Оплата частинами"' />
+                    </div>
+                    <?php 
+                                    
+                                    if ($video != ''){
+                                    ?>
+                    
+                    <div class="d-flex align-items-center text-center infolinks-3">
+                        <img <?php echo Fenix_Image::adapt('video.png', 360, 0); ?> class="lazyload"
+                            data-bs-toggle="modal" data-bs-target="#modalvideo"
+                            data-src="<?php echo Fenix_Image::adapt('video.png', 360, 0); ?>" style="margin: 0 auto; cursor: pointer;" alt='Подивитись відео' />
+                    </div>
+                    <?php 
+                    }
+                    ?>
+                    <!--<div class="d-flex align-items-center text-center infolinks-3">
+                        <a href="wishlist.html" class="add-to-wishlist-3"><i class="far fa-heart"></i><span>Add to Wishlist</span></a>
+                        <a href="javascript:void(0)" class="add-to-delivery-returns-3"><i class="far fa-paper-plane"></i><span>Delivery & Returns</span></a>
+                        <a href="javascript:void(0)" class="add-to-enquiry-3"><i class="far fa-envelope"></i><span>Enquiry</span></a>
+                    </div>-->
+                    <!--<div class="share-3 flex-wrap d-flex align-items-center">
+                        <h2 class="share-title-3">Share:</h2>
+                        <div class="social-icons-3">
+                            <a href="javascript:void(0)" class="social-button-3 icon-facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="javascript:void(0)" class="social-button-3 icon-twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="javascript:void(0)" class="social-button-3 icon-instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="javascript:void(0)" class="social-button-3 icon-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="javascript:void(0)" class="social-button-3 icon-pinterest"><i class="fab fa-pinterest-p"></i></a>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="col-xxl-3 col-lg-12 col-md-12 col-sm-12 order-last single-product-v3-tab">
+                <div class="accordion custom-accordion-3" id="accordionExample">
+                    <div class="accordion-item">
+                        <div class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <?php echo Fenix::lang('Описание') ?>
+                            </button>
+                        </div>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <?php echo $productDescription; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="accordion-item">
+                        <div class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <?php echo Fenix::lang('Характеристики') ?>
+                            </button>
+                        </div>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row">
+                                <ul>
+                            <?php 
+                            
+                            //foreach ($chars as $char) {
+                            //                        $charValue = trim($char->value);
+                            //                        if ($charValue == '') {
+                            //                            continue;
+                            //                        }
+                                                ?>
+                            <li><span><?php //echo trim($char->name) ?></span><?php //echo ' '.$charValue ?></li>
+                            <?php //} ?>
+                            </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" id="headingFor">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFor" aria-expanded="false" aria-controls="collapseFor">
+                                <?php echo Fenix::lang('Отзывы') ?> (<?php echo $reviewsCount; ?>)
+                            </button>
+                        </div>
+                        <div id="collapseFor" class="accordion-collapse collapse" aria-labelledby="headingFor"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body border-0 last-reviews-part-3">
+                                <div class="row">
+                                    <div class="col-xxl-12 col-lg-6 col-md-12 col-sm-12">
+                                        <div class="ratings-wrapper-3">
+                                            <div class="avg-rating-container">
+                                                <h4 class="avg-mark"><?php echo $ratingproduct?>
+                                                    <?php echo Fenix::lang('из 5') ?></h4>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <?php echo $this->render('catalog/products/reviews/index.phtml') ?>
+                                    <?php echo $this->render('catalog/products/reviews/list.phtml') ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop details Area End -->
+<?php 
+                                    
+if ($video != ''){
+?>
+<div class="modal fade homepage-v1-quickview" id="modalvideo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="height:100%;">
+        <div class="modal-content" id="updatemodalvideo">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div id="ytplayer" style="margin: 0 auto;"></div>
+
+                <script>
+                // Load the IFrame Player API code asynchronously.
+                var tag = document.createElement('script');
+                tag.src = "https://www.youtube.com/player_api";
+                var firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                // Replace the 'ytplayer' element with an <iframe> and
+                // YouTube player after the API code downloads.
+                var player;
+
+                function onYouTubePlayerAPIReady() {
+                    player = new YT.Player('ytplayer', {
+                        width: '100%',
+                        height: '100%',
+                        videoId: '<?php echo $video; ?>'
+                    });
+                }
+                </script>
+
+
+        </div>
+    </div>
+</div>
+<?php  } ?>
+<?php 
+
+//if ($sku == '130777'){
+//   
+//    $im = $this->product->adaptWatermarkMegkom(0, 1100);
+//    echo $this->product->adaptWatermarkMegkom(0, 1100);
+//    //echo $this->product->getImageAdapt(0, 1100);
+//    //echo '123';
+//}
+?>
+<!-- Recent Add Product Area Start --><br>
+<?php echo $this->render('catalog/products/related_product.phtml') ?>
+<!-- Recent product area end --><br>
+<?php echo $this->render('catalog/viewed.phtml') ?>
+<!-- Recent Add Product Area Start -->
+
+
+
+<script>
+function f0() {
+    return FenixCheckout.addProduct('<?php echo $this->product->getBuy() ?>/qty/1');
+}
+
+function f1() {
+    var val = $('#corob').val();
+    return FenixCheckout.addProduct('https://'
+        <?php echo $_SERVER['HTTP_HOST'];?> '/checkout/process/add/pid/' + val + '/qty/1');
+}
+
+function f2() {
+    var val2 = $('#nali').val();
+    return FenixCheckout.addProduct('https://'
+        <?php echo $_SERVER['HTTP_HOST'];?> '/checkout/process/add/pid/' + val2 + '/qty/1');
+}
+
+function f3() {
+    var val3 = $('#dobor').val();
+    return FenixCheckout.addProduct('https://'
+        <?php echo $_SERVER['HTTP_HOST'];?> '/checkout/process/add/pid/' + val3 + '/qty/1');
+}
+
+function f4() {
+    gtag('event', 'add_to_cart', {
+        currency: 'UAH',
+        items: [{
+            id: '<?php echo $this->product->sku; ?>',
+            item_id: '<?php echo $this->product->sku; ?>',
+            item_name: '<?php echo $this->product->title; ?>',
+            price: <?php echo $this->product->getPrice(); ?>,
+            currency: 'UAH',
+            quantity: 1
+        }],
+        value: <?php echo $this->product->getPrice(); ?>
+    });
+	window.clarity("event", "add_to_cart");
+}
+</script>
+
+
+
+
+<script>
+function f<?php echo $this->product->sku; ?>() {
+    FenixCheckout.addProduct('<?php echo $this->product->getBuy() ?>/qty/' + $('.cart-plus-minus-box').val());
+    gtag('event', 'add_to_cart', {
+        currency: 'UAH',
+        items: [{
+            id: '<?php echo $this->product->sku; ?>',
+            item_id: '<?php echo $this->product->sku; ?>',
+            item_name: '<?php echo $this->product->title; ?>',
+            price: <?php echo $this->product->getPrice(); ?>,
+            currency: 'UAH',
+            quantity: 1
+        }],
+        value: <?php echo $this->product->getPrice(); ?>
+    });
+	window.clarity("event", "add_to_cart");
+}
+</script>
+<?php
+/*$itsproduct = "1";
+Fenix::getOpengraph($itsproduct);*/
+?>
+
+<script>
+gtag('event', 'view_item', {
+    currency: 'UAH',
+    items: [{
+        id: '<?php echo $this->product->sku; ?>',
+        item_id: '<?php echo $this->product->sku; ?>',
+        item_name: '<?php echo $this->product->title; ?>',
+        price: <?php echo $this->product->getPrice(); ?>,
+        currency: 'UAH',
+        quantity: 1
+    }],
+    value: <?php echo $this->product->getPrice(); ?>
+});
+</script>
+<script>
+gtag('event', 'page_view', {
+    ecomm_pagetype: 'product',
+    ecomm_prodid: <?php echo $this->product->sku; ?>,
+    ecomm_totalvalue: <?php echo $this->product->getPrice(); ?>,
+    isSaleItem: <?php if ($this->product->price_old > 0) { 
+echo 'true';
+  } else {
+      echo 'false';
+  }?>
+});
+</script>
+<script>
+gtag('event', 'page_view', {
+    dynx_itemid: '<?php echo $this->product->sku; ?>',
+    dynx_pagetype: 'offerdetail',
+    dynx_totalvalue: <?php echo $this->product->getPrice(); ?>
+});
+</script>
+<script>
+gtag('event', 'page_view', {
+    'send_to': 'AW-803037648',
+    'user_id': '<?php echo Fenix::gaParseCookie(); ?>',
+    'value': '<?php echo $this->product->getPrice(); ?>',
+    'items': [{
+        'id': '<?php echo $this->product->sku; ?>',
+        'google_business_vertical': 'retail'
+    }, {
+        'id': '<?php echo $this->product->sku; ?>',
+        'google_business_vertical': 'custom'
+    }]
+});
+</script>
+
+<?php
+//echo HOME_DIR_ABSOLUTE;
+
+#$im = imagecreatefromjpeg("/var/www/dverei/100dverei.com.ua/home/store/products/130050.jpg");
+#$croppeds = imagecropauto($im, IMG_CROP_THRESHOLD, 50, 15658734);
+#$croppeds = imagecropauto($croppeds, IMG_CROP_THRESHOLD, 50, 16645116);
+#$croppeds = imagecropauto($croppeds, IMG_CROP_THRESHOLD, 50, 16777215);
+#$croppeds = imagecropauto($croppeds, IMG_CROP_THRESHOLD, 50, 16711674);
+#$croppeds = imagecropauto($croppeds, IMG_CROP_THRESHOLD, 70, 16776959);
+
+
+//if ($croppeds !== false) { // в случае возврата нового объекта изображения
+//    imagedestroy($im);    // мы уничтожаем исходное изображение
+//    $im = $croppeds;       // и назначаем обрезанное изображение в $im
+//}
+#imagejpeg($croppeds, '/var/www/dverei/100dverei.com.ua/home/store/products/cropped/130050.jpg');
+//print_r($im);
+?>

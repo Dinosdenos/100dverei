@@ -1,0 +1,6 @@
+<input<?php echo $this->Plugin->getAttributeSet('creator.calendar') ?>>
+<script>
+    $(function(){
+        $('#<?php echo $this->Plugin->getId() ?>').pickadate(<?php //echo Fenix::dump($this->Plugin->getOptionsJson()) ?>)
+    });
+</script>

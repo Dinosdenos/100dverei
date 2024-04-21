@@ -1,0 +1,58 @@
+<?php 
+            //echo $this->product->image;
+            $img = Fenix_Image::adapt($this->product->image, 200, 150);
+            $rname = str_replace('.jpg', 'a.jpg', $this->product->image);
+            $img_a = Fenix_Image::adapt($rname, 200, 150);
+
+?>
+<div class="col-xl-2 col-md-6 col-lg-4 col-sm-6 col-xs-12">
+    <article class="list-product ajax-search-product">
+        <div class="img-block">
+            <a href="<?php echo $this->product->getUrl() ?>" class="thumbnail">
+                <img class="first-img lazyload" src="<?php echo $img; ?>"
+                    alt="<?php echo $this->product->title; ?>" />
+                <img class="second-img lazyload" src="<?php echo $img_a; ?>"
+                    alt="<?php echo $this->product->title.'_2'; ?>" />
+            </a>
+            <!--<div class="quick-view">
+                <a href="javascript: void(0);" class="quick_view"
+                    onclick="return FenixCheckout.quickview('<?php echo $this->product->url_key; ?>')"
+                    data-link-action="quickview" title="Быстрый просмотр" data-bs-toggle="modal"
+                    data-bs-target="#modalindex"><i class="ion-ios-search-strong"></i></a>
+            </div>-->
+        </div>
+        <!--<ul class="product-flag">
+                                                        <li class="new">New</li>
+                                                    </ul>-->
+        <div style="padding: 10px 15px 4px 15px;" class="product-decs">
+            <a class="inner-link" style="margin-bottom: 0px;"
+                href="<?php echo $this->product->getUrl() ?>"><span><?php echo 'Код: '. $this->product->sku; ?></span></a>
+            <div><a href="<?php echo $this->product->getUrl() ?>"
+                    class="product-link"><?php echo ucfirst($titleProduct); ?></a></div>
+            <div class="rating-product">
+                <?php 
+                                                            for ($a = 0; $a < $this->product->rating; $a++) { ?>
+                <i class="ion-android-star"></i>
+                <?php } ?>
+            </div>
+            <div class="pricing-meta">
+                <ul>
+                    <?php echo ($this->product->price_old <= 0 or $this->product->price_old <= $this->product->price) ? '<li class="current-price">'.$this->product->price.' UAH</li>' : '<li class="old-price">'.$this->product->price_old.'</li><li class="current-price">'.$this->product->price.' UAH</li>';?>
+                </ul>
+            </div>
+        </div>
+        <div class="add-to-link">
+            <ul>
+                <li class="cart"><a class="cart-btn"
+                        onclick="return FenixCheckout.addProduct('https://<?php echo $_SERVER['HTTP_HOST'];?>/checkout/process/add/pid/<?php echo $this->product->id; ?>/qty/1')"
+                        href="javascript: void(0);"><?php echo Fenix::lang('Добавить в корзину') ?> </a></li>
+                <!--<li>
+                                                                <a href="wishlist.html"><i class="ion-android-favorite-outline"></i></a>
+                                                            </li>-->
+                <!--<li>
+                                                                <a href="compare.html"><i class="ion-ios-shuffle-strong"></i></a>
+                                                            </li>-->
+            </ul>
+        </div>
+    </article>
+</div>

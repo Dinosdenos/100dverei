@@ -1,0 +1,208 @@
+<div class="p-3 bg-dark rounded">
+    <?php
+    if ($this->category !== null && $this->category->image2) { ?>
+        <div class="filter specialist">
+            <?php //Fenix::dump($this->category->getImage()) ?>
+            <?php
+            if ($this->category->image2 != null) {
+                $info = (object) unserialize($this->category->image2_info);
+                $imageUrl = Fenix::createImageFromStreamInfo($this->category->image2, $info);
+            }
+            ?>
+            <img class="lazyload" data-src="<?php echo $imageUrl ?>" width="246" height="246" alt=""/>
+            <?php //echo $this->category->getImageFrame2(246,246) ?>
+        </div>
+    <?php } ?>
+<div class="buttonfilters">    
+    <a class="btn btn-primary btn-lg show-filters" data-toggle="collapse" href="#filterContainer" role="button"
+       aria-expanded="false" aria-controls="filterContainer">
+        Фильтр
+    </a>
+	        <a class="btn btn-primary btn-lg show-filters" data-toggle="collapse" href="#balansContainer" role="button"
+       aria-expanded="false" aria-controls="filterContainer">
+        Сортировка
+    </a>
+	</div>
+    <!--<p class="h4">Подбор по параметрам</p>-->
+    <?php
+    $availableAttributes = Fenix::getHelper('catalog/service_filter')->getAttributeInLeftBlock($this->category);
+    $haveFilters = false;
+    $catalogFilterModel = Fenix::getModel('catalog/filter');
+    ?>
+    <div class="collapse bg-filter-collapsed" id="filterContainer">
+        <?php foreach ($availableAttributes AS $_attribute) { ?>
+            <?php if ($_attribute->is_range) { ?>
+                <?php $range = $catalogFilterModel->getRangeData($this->category, $_attribute) ?>
+                <?php if ($range->min < $range->max) {
+                    $haveFilters = true;
+                    ?>
+                    <div class="filter-block">
+                        <p class="h5"><?php echo $_attribute->title ?>, грн</p>
+                        <script>
+                            $(function () {
+                                $("#slider-range").slider({
+                                    range: true,
+                                    min: <?php echo (double) $range->min ?>,
+                                    max: <?php echo (double) $range->max ?>,
+                                    values: [<?php echo (double) $range->selected_min ?>, <?php echo (double) $range->selected_max ?>],
+                                    slide: function (event, ui) {
+
+                                        $("#priceFrom").val(ui.values[0]);
+                                        $("#priceTo").val(ui.values[1]);
+                                    },
+                                    stop: function (event, ui) {
+                                        $.post('', {
+                                            'action': 'updateFilter',
+                                            'attribute': '<?php echo $_attribute->sys_title ?>',
+                                            'min': ui.values[0],
+                                            'max': ui.values[1]
+                                        }, function (data) {
+                                            if (data != '')
+                                                self.location.href = data;
+                                        });
+                                    }
+                                });
+                                $("#priceFrom").val($("#slider-range").slider("values", 0));
+                                $("#priceTo").val($("#slider-range").slider("values", 1));
+
+                                $("#priceFrom").keyup(function (event) {
+                                    var minChar = parseInt($(this).val());
+                                    $("#slider-range").slider('values', 0, minChar);
+                                });
+                                $("#priceTo").keyup(function (event) {
+                                    var maxChar = parseInt($(this).val());
+                                    $("#slider-range").slider('values', 0, maxChar);
+                                });
+
+                            });
+                        </script>
+                        <div class="d-flex flex-row">
+                            <div class="p-2"><input type="number" name="from" class="form-control" id="priceFrom"
+                                                    placeholder="От" max="<?php echo (int) $range->max ?>"></div>
+                            <div class="p-2"><input type="number" name="to" class="form-control" id="priceTo"
+                                                    placeholder="До" max="<?php echo (int) $range->max ?>"></div>
+                        </div>
+                        <div class="price-slider">
+                            <div id="slider-range"></div>
+                        </div>
+                    </div>
+                <?php } ?>
+            <?php } else { ?>
+                <?php $_values = $catalogFilterModel->getAvailableValues($this->category, $_attribute);
+
+                if ($_values->count() > 0) {
+                    $haveFilters = true;
+                    ?>
+                    <div class="filter-attribute">
+                        <p class="h5">
+                            <a rel="nofollow" class="collapsed" data-toggle="collapse"
+                               href="#collapse<?php echo $_attribute->id ?>"
+                               role="button" aria-expanded="false"
+                               aria-controls="collapse<?php echo $_attribute->id ?>"><?php echo $_attribute->title ?></a>
+                        </p>
+                        <div class="collapse" id="collapse<?php echo $_attribute->id ?>">
+                            <?php foreach ($_values AS $_value) { ?>
+                                <?php
+                                $isSelected = $catalogFilterModel->isAttributeSelected($_attribute, $_value);
+                                $onClick = '';
+                                $disabled = ' disabled="disabled"';
+                                $checked = '';
+
+                                if ($_value->count > 0) {
+                                    $onClick = 'onclick="window.location.href=\'' . $catalogFilterModel->prepareFilterUrl($_attribute, $_value) . '\'"';
+                                    $disabled = '';
+                                }
+
+                                if ($isSelected) {
+                                    $checked = ' checked="checked"';
+                                }
+                                ?>
+                                <div class="w-100">
+                                    <label class="custom-control custom-checkbox" <?php echo $onClick; ?>>
+                                        <input type="checkbox"
+                                               class="custom-control-input" <?php echo $checked; ?> <?php echo $disabled; ?>>
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description"><?php echo $_value->value ?></span>
+                                    </label>
+                                    <span class="attribute-counter">(<?php echo $_value->count ?>)</span>
+                                </div>
+
+                            <?php } ?>
+                        </div>
+                    </div>
+                <?php } ?>
+            <?php } ?>
+        <?php } ?>
+        <?php
+        if ($haveFilters === true) { ?>
+            <div class="text-center">
+                <a href="<?php echo Fenix::getUrl($this->category->url_key) ?>" class="reset-filter">Сбросить
+                    фильтры</a>
+            </div>
+        <?php } ?>
+    </div>
+</div>
+<script>
+    $(function () {
+        var $filterAttribute = $(".filter-attribute"),
+            $inputs = $("input[type='checkbox']");
+
+        $filterAttribute.each(function () {
+            var $this = $(this);
+            var $controls = $this.find(".custom-control");
+
+            if ($controls.length > 10) {
+                $controls.each(function (index) {
+                    if (index > 9) {
+                        $(this).parent().addClass("filter-checkbox hide");
+                    }
+                });
+                $this.append('<div class="text-center mb-3"><button class="btn btn-primary show-all-filters">Показать все <i class="icon-angle-down"></i></button></div>');
+            }
+
+            $this.find("[data-toggle='collapse']").removeClass("collapsed");
+            $this.find(".collapse").addClass("show");
+        });
+
+        $("#filterContainer").find(".custom-control").each(function () {
+            var $this = $(this);
+            if ($(".custom-control-input:checked", $this).length > 0) {
+                var $filterAttribute = $(".custom-control-input:checked", $this).closest(".filter-attribute");
+                if ($filterAttribute.find("a").hasClass("collapsed")) {
+                    $filterAttribute.find("a").removeClass("collapsed");
+                }
+                if (!$filterAttribute.find(".collapse").hasClass("show")) {
+                    $filterAttribute.find(".collapse").addClass("show");
+                }
+            }
+
+            $this.click(function () {
+                $inputs.attr("disabled", "disabled");
+            });
+        });
+
+        $("body").on("click", ".show-all-filters", function () {
+            var $this = $(this);
+            var $parent = $this.parents(".filter-attribute");
+            var $hiddenFields = $parent.find(".filter-checkbox");
+
+            if (!$this.hasClass("active")) {
+                $this.addClass("active");
+                $this.text("Скрыть");
+                $this.append('<i class="icon-angle-up"></i>');
+            } else {
+                $this.removeClass("active");
+                $this.text("Показать все");
+                $this.append('<i class="icon-angle-down"></i>');
+            }
+
+            $hiddenFields.each(function () {
+                if ($(this).hasClass("hide")) {
+                    $(this).removeClass("hide").addClass("show");
+                } else {
+                    $(this).removeClass("show").addClass("hide");
+                }
+            });
+        });
+    });
+</script>

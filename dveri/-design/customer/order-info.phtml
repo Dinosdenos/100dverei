@@ -1,0 +1,24 @@
+<?php //Fenix::dump($this->orderInfo) ?>
+<div class="features features-wide" style="margin-bottom: 20px">
+    <div class="feature">Дата создания заказа: <strong><?php echo Fenix::getDate($this->orderInfo->getCreateDate())->format('d.m.Y H:i') ?></strong></div>
+    <div class="feature">Имя: <strong><?php echo $this->orderInfo->getName() ?></strong></div>
+    <div class="feature">Телефон: <strong><?php echo $this->orderInfo->getCellphone() ?></strong></div>
+    <div class="feature">Email: <strong><?php echo $this->orderInfo->getEmail() ?></strong></div>
+
+    <div class="feature">Доставка: <strong><?php echo $this->orderInfo->getDelivery()->type_formatted ?></strong></div>
+    <?php if ($this->orderInfo->getDelivery()->address != ''): ?>
+        <div class="feature">Адрес: <strong><?php echo $this->orderInfo->getDelivery()->address ?></strong></div>
+    <?php endif ?>
+
+    <?php if ($this->orderInfo->getDelivery()->city != ''): ?>
+        <div class="feature">Город: <strong><?php echo $this->orderInfo->getDelivery()->city ?></strong></div>
+    <?php endif ?>
+
+    <?php if ($this->orderInfo->getDelivery()->warehouse != ''): ?>
+        <div class="feature">Склад: <strong><?php echo $this->orderInfo->getDelivery()->warehouse ?></strong></div>
+    <?php endif ?>
+
+    <?php if ($this->orderInfo->getPayVariant() != ''): ?>
+        <div class="feature">Оплата: <strong><?php echo $this->orderInfo->getPayVariant() ?></strong></div>
+    <?php endif ?>
+</div>

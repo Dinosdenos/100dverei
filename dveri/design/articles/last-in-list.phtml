@@ -1,0 +1,17 @@
+<?php
+$lastArticles = Fenix::getCollection('articles/articles')->getLastArticles();
+
+if ($lastArticles->count() <= 0) {
+    return '';
+}
+?>
+<div class="sidebar-widget">
+    <div class="main-heading">
+        <div><?php echo Fenix::lang('Последние статьи') ?></div>
+    </div>
+    <div class="recent-post-widget">
+        <?php foreach ($lastArticles AS $article) { ?>
+        <?php echo $this->partial('articles/blocks/article-last-in-list.phtml', ['article' => $article]) ?>
+        <?php } ?>
+    </div>
+</div>

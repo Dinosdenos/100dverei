@@ -1,0 +1,11 @@
+<ul<?php echo $this->Plugin->getAttributeSet('creator.breadcrumbs') ?>>
+    <?php foreach ($this->Plugin->getCrumbs() AS $i => $_crumb): ?>
+        <?php if (isset($_crumb['url'])): ?>
+            <li<?php echo $this->Plugin->getAttributeSet('creator.breadcrumbs.crumb.' . ($i + 1)) ?>>
+                <a href="<?php echo $_crumb['url'] ?>"><?php echo $_crumb['label'] ?></a>
+            </li>
+        <?php else: ?>
+            <li class="active"><?php echo $_crumb['label'] ?></li>
+        <?php endif ?>
+    <?php endforeach ?>
+</ul>

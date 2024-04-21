@@ -1,0 +1,34 @@
+<?php $closeTag = false; if ($this->Form->isAjaxEnabled() === true && $this->Form->getRequest()->getPost('isAjax') != '1'): ?>
+<div id="<?php echo $this->containerId ?>_ajax">
+    <?php $closeTag = true;  endif ?>
+    <?php if ($this->Form->isAjaxEnabled() === true): ?>
+        <script>
+            $(function() {
+                $('#<?php echo $this->containerId ?>_ajax form').ajaxForm({
+                    target       : '#<?php echo $this->containerId ?>_ajax',
+                    data         : {
+                        isAjaxForm  : '<?php echo $this->containerId ?>',
+                        isAjax      : '1'
+                    },
+                    beforeSubmit : function(){
+
+                    },
+                    success      : function(){
+                    }
+                });
+            });
+        </script>
+    <?php endif ?>
+    <!--<div id="<?php echo $this->containerId ?>">-->
+        <form<?php echo $this->Form->getAttributeSet('creator.form') ?> id="<?php echo $this->containerId ?>">
+            <?php foreach ($this->Form->getContent() AS $i => $_content): ?>
+                <div<?php echo $this->Form->getAttributeSet('creator.form.content.' . ($i + 1)) ?>>
+                    <?php echo $this->Form->renderContent($_content) ?>
+                </div>
+            <?php endforeach ?>
+        </form>
+    <!--</div>-->
+    <?php if ($closeTag === true): ?>
+</div>
+<?php endif ?>
+

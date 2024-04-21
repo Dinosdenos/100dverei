@@ -1,0 +1,15 @@
+<script>
+    $(function(){
+        $("#<?php echo $this->Plugin->getId() ?>").sticky({ 
+            topSpacing: 70, 
+            center:true, 
+            className:"",
+            bottomSpacing : 220
+        });
+    });
+</script>
+<div<?php echo $this->Plugin->getAttributeSet('creator.sticky') ?>>
+    <?php if ($this->Plugin->getContent() != ""): ?>
+        <?php echo $this->Plugin->renderContent($this->Plugin->getContent()) ?>
+    <?php endif ?>
+</div>

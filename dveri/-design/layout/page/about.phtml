@@ -1,0 +1,77 @@
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+<section>
+    <row>
+        <div style="display: flow-root;" class="container text">
+            <div style="padding-top:15px;">
+                <h1 class="common-title"><?php echo $this->current->getSeo()->getH1() ?></h1>
+            </div>
+
+            <div style="padding-top:20px;"><?php echo $this->current->getContent() ?></div>
+
+        </div>
+
+
+    </row>
+</section>
+<?php 
+$images = $this->current->getGallery();
+$i = 0;
+foreach ($images as $gallery) {
+if ($gallery->image != ''){
+    $i++;
+}
+}
+if ($i++ >= 1) { 
+?>
+<section>
+    <div class="container text">
+    <div class="row" style="margin-top: 15px;">
+            <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-6">
+                <div class="homepage-v7-featured-products-title-main">
+                    <div class="common-title2"><?php echo Fenix::lang('Фото наших работ') ?></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <?php
+                            foreach ($images as $gallery) {
+                                
+                                $image = HOME_DIR_ABSOLUTE.$gallery->image;
+                                echo '
+                                <div class="col-lg-3 col-md-4 col-sm-6">
+    <div class="homepage-v7-popular-products-shop-layout">
+        <div class="homepage-v7-popular-products-shop-image-wrap">
+            <div class="homepage-v7-popular-products-shop-image-main">
+                <div class="homepage-v7-popular-products-shop-image">
+                    <a href="'.$gallery->meta_url.'">
+                        <img style="height: 100%; margin: 0 auto; display: block;"
+                            src="'.Fenix_Image::adapt($image, 360, 0).'"
+                            class="object-fit-cover h-100 ls-is-cached lazyload" alt="'.$gallery->meta_alt.'">
+                        <div class="homepage-v7-popular-products-shop-image-x">
+                            <img style="height: 100%; margin: 0 auto; display: block;"
+                                src="'.Fenix_Image::adapt($image, 360, 0).'"
+                                class="object-fit-cover h-100 ls-is-cached lazyload" alt="'.$gallery->meta_alt.'">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="shop-content">
+            <div class="homepage-v7-popular-products-shop-title-main">
+                <a class="homepage-v7-popular-products-shop-title"
+                    href="'.$gallery->meta_url.'">'.$gallery->meta_title.'</a>
+            </div>
+        </div>
+    </div>
+</div>
+        ';
+                            }
+                            
+        ?>
+        </div>
+    </div>
+</section>
+<?php
+}
+?>

@@ -1,0 +1,11 @@
+<div class="products-list" style="position:relative;z-index:1;">
+    <?php if ($this->products->count() > 0): ?>
+        <?php foreach ($this->products AS $i => $product): ?>
+            <?php $_product = Fenix::getCollection('catalog/products_product')->setProduct($product->toArray()) ?>
+            <?php echo $this->partial('catalog/products/block.phtml', array('i' => $i, 'product' => $_product)) ?>
+        <?php endforeach ?>
+    <?php else: ?>
+        Нет товаров
+    <?php endif ?>
+    <div class="clearfix"></div>
+</div>

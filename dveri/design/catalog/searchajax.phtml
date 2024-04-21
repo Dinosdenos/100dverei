@@ -1,0 +1,55 @@
+<section class="product-list search">
+    <div class="container" style="
+background: #c9c9c980;
+    border: 1px solid #f00;
+    box-shadow: 0 0 9px #ef1e1e;
+    border-radius: 0px 0px 10px 10px;
+    backdrop-filter: blur(10px);
+">
+        <?php if ( ! empty($this->emptySearchString)) { ?>
+        <div class="alert alert-warning" role="alert">
+            <?php echo $this->emptySearchString; ?>
+        </div>
+        <?php } else { ?>
+        <?php if ($this->products->count() > 0) { ?>
+        <div class="row">
+            <?php 
+            require_once ('searchcateg.php');
+			?>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <!-- Section Title -->
+                <div style="margin-bottom: 29px; padding-top: 10px;" class="section-title mt-res-sx-30px mt-res-md-30px underline-shape ajax-line">
+                    <div><?php echo Fenix::lang('Товары соответствующие запросу:') ?></div>
+                </div>
+                <!-- Section Title -->
+            </div>
+        </div>
+        <div class="row">
+            <?php
+                    $i = 0;
+                    foreach ($this->products AS $product) {
+                        echo $this->partial('catalog/products/block-ajax.phtml', array('i' => $i,'sku' => $sku, 'product' => $product, 'category' => $this->category));
+                        $i++;
+						}
+						
+                    ?>
+        </div>
+        <?php
+            }
+			
+            else { ?>
+        <div><?php echo Fenix::lang('Нет товаров') ?></div>
+        <?php } ?>
+        <?php } ?>
+    </div>
+    <?php
+    if (empty($this->emptySearchString)) {
+        echo $this->paginationControl($this->productsList, 'Sliding', 'layout/blocks/paginator.phtml',
+            array(
+                'uri' => '?page=%s&q=' . Fenix::getRequest()->getQuery('q')
+            ));
+    }
+    ?>
+</section>

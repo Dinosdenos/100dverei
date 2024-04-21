@@ -1,0 +1,105 @@
+<?php $req = Fenix::getRequest() ?>
+<?php if($this->orderInfo === false) { ?>
+<p class="alert alert-info"><?php echo Fenix::lang('Ваша корзина пуста'); ?></p>
+<?php } else { 
+           
+            //$name = $this->orderInfo->name;
+            $cellphone = $this->orderInfo->cellphone;
+            $email = $this->orderInfo->email;
+            
+            
+
+                // Удаляем все символы, кроме цифр
+            $cellphone = preg_replace('/\D/', '', $cellphone);
+                
+                // Добавляем префикс '+38', если его нет
+            if (substr($cellphone, 0, 2) !== '38') {
+                $cellphone = '38' . $cellphone;
+            }
+                
+                // Добавляем '+' в начало строки
+            $cellphone = '+' . $cellphone;
+
+           
+            
+            ?>
+<div class="table-content table-responsive cart-table-content offcanvas-cart">
+    <!-------->
+    <div id="checkinfotb">
+        <?php foreach ($this->products as $i => $_product) { ?>
+
+        <?php 
+                $total = 0;
+                $total += ($UnitPrice * $_product->getOrderQty()) ?>
+        <div class="tr_subtotal tr_product_<?php echo $_product->getOrderUnitId() ?>">
+            <div class="main-product">
+                <div class="product-thumbnail">
+                    <a href="<?php echo $_product->getUrl() ?>"><img
+                            src="<?php echo $_product->getImageAdapt(98, 98) ?>"
+                            alt="<?php echo $_product->getTitle() ?>" /></a>
+                </div>
+                <div class="product-name"><a
+                        href="<?php echo $_product->getUrl() ?>"><?php echo $_product->getTitle() ?></a></div>
+            </div>
+            <div class="footer-product">
+                <div class="product-price-cart">
+                    <span><?php echo Fenix::lang('Цена') ?><?php echo ': ';?></span><?php echo $_product->getOrderUnitPrice() ?></span>
+                    UAH</div>
+                <div class="product-quantity" style="line-height: unset; margin: 0px; top: 0;">
+                    <div class="qty-block"
+                        style="border: 0px solid #e8e8e8;color: #000;height: auto;/* display: flex; *//* align-content: center; *//* flex-wrap: nowrap; *//* justify-content: center; */width: auto;display: flex;align-content: center;justify-content: center;align-items: center;line-height: unset;">
+                        <?php echo $_product->getOrderQty() ?><?php echo $_product->getUnitForCart(); ?>
+                    </div>
+                </div>
+                <div class="product-subtotal"><?php echo Fenix::lang('Сумма') ?><?php echo ': ';?><span
+                        class="product_subtotal"><?php echo $_product->getOrderUnitPrice() * $_product->getOrderQty(); ?></span>
+                    UAH</div>
+            </div>
+        </div>
+        <?php } ?>
+    </div>
+    <!-------->
+    </tbody>
+    </table>
+</div>
+<script>
+window.clarity("event", "purchase");
+</script>
+<script>
+  gtag("event", "purchase", {
+    transaction_id: "<?php echo $this->orderInfo->getId(); ?>",
+    value: <?php echo $this->orderInfo->total_price; ?>,
+    currency: "UAH",
+    items: [<?php
+                $s = 0;
+                foreach ($this->products as $i => $product) {
+                    if ($s <= 0) {
+                        $s++;
+                        echo "{
+				id: '" . $product->sku . "', \n
+                item_id: '" . $product->sku . "', \n
+				google_business_vertica : 'retail', \n
+                item_name: '" . $product->title . "', \n
+                item_list_id: '" . $product->parent . "',\n
+                price: " . $product->price . " , \n
+                currency: 'UAH', \n
+                quantity: ". $product->getOrderQty() . " \n
+                } ";
+                    } else {
+                        echo ", {
+				id: '" . $product->sku . "', \n			
+                item_id: '" . $product->sku . "', \n
+				google_business_vertica : 'retail', \n
+                item_name: '" . $product->title . "', \n
+                item_list_id: '" . $product->parent . "',\n
+                price: " . $product->price . " , \n
+                currency: 'UAH', \n
+                quantity: " . $product->getOrderQty() . " \n
+                }";
+                    }
+                }
+                ?>]
+  }
+);
+</script>
+<?php }?>

@@ -1,0 +1,255 @@
+<?php
+   $availableAttributes = Fenix::getHelper('catalog/service_filter')->getAttributeInLeftBlock($this->category);
+   $haveFilters = false;
+   $catalogFilterModel = Fenix::getModel('catalog/filter');
+   ?>
+
+<div class="product-filter-wrapper">
+    <div class="left-sidebar">
+        <div class="sidebar-heading">
+            <div class="main-heading">
+                <div><?php echo Fenix::lang('Фильтр товаров'); ?></div>
+            </div>
+            <!-- Sidebar single item -->
+            <?php foreach ($availableAttributes as $_attribute) { ?>
+            <?php if ($_attribute->is_range) { ?>
+            <?php $range = $catalogFilterModel->getRangeData($this->category, $_attribute) ?>
+            <?php 
+
+        ?>
+            <?php if ($range->min < $range->max) {
+               $haveFilters = true;
+            ?>
+            <div class="sidebar-widget mt-20">
+            <h4 class="pro-sidebar-title"><?php echo $_attribute->title; ?></h4>
+                <script>
+                $(function() {
+                    $("#slider-range").slider({
+                        range: true,
+                        min: <?php echo (float) $range->min ?>,
+                        max: <?php echo (float) $range->max ?>,
+                        values: [<?php echo (float) $range->selected_min ?>,
+                            <?php echo (float) $range->selected_max ?>
+                        ],
+                        slide: function(event, ui) {
+                            $("#amount").val($("#slider-range").slider("values", 0) + " UAH " + 
+                            " - " + $("#slider-range").slider("values", 1) + " UAH ");
+                        },
+                        stop: function(event, ui) {
+                            $.post('', {
+                                'action': 'updateFilter',
+                                'attribute': '<?php echo $_attribute->sys_title ?>',
+                                'min': ui.values[0],
+                                'max': ui.values[1]
+                            }, function(data) {
+                                if (data != '')
+                                    self.location.href = data;
+                            });
+                        }
+                    });
+                    $("#amount").val($("#slider-range").slider("values", 0) + " UAH " + 
+                            " - " + $("#slider-range").slider("values", 1) + " UAH ");
+
+                });
+                </script>
+                <div class="price-filter mt-10">
+                    <div class="price-slider-amount">
+                        <input type="text" id="amount" name="price" placeholder="Add Your Price" />
+                    </div>
+                    <div id="slider-range"></div>
+                </div>
+            </div>
+            <?php } ?>
+            <?php } else { ?>
+            <?php $_values = $catalogFilterModel->getAvailableValues($this->category, $_attribute);
+
+if ($_values->count() > 0) {
+    $haveFilters = true;
+    $attributes_title = $_attribute->title;
+?>
+            <div class="sidebar-widget">
+                <h4 class="pro-sidebar-title"><?php echo $attributes_title; ?></h4>
+                <div class="sidebar-widget-list">
+                    <ul>
+
+                
+                        <?php foreach ($_values as $_value) { ?>
+                        <?php
+                        $isSelected = $catalogFilterModel->isAttributeSelected($_attribute, $_value);
+                        $onClick = '';
+                        $disabled = ' disabled="disabled"';
+                        $checked = '';
+                        $link = '';
+                        $display = '';
+                        $hide = '';
+                        $controlplus = '';
+                        $inSitemap = '';
+                        //$display = 'none';
+
+                        if ($_value->count > 0) {
+                           $link = $catalogFilterModel->prepareFilterUrl($_attribute, $_value);
+                           $link = str_replace(' ', '%20', $link);
+                           $onClick = 'onclick="window.location.href=\'' . $link . '\'"';
+                           $disabled = '';
+                           $inSitemap = '';
+                           //$display = '';
+                        }
+
+                        if ($isSelected) {
+                           $checked = ' checked="checked"';
+                        }
+                        ?>
+                        <?php
+                        /*$myArr = array(1,2,3,4,5);
+                        foreach($myArr as $key => $item){
+                            if ($item == 3){
+                              unset($myArr[$key]);
+                            }
+                        }*/
+                        /*Исключение из фильтра данных */
+                        $reled_filter_arr = explode(',', $this->category->related_filter);
+                        foreach($reled_filter_arr as $key => $reled_filter){
+                            if ($_value->value == $reled_filter) {
+                                $display = 'style="display: none;"';
+                                $controlplus = 'hide';
+                            }
+                        }
+                        $hide_filter_arr = explode(',', $this->category->hide_filter);
+                        foreach($hide_filter_arr as $key => $hide_filter){
+                            if ($_value->value == $hide_filter) {
+                                $display = 'style="display: none;"';
+                                $controlplus = 'hide';
+                                $inSitemap = 'rel="nofollow"';
+                            }
+                        }
+                        /*Конец исключения из фильтра */
+                        ?>
+                        <?
+                        if ($display != 'style="display: none;"') { ?>
+                        <li class="" <?php echo $display; ?>>
+                            <div class="sidebar-widget-list-left"> 
+                                <input id="fil_ch"<?php echo $checked ?> type="checkbox"
+                                    onclick="location.href='<?php echo $link ?>';" /> <a  <?php echo $inSitemap; ?> 
+                                    href="<?php echo $link ?>"><?php echo Fenix::lang($_value->value); ?><span>(<?php echo $_value->count ?>)</span>
+                                </a>
+                                <span class="checkmark" onclick="location.href='<?php echo $link ?>';"></span>
+                            </div>
+                        </li>
+                        <?php } 
+                         } ?>
+                        <!--/************ */-->
+                    </ul>
+                </div>
+            </div>
+            <?php 
+                        }
+                    }
+                    
+                        }
+                        ?>
+            <!-- Sidebar single item -->
+        </div>
+
+    </div>
+</div>
+
+
+<?php if (strpos($_SERVER['REQUEST_URI'], '/ua') === false) { ?>
+<script>
+$(function() {
+    var $filterAttribute = $(".sidebar-widget");
+
+    $filterAttribute.each(function() {
+        var $this = $(this);
+        var $controls = $this.find(".sidebar-widget-list-left");
+
+        if ($controls.length > 5) {
+            $controls.each(function(index) {
+                if (index > 4) {
+                    $(this).parent().addClass("checked_li hide");
+                }
+            });
+            $this.append(
+                '<div class="text-center mb-3"><span class="show-all-filters">Показать все <i class="ion-ios-plus-empty"></i></span></div>'
+            );
+        }
+
+
+    });
+
+
+    $("body").on("click", ".show-all-filters", function() {
+        var $this = $(this);
+        var $parent = $this.parents(".sidebar-widget");
+        var $hiddenFields = $parent.find(".checked_li");
+
+        if (!$this.hasClass("active")) {
+            $this.addClass("active");
+            $this.text("Скрыть");
+            $this.append('<i class="ion-ios-minus-empty"></i>');
+        } else {
+            $this.removeClass("active");
+            $this.text("Показать все");
+            $this.append('<i class="ion-ios-plus-empty"></i>');
+        }
+
+        $hiddenFields.each(function() {
+            if ($(this).hasClass("hide")) {
+                $(this).removeClass("hide").addClass("show");
+            } else {
+                $(this).removeClass("show").addClass("hide");
+            }
+        });
+    });
+});
+</script>
+<?php } else { ?>
+<script>
+$(function() {
+    var $filterAttribute = $(".sidebar-widget");
+
+    $filterAttribute.each(function() {
+        var $this = $(this);
+        var $controls = $this.find(".sidebar-widget-list-left");
+
+        if ($controls.length > 5) {
+            $controls.each(function(index) {
+                if (index > 4) {
+                    $(this).parent().addClass("checked_li hide");
+                }
+            });
+            $this.append(
+                '<div class="text-center mb-3"><span class="show-all-filters">Показати все <i class="ion-ios-plus-empty"></i></span></div>'
+            );
+        }
+
+
+    });
+
+
+    $("body").on("click", ".show-all-filters", function() {
+        var $this = $(this);
+        var $parent = $this.parents(".sidebar-widget");
+        var $hiddenFields = $parent.find(".checked_li");
+
+        if (!$this.hasClass("active")) {
+            $this.addClass("active");
+            $this.text("Сховати");
+            $this.append('<i class="ion-ios-minus-empty"></i>');
+        } else {
+            $this.removeClass("active");
+            $this.text("Показати все");
+            $this.append('<i class="ion-ios-plus-empty"></i>');
+        }
+
+        $hiddenFields.each(function() {
+            if ($(this).hasClass("hide")) {
+                $(this).removeClass("hide").addClass("show");
+            } else {
+                $(this).removeClass("show").addClass("hide");
+            }
+        });
+    });
+});
+</script>
+<?php } ?>

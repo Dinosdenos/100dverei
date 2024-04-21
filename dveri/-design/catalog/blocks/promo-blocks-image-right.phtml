@@ -1,0 +1,37 @@
+<?php $promoBlock = Fenix::getCollection('catalog/promo')->load('right_image_midle');?>
+<?php 
+if (Fenix_Language::getInstance()->getCurrentLanguage()->name == 'russian') {
+    $title = $promoBlock->getTitleRussian(); 
+} else {
+    $title = $promoBlock->getTitleUkraine(); 
+}
+
+?>
+<?php if ($promoBlock !== false): ?>
+<?php $total = count($promoBlock->getProducts()); ?>
+<?php 
+if (Fenix_Language::getInstance()->getCurrentLanguage()->name == 'russian') {
+    $image = $promoBlock->getImageRussian(); 
+} else {
+    $image = $promoBlock->getImageUkraine(); 
+}
+?>
+<?php $image = Fenix_Image::adapt($image, 690, 280);  ?>
+<?php 
+if (Fenix_Language::getInstance()->getCurrentLanguage()->name == 'russian') {
+    $href = $promoBlock->getUrlRussian(); 
+} else {
+    $href = $promoBlock->getUrlUkraine();
+}
+?>
+<?php if ($href != '') { ?>
+<a href="<?php echo $href; ?>">
+<?php } ?>
+
+<img data-src="<?php echo $image; ?>" alt="<?php echo $title; ?>" class="lazyload" />
+
+<?php if ($href != '') { ?>
+</a>
+<?php } ?>
+
+<?php endif ?>

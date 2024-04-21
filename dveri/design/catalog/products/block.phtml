@@ -1,0 +1,165 @@
+<?php 
+            //echo $this->product->image;
+            $img = Fenix_Image::adaptWatermark($this->product->image, 360, 0);
+            $imge = Fenix_Image::adapt('e.png', 360, 0);
+            $rname = str_replace('.jpg', 'a.jpg', $this->product->image);
+            //$img_a = Fenix_Image::adaptWatermark($rname, 360, 0);
+            $stock = '';
+            $styleimg = '';
+            $video = Fenix::getYouTubeVideoId(trim(strip_tags($this->product->video)));
+            if (strripos($this->product->style, 'Двустворчатые')){
+                $styleimg = 'style="object-fit: contain !important; width: 100%;"';
+            }
+            if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) {
+
+                if ($this->product->getPreorder() == 0){ 
+                    $stock = Fenix::lang('Есть в наличии');
+                    $check = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: green;" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                  </svg>';
+                  $style = 'style="color: green;;font-weight: 700;"';
+                } else {
+                    $stock = Fenix::lang('Ожидается через 7 дней');
+                    $style = 'style="color: red;font-weight: 700;"';
+                    $check = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: green;" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                  </svg>';
+                }
+                } else {
+                    $stock = Fenix::lang('Нет в наличии');
+                    $style = 'style="color: red;font-weight: 700;"';
+                    $check = '';
+                }
+               $reviewsList = $this->product->getReviews(); 
+               $reviewsCount = $reviewsList->count();
+                ?>
+
+
+<div class="col-xxl-3 col-lg-4 col-md-4 col-sm-6 m-b-60 homepage-v7-responsive-full-box">
+    <div class="card product-card recently-added-product">
+    <?php if ($this->product->sale == 1 or $this->product->recomend == 1 or $video != '' or $this->product->is_new == 1 or $this->product->install == 1  or $this->product->price < $this->product->price_old) { ?>
+            <ul class="homepage-v7-popular-products-badge-group-main">
+                <?php if ($this->product->sale == 1 or $this->product->price < $this->product->price_old) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-sale-products-badge"><?php echo Fenix::lang('Aкция') ?></span></li>
+                <?php } ?>
+                <?php if ($this->product->recomend == 1) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-recomend-products-badge"><?php echo Fenix::lang('Мы рекомендуем') ?></span>
+                </li>
+                <?php } ?>
+                <?php if ($this->product->is_new == 1) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-new-products-badge"><?php echo Fenix::lang('Новинка') ?></span></li>
+                <?php } ?>
+                <?php if ($this->product->install == 1) { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-install-products-badge"><?php echo Fenix::lang('Монтаж на завтра') ?></span>
+                </li>
+                <?php } ?>
+                <?php if ($video != '') { ?>
+                <li class="homepage-v7-popular-products-badge-group"><span
+                        class="homepage-v7-install-products-badge"><?php echo Fenix::lang('Есть видео') ?></span>
+                </li>
+                <?php } ?>
+            </ul>
+            <?php } ?>
+            <?php
+            $is_mobile_device = Fenix::check_mobile_device();
+                    if ($this->product->getParent() == '7141'){
+                        if ($is_mobile_device){
+                            $styleE = 'style="position:absolute; top:173px;"';
+                        } else {
+                            $styleE = 'style="position:absolute; top:153px;"';
+                        }
+                        
+                    } else {
+                        if ($is_mobile_device){
+                        $styleE = 'style="position:absolute; top:223px;"';
+                        } else {
+                            $styleE = 'style="position:absolute; top:414px;"';
+                        }
+                    }
+                   
+                    ?>
+            <div class='e' <?php echo $styleE;?>>
+            <img <?php echo $imge; ?>
+                class="" src="<?php echo $imge; ?>"
+                alt='Участник програми "єВідновлення"' style="max-width: 60%;margin: 0 auto;display: flex;" />
+            </div>    
+                    <?php
+                    if ($this->product->getParent() == '7141'){
+                        $styleBlock = 'style="height: 200px;"';
+                    } else {
+                        $styleBlock = '';
+                    }
+                   
+                    ?>
+
+        <a class="card-img-top" <?php echo $styleBlock; ?> href="<?php echo $this->product->getUrl() ?>"><img <?php echo $styleimg; ?>
+                class="object-fit-cover <!--w-100--> h-100" src="<?php echo $img; ?>"
+                alt="<?php echo $this->product->title; ?>" /></a>
+        <div class="card-body">
+            <p><span <?php echo $style; ?>><?php echo $check; ?><?php echo $stock; ?></span></p>
+            <div class="product-title"><a
+                    href="<?php echo $this->product->getUrl() ?>"><?php echo ucfirst($this->product->title); ?></a>
+            </div>
+            <div class="d-flex justify-content-between price-box">
+                <div class="product-price">
+                    <?php echo ($this->product->price_old <= 0 or $this->product->price_old <= $this->product->price) ? '<span class="text-price">'.$this->product->price.' UAH</span>' : '<span class="text-price"><del>'.$this->product->price_old.'</del></span><span class="text-price">'.$this->product->price.' UAH</span>';?>
+                </div>
+                <?php 
+                if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) {
+                                ?>
+                <div class="product-action-vertical">
+                    <!--<a href="wishlist.html" title="Add To Wishlist" class="btn-product-wishlist-icon">
+                                                    <span><i class="far fa-heart"></i></span>
+                                                </a>-->
+                    <!--<a href="javascript:void(0)" title="Быстрый просмотр" data-bs-toggle="modal"
+                    onclick="return FenixCheckout.quickview('<?php echo $this->product->url_key; ?>')"
+                    data-link-action="quickview" title="Быстрый просмотр" data-bs-toggle="modal"
+                    data-bs-target="#modalindex">
+                        <span><i class="fas fa-eye"></i></span>
+                    </a>-->
+                    <a onclick="f<?php echo $this->product->sku; ?>(); f<?php echo $this->product->getId();?>();"
+                        href="javascript: void(0);" title="<?php echo Fenix::lang('Добавить в корзину') ?>"
+                        class="btn-product-addtocart-icon">
+                        <span><i class="fas fa-shopping-basket"></i></span>
+                    </a>
+                </div>
+                <?php 
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php
+                $dataPrice = $this->product->price_old > $this->product->price ? $this->product->price_old : $this->product->price;
+                $discount = $this->product->price_old > $this->product->price ? $this->product->price_old - $this->product->price : 0; 
+
+?>
+<script>
+function f<?php echo $this->product->sku; ?>() {
+    return FenixCheckout.addProduct('https://<?php echo $_SERVER['HTTP_HOST'];?>/checkout/process/add/pid/<?php echo $this->product->id; ?>/qty/1');
+}
+
+function f<?php echo $this->product->getId();?>() {
+    gtag("event", "add_to_cart", {
+    currency: "UAH",
+    value: "<?php echo number_format($this->product->price, 2, '.', '');?>",
+    items: [
+    {
+      item_id: "<?php echo $this->product->sku; ?>",
+      item_name: "<?php echo $this->product->title; ?>",
+      discount: <?php echo $discount; ?>,
+      item_brand: "<?php echo $this->product->brand_name; ?>",
+      item_list_id: "<?php echo $this->product->parent; ?>",
+      price: "<?php echo number_format($dataPrice, 2, '.', ''); ?>",
+      quantity: 1
+    }
+    ]
+  });
+	window.clarity("event", "add_to_cart");
+}
+</script>
+</div>

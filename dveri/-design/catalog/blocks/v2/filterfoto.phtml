@@ -1,0 +1,124 @@
+<?php
+//$linko = mysqli_connect('localhost', 'u_dvereijl', '7iF218IxALtA', 'dvereijl');
+//$getcateg = mysqli_query($linko, "SELECT COUNT(*) FROM `fe_foto_filter` where `categ_id` = '" . $this->category->id . "';");
+$getcateg = Fenix::getHelper('catalog/service_filter')->getFilterFotoCount($this->category->id);
+
+foreach ($getcateg as $getcategcount) {
+   $countcateg = $getcategcount['COUNT(*)'];
+}
+if ($countcateg > 0) {
+?>
+<div class="container filterfotos">
+    <div class="arrowsleft"><i class="arrow left js-prev"></i></div>
+    <div class="owl-carousel">
+        <?php
+         $availableAttributes = Fenix::getHelper('catalog/service_filter')->getAttributeInLeftBlock($this->category);
+         $haveFilters = false;
+         $catalogFilterModel = Fenix::getModel('catalog/filter');
+         foreach ($availableAttributes as $_attribute) {
+            $_values = $catalogFilterModel->getAvailableValues($this->category, $_attribute);
+            if ($_values->count() > 0) {
+               $haveFilters = true;
+               foreach ($_values as $_value) {
+                  $isSelected = $catalogFilterModel->isAttributeSelected($_attribute, $_value);
+                  $onClick = '';
+                  $disabled = ' disabled="disabled"';
+                  $checked = '';
+                  $link = '';
+                  $display = 'none';
+                  if ($_value->count > 0) {
+                     $link = $catalogFilterModel->prepareFilterUrl($_attribute, $_value);
+                     $link = str_replace(' ', '%20', $link);
+                     $onClick = 'onclick="window.location.href=\'' . $catalogFilterModel->prepareFilterUrl($_attribute, $_value) . '\'"';
+                     $disabled = '';
+                     $display = '';
+                  }
+                  if ($isSelected || $_value->count <= 0) {
+                     $checked = 'opacity:.25;';
+                  }
+				  $getatributs = Fenix::getHelper('catalog/service_filter')->getFilterFoto($this->category->id, $_value->value);
+                  //$getatributs = mysqli_query($linko, "SELECT * FROM `fe_foto_filter` where `categ_id` = '" . $this->category->id . "' and `filter_name` = '" . $_value->value . "';");
+         ?>
+        <?php
+	  
+                  while ($atributs = mysqli_fetch_array($getatributs)) {
+					  /************************/
+					  $imgwebp = str_replace('.jpg', '.webp', Fenix_Image::resize($atributs['filter_image'], 120, 120));
+					  /**************************/
+					  $filterName = $atributs['new_filter_name'];
+					  /*******************************/
+					  /*if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei' , $imgwebp))) { 
+        $image_webp = '<picture style="margin: auto;">
+            <source type="image/webp" data-srcset="'.$imgwebp.'">
+            <img width="100%" height="100%" style="border: 2px solid;    border-radius: 10px; '.$checked.'    border-color: #196089;" class="rounded img-fluid lazyload"
+               data-src="'.Fenix_Image::resize($atributs['filter_image'], 120, 120).'"
+               title="'.Fenix::lang($filterName).'" alt="'.Fenix::lang($filterName).'" />
+         </picture>';
+          } else { */
+          $image_webp = '
+          <picture style="margin: auto;">
+          <source type="image/webp" data-srcset="'.Fenix_Image::resizeWebp($atributs['filter_image'], 120, 120).'">
+          <img style="border: 2px solid;    border-radius: 10px; '.$checked.' border-color: #196089;" class="rounded img-fluid lazyload"
+          data-src="'.Fenix_Image::resize($atributs['filter_image'], 120, 120).'"
+          title="'.Fenix::lang($filterName).'" alt="'.Fenix::lang($filterName).'">
+          </picture>
+            ';
+		/* } 
+					  /**********************************/
+					  if ($atributs['new_filter_name'] == ''){
+						  $filterName = $_value->value;
+					  }
+                     echo '<div class="carousel-item" style=" word-wrap: break-word !important; display: block; max-width: 200px; "><a style=" color: #000; text-decoration: none; font-size: 12px;" href="' . $link . '"> 
+					 '.$image_webp.'
+					 <div style=" color: #000; text-decoration: none; font-size: 12px;">' . Fenix::lang($filterName) . '</div></a></div>';
+                  }
+                  ?>
+        <?php }
+            }
+         }
+         ?>
+    </div>
+    <div class="arrowsright"><i class="arrow right js-next"></i></div>
+</div>
+<script>
+$(document).ready(function() {
+    var owl = $('.owl-carousel');
+    // При клике по кнопке Влево
+    $(this).find('.js-prev').on('click', function() {
+        // Перематываем карусель назад
+        owl.trigger('prev.owl.carousel');
+    });
+    // При клике по кнопке Вправо
+    $(this).find('.js-next').on('click', function() {
+        // Перематываем карусель вперед
+        owl.trigger('next.owl.carousel');
+    });
+    owl.owlCarousel({
+        loop: true,
+        margin: 10,
+        navRewind: true,
+        nav: false,
+        dots: false,
+        center: true,
+        dotsEach: 3,
+        responsive: {
+            0: {
+                items: 5
+            },
+            700: {
+                items: 7
+            },
+            900: {
+                items: 8
+            },
+            1000: {
+                items: 12
+            }
+        }
+    })
+})
+</script>
+<script async src="https://<?php echo $_SERVER['HTTP_HOST'];?>/var/themes/modern171130/skin/js/owl.carousel.min.js"></script>
+<?php
+}
+?>

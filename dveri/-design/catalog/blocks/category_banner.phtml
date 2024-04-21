@@ -1,0 +1,62 @@
+<?php
+if ( ! count($this->banners) > 0) {
+    return '';
+}
+$href = '<a href="%s" title="%s">%s</a>';
+$img = '<img data-src="%s" class="lazyload img-fluid">';
+?>
+<div class="row" style="margin-top: 10px;">
+    <?php 
+	$i = 0;
+    foreach ($this->banners as $item) {
+        $i++;
+    }
+
+	foreach ($this->banners as $item) {
+    if ($i == 2){
+        $cols = 'col-md-12';
+    } else {
+        $cols = 'col-md-12';
+    }
+
+     ?>
+    
+    <div class="col-12 <?php echo $cols;?>" >
+        <?php
+            extract($item);
+			//echo $youtube_url;
+            if (isset($image) && $image != '') {
+                $imgwebp = str_replace('.jpg', '.webp', Fenix::getUploadImageUrl($image));
+				if (file_exists(str_replace('https://'. $_SERVER['HTTP_HOST'], $_SERVER['HTTP_HOST'] , $imgwebp))) { 
+				$imgSrc = $imgwebp;
+				} else {
+				$imgSrc = Fenix::getUploadImageUrl($image);
+				}
+            }
+            if ( ! empty($imgSrc)) {
+                $image = sprintf($img, $imgSrc);
+            }
+            if (isset($uri) && ($uri != '') && ($youtube_url == '')) {
+				
+                echo sprintf($href, Fenix::getUrl($uri), $title, $image);
+            }
+			elseif ($uri == '' && $youtube_url != ''){
+				
+				?>
+
+        <?php echo '<a href="'.$youtube_url.'" data-lity>'.$image.'</a>'; ?>
+
+
+        <?php 
+			
+			}
+            else {
+                echo $image;
+            }
+            ?>
+    </div>
+    <?php 
+
+} ?>
+</div>
+<script src="<?php echo Fenix::getSkinUrl('js/lity.min.js'); ?>"></script>

@@ -1,0 +1,33 @@
+<?php
+
+use App\Local\Core\Helper\DecoratorPhone;
+
+$phoneBlock = Fenix::getConfig('general/project/cellphone');
+$phoneBlock = trim($phoneBlock);
+if ($phoneBlock == '') {
+    return;
+}
+
+$phones = explode(chr(10), $phoneBlock);
+?>
+
+<?php if (count($phones) > 0) { ?>
+<div class="phones">
+    <div class="dropdown">
+        <button class="btn dropdown-toggle" type="button" id="navbarPhoneMenu" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <?php echo $phones[0]; ?>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarPhoneMenu">
+            <?php foreach ($phones as $phone) {
+                    $phone = DecoratorPhone::decorate($phone);
+                    echo $phone->getPhone();
+                }
+                ?>
+            <a href="javascript: void(0);" class="callback text-uppercase"
+                onclick="FenixUI.callbackDialog()">Перезвоните
+                мне</a>
+        </div>
+    </div>
+</div>
+<?php } ?>

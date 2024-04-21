@@ -1,0 +1,343 @@
+<!-- Home Page v7 Banner Slider -->
+<section class="homepage-v7-slider">
+    <div class="homepage-v7-slider-main-2">
+        
+    <!--
+        <?php
+                            $is_mobile_device = Fenix::check_mobile_device();
+                            /*$count = count($this->slideItems);
+                            for ($i = 0; $i < $count; $i++) {
+
+                                $image = $this->slideItems[$i]['image'];
+								$h1_1 = $this->slideItems[$i]['h1_1'];
+								$h1_2 = $this->slideItems[$i]['h1_2'];
+                                $url = $this->slideItems[$i]['url'];
+                                $url_name = $this->slideItems[$i]['button'];
+								$content = $this->slideItems[$i]['content'];
+                                $domain = 'https://'.$_SERVER['HTTP_HOST'].'/';
+                                $image = str_replace($domain, '', $image);*/
+                                 ?>
+
+        <div class="slick-slide">
+            <div class="homepage-v7-slide1-bg-images">
+                <img src="<?php //echo Fenix::getSkinUrl('images/homepage-v7-slide5-bg-img.jpg'); ?>"
+                    class="object-fit-cover w-100 h-100" alt="<?php echo $h1_1; ?>" />
+            </div>
+            <div class="homepage-v7-slide1-text">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 order-sm-last">
+                            <div class="homepage-v7-slide1-right-part">
+
+                                <img src="<?php //echo Fenix_Image::adapt($image, 646, 536);?>"
+                                    class="object-fit-cover w-100 h-100" alt="Regalia" />
+                            </div>
+                        </div>
+                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 order-sm-first">
+                            <div class="homepage-v7-slide1-left-part">
+                                <h3 class="common-tagtitle1-slide1"><?php //echo $h1_2; ?></h3>
+                                <h1 class="common-title1-slide1"><?php //echo $h1_1; ?></h1>
+                                <p class="common-desc1-slide1"><?php //echo $content; ?></p>
+                                <h2 class="common-subtitle1-slide1">$399.00</h2>
+                                <div class="homepage-v7-slide1-btn">
+                                    <a href="<?php //echo $url; ?>" class="common-btn1-hover"><span>buy now</span> <img
+                                            src="<?php //echo Fenix::getSkinUrl('images/common-btn-green-arrow.png'); ?>"
+                                            class="mw-100" alt="<?php //echo $h1_1; ?>" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php //} ?>
+                            -->
+
+                            <div class="homepage-v7-slide-bg-images">
+                                <?php 
+                                if ($is_mobile_device){ 
+                                    ?>
+                                    <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-slide5-bg-img'. Fenix_Language::getInstance()->getCurrentLanguage()->name .'_mob.jpg'); ?>"
+                                    class="object-fit-cover w-100 h-100" alt="<?php echo $h1_1; ?>" />
+                                <?php 
+                                } else { ?>
+                    <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-slide5-bg-img'. Fenix_Language::getInstance()->getCurrentLanguage()->name .'.jpg'); ?>"
+                    class="object-fit-cover w-100 h-100" alt="<?php echo $h1_1; ?>" />
+                                <?php
+                                }
+                                
+                                ?>
+                
+            </div>
+    </div>
+    <!--<div class="d-flex clearfix homepage-v7-slider-slicknavholdercustom">
+        <div class="homepage-v7-slider-slicknavbtnbig homepage-v7-slider-slicknavbtnprev">
+            <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-slider-prev.png'); ?>" class="mw-100"
+                alt="Regalia" />
+            <span>Prev</span>
+        </div>
+        <span class="homepage-v7-slider-slicknavholdercustom-line"></span>
+        <div class="homepage-v7-slider-slicknavbtnbig homepage-v7-slider-slicknavbtnnext">
+            <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-slider-next.png'); ?>" class="mw-100"
+                alt="Regalia" />
+            <span>Next</span>
+        </div>
+    </div>
+    <div class="homepage-v7-sliderCounterMain">
+        <span class="homepage-v7-slider-counter-cslide active">01</span>
+        <span class="homepage-v7-slider-counter-dslide"></span>
+        <span class="homepage-v7-slider-counter-tslide total"></span>
+    </div>
+    <div class="homepage-v7-slider-socialMain">
+        <ul>
+            <li class="homepage-v7-slider-socialMain-text">
+                <a href="javascript:void(0)" class="homepage-v7-slider-socialMain-name">Facebook</a>
+            </li>
+            <li class="homepage-v7-slider-socialMain-text">
+                <a href="javascript:void(0)" class="homepage-v7-slider-socialMain-name">Twitter</a>
+            </li>
+            <li class="homepage-v7-slider-socialMain-text">
+                <a href="javascript:void(0)" class="homepage-v7-slider-socialMain-name">Instagram</a>
+            </li>
+        </ul>
+    </div>-->
+</section>
+<!-- Home Page v7 Banner Slider -->
+
+<!-- Home Page v7 Categories -->
+<?php 
+$categories = Fenix::getHelper('catalog/service_categories')->getCategoriesForCard();
+if ( ! $categories) {
+    return '';
+} else { ?>
+
+<section class="homepage-v7-categories-area p-y-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                <div class="homepage-v7-categories-title-main">
+                    <h2 class="common-title"><?php echo Fenix::lang('Категории') ?></h2>
+                    <!--<p class="common-subtitle-desc">we have wide range of watch collection to present to our customers.
+                        We have gigantic range of smart watches, smart phones, bands and many other watches.</p>-->
+                    <div class="d-flex clearfix homepage-v7-categories-wrap-slicknavholdercustom">
+                        <div
+                            class="homepage-v7-categories-wrap-slicknavbtnbig homepage-v7-categories-wrap-slicknavbtnprev">
+                            <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-prev.png'); ?>"
+                                class="mw-100" alt="prev" />
+                        </div>
+                        <div
+                            class="homepage-v7-categories-wrap-slicknavbtnbig homepage-v7-categories-wrap-slicknavbtnnext">
+                            <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-next.png'); ?>"
+                                class="mw-100" alt="next" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-10 col-xl-9 col-lg-9 col-md-9 col-sm-12">
+                <div class="homepage-v7-categories-wrap">
+                    <?php foreach ($categories as $category) { ?>
+                    <div class="homepage-v7-categories-item">
+                        <div class="homepage-v7-categories-images-main">
+                            <div class="homepage-v7-categories-images">
+                                <a href="<?php echo $category['url']; ?>">
+                                    <img style="height: 100%; margin: 0 auto;" class="lazyload" data-src="<?php echo $category['image']; ?>"
+                                        alt="<?php echo $category['title'] ?>" class="object-fit-cover w-100 h-100">
+                                    <div class="homepage-v7-categories-images-x">
+                                        <img style="height: 100%; margin: 0 auto;" class="lazyload" data-src="<?php echo $category['image']; ?>"
+                                            alt="<?php echo $category['title'] ?>"
+                                            class="object-fit-cover w-100 h-100" />
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="homepage-v7-categories-content">
+                            <a href="<?php echo $category['url']; ?>">
+                                <h4 class="homepage-v7-categories-title"><?php echo $category['title'] ?></h4>
+                                <!--<p class="homepage-v7-categories-subtitle">5 Items</p>-->
+                            </a>
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?
+}
+?>
+
+<!-- Home Page v7 Categories -->
+
+<!-- Home Page v7 Features Area -->
+<section class="homepage-v7-features-area">
+<h2 class="common-title3"><?php echo Fenix::lang('Как мы работаем') ?></h2>
+    <div class="container">
+        <div class="row row-cols-xxl-5 row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 gx-0">
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                <div class="homepage-v7-features-item d-flex gray-bg">
+                    <div class="homepage-v7-features-icon">
+                        <i class="fas fa-door-closed"></i>
+                    </div>
+                    <div class="homepage-v7-features-content">
+                        <h6 class="homepage-v7-features-content-title"><?php echo Fenix::lang('Выбор модели двери') ?></h6>
+                        <span class="homepage-v7-features-content-subtitle"><?php echo Fenix::lang('Вы оставляете заявку на сайте на выбранную модель или приезжаете к нам в выставочный зал. Мы делаем предварительный расчёт стоимости готового дверного блока.') ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                <div class="homepage-v7-features-item d-flex gray-bg">
+                    <div class="homepage-v7-features-icon">
+                        <i class="fas fa-pencil-ruler"></i>
+                    </div>
+                    <div class="homepage-v7-features-content">
+                        <h6 class="homepage-v7-features-content-title"><?php echo Fenix::lang('Замер') ?></h6>
+                        <span class="homepage-v7-features-content-subtitle"><?php echo Fenix::lang('Мы выезжаем к Вам и после замера нашим монтажником делаем финальный счет и договор. Вы вносите предоплату за материалы в размере от 10 до 20 процентов в зависимости от типа дверей.') ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                <div class="homepage-v7-features-item homepage-v7-features-item-last d-flex gray-bg">
+                    <div class="homepage-v7-features-icon">
+                    <i class="fas fa-hammer"></i>
+                    </div>
+                    <div class="homepage-v7-features-content">
+                        <h6 class="homepage-v7-features-content-title"><?php echo Fenix::lang('Монтаж') ?></h6>
+                        <span class="homepage-v7-features-content-subtitle"><?php echo Fenix::lang('Согласно срокам, указанным в договоре, наша команда устанавливает дверной блок у Вас на объекте, после чего, вы оплачиваете остаток стоимости материалов и услуги монтажа.') ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Home Page v7 Features Area -->
+
+<!-- Home Page v7 Popular Products -->
+<?php echo $this->render('catalog/blocks/promo-blocks.phtml')  . PHP_EOL; ?>
+<!-- Home Page v7 Popular Products -->
+
+<!-- Home Page v7 Discount Collection -->
+<?php echo $this->render('catalog/blocks/promo-blocks-image.phtml')  . PHP_EOL; ?>
+<!-- Home Page v7 Discount Collection -->
+
+
+<!-- Home Page v7 Featured Products -->
+<?php echo $this->render('catalog/new-product.phtml') . PHP_EOL; ?>
+
+<!-- Home Page v7 Featured Products -->
+
+
+
+<!-- Home Page v7 Latest Blog -->
+<?php echo $this->render('blog/last.phtml') . PHP_EOL; ?>
+
+<!-- Home Page v7 Latest Blog -->
+
+
+<section class="seo-content">
+    <div class="container">
+        <div class="container seo-text mainpage">
+            <div class="row">
+                <div>
+                    <h1 style="text-align: center;" class="main-heading">
+                        <?php echo $this->current->getSeoH1() ?>
+
+                    </h1>
+                    <p class="h1 d-block d-md-none">
+                        <?php echo $this->current->getSeoH1() ?>
+                    </p>
+                    <?php 
+		$seotext = str_replace ('<img', '<img class="lazyload"', $this->current->getContent());
+		echo $seotext;
+		?>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-widget-tag seo-open">
+            <button id="open-bottom" class="nav-item homev7-pages roundbgcolor-box">
+                        <a class="homev7-nav-link nav-link round-box" style="font-weight: 700;" href="javascript:void(0)">
+                        <?php echo Fenix::lang('Читать всю статью')?></a>
+            </button>
+        </div>
+    </div>
+</section>
+<!-- Home Page v7 Subscribe Newsletter -->
+<!--<section class="homepage-v7-subscribe-newsletter pink-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="homepage-v7-subscribe-newsletter-content d-flex justify-content-center align-items-center">
+                    <div>
+                        <h4 class="homepage-v7-subscribe-newsletter-title">Subscribe Newsletter</h4>
+                    </div>
+                    <div>
+                        <p class="homepage-v7-subscribe-newsletter-text">Sign up to receive 15% off your first order!
+                        </p>
+                    </div>
+                    <div>
+                        <form class="homepage-v7-subscribe-newsletter-form">
+                            <input type="email" class="form-control" placeholder="Email address">
+                            <button class="btn-submit" type="submit"><i class="fab fa-telegram-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>-->
+<!-- Home Page v7 Free Shipping -->
+<!--<section class="homepage-v7-free-shipping green-bg" style="margin-top:15px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="homepage-v7-free-shipping-content d-flex justify-content-center align-items-center">
+                    <div style="min-width: 320px;">
+                        <h4 class="homepage-v7-free-shipping-title"><i class="fas fa-pencil-ruler"></i>*<?php echo Fenix::lang('БЕСПЛАТНЫЙ ЗАМЕР')?></h4>
+                    </div>
+                    <div >
+                        <p style="max-width: 500px;" class="homepage-v7-free-shipping-text">*<?php echo Fenix::lang('при покупке дверей у нас в магазине, сумма оплаченная Вами за замер возвращается скидкой в чек.')?>
+                        </p>
+                    </div>
+                    <div>
+
+                        <form style="display: flex;padding: 10px; align-items: center!important;" id="callback" class="common-form footers" method="POST" action="https://<?php echo $_SERVER['HTTP_HOST'];?>/feedback/calldoormaster"
+                        style="padding: 10px" novalidate="novalidate">
+                        <div class="form-group" style="display: inline-flex; min-width: 220px;">
+                            <input style="color: #fff; margin: 0 0 0 0;" type="text" class="form-control" name="firstname" placeholder="<?php echo Fenix::lang('Ваше имя')?>">
+                        </div>
+                        <div class="form-group" style="display: inline-flex; min-width: 220px;">
+                            <input style="color: #fff; margin: 0 0 0 0;" type="text" class="form-control" name="phone"
+                                placeholder="<?php echo Fenix::lang('Введите Ваш номер телефона')?>">
+                        </div>
+                        <div class="form-group" >
+                            <input type="hidden" name="url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+                        </div>
+                        <div class="form-group" >
+                            <input type="hidden" name="ip" value="<?php echo Fenix::getIp(); ?>">
+                        </div>
+                        <button style="color: #fff; height: 66px; border: 2px solid #ffffff;" type="submit" style="display: inline-flex; min-width: 157px;" class="common-btn1-hover-small modal-box-call"
+                            id="sendCallback"><?php echo Fenix::lang('Отправить')?></button>
+                    </form>
+      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>-->
+<!-- Home Page v7 Free Shipping -->
+<!-- Home Page v7 Subscribe Newsletter -->
+
+
+
+<?php /*
+echo Fenix::getHelper('core/cache')
+                ->partialCache(
+                    'core/render',
+                    'layout/page/mainindex.phtml',
+                    'main_page' . md5($_SERVER['REQUEST_URI']),
+                    array()
+                );*/
+?>

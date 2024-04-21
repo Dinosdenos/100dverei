@@ -1,0 +1,11 @@
+<h1<?php echo $this->Plugin->getAttributeSet('creator.title.title') ?>>
+    <span><?php echo $this->Plugin->getTitle() ?></span>
+
+    <?php if ($this->Plugin->getButtonset() != null): ?>
+        <?php $this->Plugin->setAttributeGroup('creator.title.buttonset') ?>
+        <?php $this->Plugin->appendClass('pull-right') ?>
+        <div<?php echo $this->Plugin->getAttributeSet('creator.title.buttonset') ?>>
+            <?php echo $this->Plugin->getButtonset() ?>
+        </div>
+    <?php endif ?>
+</h1>

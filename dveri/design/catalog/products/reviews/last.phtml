@@ -1,0 +1,111 @@
+<?php $locale = new Zend_Locale('ru_RU') ?>
+<?php $reviewsList = $this->product->getReviews() ?>
+<div class="reviews-last">
+
+    <div class="block-title actions"><span>Отзывы покупателей</span> <a href="#tab-reviews" class="btn green form-send"
+            onclick="return false;">Оставить отзыв</a> <a href="#tab-reviews" class="reviews-view-all">Смотреть все</a>
+    </div>
+    <div class="clear"></div>
+    <div class="reviews-list">
+
+
+        <?php if ($reviewsList->count() > 0): ?>
+        <?php foreach ($reviewsList AS $indexReview => $_review): ?>
+        <?php if ($this->limit && $indexReview >= $this->limit) {
+                    break;
+                } ?>
+        <?php $responseList = Fenix::getModel('catalog/reviews')->getReviewsList($this->product->getId(), $_review->id); ?>
+        <div class="review" property="review" typeof="Review">
+            <div class="name" property="name"><?php echo $_review->name ?></div>
+            <div class="rate">
+                <input type="hidden" name="val" value="<?php echo $_review->rating ?>" />
+            </div>
+            <?php $date = new Zend_Date($_review->review_date) ?>
+            <div class="date" property="datePublished"
+                datetime="<?php echo Fenix::getDate($_review->review_date)->format('Y-m-d') ?>">
+                <?php echo $date->get(Zend_Date::DAY, $locale) ?><?php echo $date->get(Zend_Date::MONTH_NAME, $locale) ?><?php echo $date->get(Zend_Date::YEAR, $locale) ?>
+            </div>
+            <?php if ($_review->review != ''): ?>
+            <div class="review-content" property="description"><?php echo $_review->review ?></div>
+            <?php endif ?>
+            <?php if ($_review->benefits): ?>
+            <div class="review-benefits"><span style="font-weight: bold">Достоинства:</span>
+                <?php echo $_review->benefits ?></div>
+            <?php endif ?>
+
+            <?php if ($_review->limitations): ?>
+            <div class="review-limitations"><span style="font-weight: bold">Недостатки:</span>
+                <?php echo $_review->limitations ?>
+            </div>
+            <?php endif ?>
+            <!--<div class="actions">
+                    <a href="javascript:;" class="action-add"><span>Ответить</span></a>
+                    <a href="javascript:;" class="action-response"><span><?php /*echo $responseList->count() */ ?> <?php /*echo  Fenix::declination($responseList->count(),array('Ответов','Ответ','Ответа')) */ ?></span></a>
+                    <?php /*echo $this->partial('likes/like.phtml',array(
+                        'item_id'   => $_review->id,
+                        'item_type' => 'product-review'
+                    )) */ ?>
+                </div>-->
+            <?php if (trim($_review->respond) != ''): ?>
+            <?php $date = new Zend_Date($_review->modify_date) ?>
+            <div class="separator"></div>
+            <div class="respond">
+                <div class="name"><?php echo Fenix::getConfig('general/project/name') ?></div>
+                <div class="date" property="datePublished"
+                    datetime="<?php echo Fenix::getDate($_review->review_date)->format('Y-m-d') ?>">
+                    <?php echo $date->get(Zend_Date::DAY, $locale) ?><?php echo $date->get(Zend_Date::MONTH_NAME, $locale) ?><?php echo $date->get(Zend_Date::YEAR, $locale) ?>
+                </div>
+                <div class="clear"></div>
+                <div class="respond-content"><?php echo $_review->respond ?></div>
+            </div>
+            <?php endif ?>
+            <div class="response-list-wrapper">
+                <?php foreach ($responseList as $response): ?>
+                <?php $date = new Zend_Date($response->review_date) ?>
+                <div class="respond">
+                    <div class="name"><?php echo $response->name ?></div>
+                    <div class="date" property="datePublished"
+                        datetime="<?php echo Fenix::getDate($response->review_date)->format('Y-m-d') ?>">
+                        <?php echo $date->get(Zend_Date::DAY, $locale) ?><?php echo $date->get(Zend_Date::MONTH_NAME, $locale) ?><?php echo $date->get(Zend_Date::YEAR, $locale) ?>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="respond-content"><?php echo $response->review ?></div>
+                </div>
+                <?php endforeach ?>
+            </div>
+            <div class="response-form-wrapper">
+                <?php echo Fenix::getHelper('catalog/reviews')->getResponseForm($this->product, $_review)->fetch() ?>
+            </div>
+        </div>
+        <?php endforeach ?>
+        <?php else: ?>
+        <?php
+            $Event = Fenix::getCreatorUI()
+                ->loadPlugin('Events')
+                ->setType(Creator_Events::TYPE_OK)
+                ->setMessage(Fenix::lang("Отзывов о товаре еще нет. Вы можете оставить свой заполнив форму."));
+            echo $Event->fetch();
+            ?>
+        <?php endif ?>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    $('.reviews-list').find('.review').each(function() {
+        $(this).find('.rate').rating({
+            fx: 'full',
+            loader: '<?php echo $this->getSkinUrl('images/1px.gif') ?>',
+            url: false,
+            readOnly: true,
+            image: '<?php echo $this->getSkinUrl('images/stars.png') ?>'
+        });
+    });
+
+    $('.reviews-list .actions .action-add').click(function() {
+        $(this).closest('.review').find('.response-form-wrapper').show();
+    });
+    $('.reviews-list .actions .action-response').click(function() {
+        $(this).closest('.review').find('.response-list-wrapper').show();
+    });
+});
+</script>

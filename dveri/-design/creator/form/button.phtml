@@ -1,0 +1,6 @@
+<button<?php echo $this->Plugin->getAttributeSet('creator.form.button') ?>>
+    <?php if ($this->Plugin->getIcon() != ''): ?>
+        <i class="<?php echo $this->Plugin->getIcon() ?>"></i>
+    <?php endif ?>
+    <?php echo $this->Plugin->getValue() ?>
+</button>

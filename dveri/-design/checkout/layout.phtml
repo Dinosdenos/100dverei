@@ -1,0 +1,215 @@
+<?php
+			function langurl(){
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+					
+			//	$lang = 'uk';
+				$svitcher = 'checked="checked"';
+				$urlchange = 'https://'. $_SERVER['HTTP_HOST'] .'' . str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+				echo $urlchange;
+			//	echo $lang;
+			//	echo $svitcher;
+			} else { 
+			//$lang = 'ru';
+			$urlchange = 'https://'. $_SERVER['HTTP_HOST'] .'' . '/ru' . $_SERVER['REQUEST_URI'];
+			echo $urlchange;
+			//echo $lang;
+			}
+			}
+			function langhtml(){
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+				$lang = 'ru';
+				echo $lang;
+			} else { 
+			$lang = 'uk';
+			echo $lang;
+			}
+			}
+			function svitcher(){
+				if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false){
+						$svitcher = 'checked="checked"';
+				echo $svitcher;}
+			}
+            
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+				$alternateua = 'https://'. $_SERVER['HTTP_HOST'] .'' . $_SERVER['REQUEST_URI'];
+				$alternateru = 'https://'. $_SERVER['HTTP_HOST'] .'' . str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+			} else { 
+				$alternateru = 'https://'. $_SERVER['HTTP_HOST'] .'' . str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+				$alternateua = 'https://'. $_SERVER['HTTP_HOST'] .'/ru' . $_SERVER['REQUEST_URI'];
+			}
+            $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            $url = explode('?', $url);
+            $url = $url[0];
+            $symbol = ',';
+            $symboldot = ';';
+
+            $url_sale = $_SERVER['REQUEST_URI'];
+            if (strpos($url, $symbol) !== true || strpos($url, $symboldot) !== true){
+	            $canon = '<link rel="canonical" href="'.$url.'"/>';
+	           }
+            if (strpos($url_sale, '?sale=sale') !== false){
+                echo $url_sale;
+                $canon = '<link rel="canonical" href="'.$url.'"/>
+	            <meta name="robots" content="noindex,nofollow">';
+            }
+            if (strpos($url, $symbol) !== false ){
+	            $url = strstr($url, $symbol, ru);
+	            $canon = '<link rel="canonical" href="'.$url.'"/>
+	            <meta name="robots" content="noindex,nofollow">';
+            } 
+            if (strpos($url, $symboldot) !== false ){
+            	$url = strstr($url, $symboldot, ru);	
+            	$canon = '<link rel="canonical" href="'.$url.'"/>
+            	<meta name="robots" content="noindex,nofollow">';
+        	} 
+?>
+<!DOCTYPE html>
+<html lang="<?php $thishtmllang = langhtml(); echo $thishtmllang;?>">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <?php echo $this->headTitle(Fenix::getConfig('general/project/name'))
+	                ->setSeparator(Fenix::getConfig('general/title/separator')) ?>
+    <?php echo $this->headMeta() ?>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="<?php echo Fenix::getModel('core/themes')->getFavicon() ?>">
+
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
+        rel="stylesheet" />
+
+
+    <!-- Fontawesome CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/fontawesome.min.css'); ?>" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/bootstrap.min.css'); ?>" rel="stylesheet" type="text/css" />
+    <!-- Slick CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/slick.css'); ?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo Fenix::getSkinUrl('css/slick-theme.css'); ?>" rel="stylesheet" type="text/css" />
+    <!-- Jquery UI CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/jquery-ui.css'); ?>" rel="stylesheet" type="text/css" />
+    <!-- Fancybox CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/jquery.fancybox.min.css'); ?>" rel="stylesheet" type="text/css" />
+    <!-- Style CSS -->
+    <link href="<?php echo Fenix::getSkinUrl('css/style.css'); ?>" rel="stylesheet" type="text/css" />
+
+            <!-- Jquery JS -->
+            <script src="<?php echo Fenix::getSkinUrl('js/jquery-3.6.0.min.js'); ?>"></script>
+                    <!-- jquery UI JS -->
+        <script src="<?php echo Fenix::getSkinUrl('js/jquery-ui.min.js'); ?>"></script>
+    <!-- Alternate url -->
+    <link rel="alternate" href="<?php echo $alternateru; ?>" hreflang="uk-UA">
+    <link rel="alternate" href="<?php echo $alternateru; ?>" hreflang="uk">
+    <link rel="alternate" href="<?php echo $alternateua; ?>" hreflang="ru">
+    <link rel="alternate" href="<?php echo $alternateua; ?>" hreflang="ru-UA">
+    <?php	echo $canon;	?>
+    <!-- Google TAG -->
+    <?php //echo $this->render('layout/blocks/google.phtml') . PHP_EOL; ?>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4KC9CGCV84"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  //gtag('config', 'G-4KC9CGCV84');
+  gtag('config', 'AW-803037648', {
+  'user_id': '<?php echo Fenix::gaParseCookie(); ?>'
+});
+  gtag('config', 'G-4KC9CGCV84', {
+  'user_id': '<?php echo Fenix::gaParseCookie(); ?>'
+});
+</script>
+</head>
+
+<body>
+
+        <?php echo $this->render('checkout/html/header.phtml') . PHP_EOL; ?>
+        <!-- Header ENDS -->
+        <?php echo $this->layout()->content . PHP_EOL; ?>
+
+
+        
+
+
+        <?php echo $this->render('layout/blocks/modals-product.phtml') . PHP_EOL; ?>        
+        <!-- Footer Area start -->
+        <?php echo $this->render('layout/html/footer.phtml') . PHP_EOL; ?>
+
+
+
+
+        <!-- Bootstrap Bundle JS -->
+        <script defer src="<?php echo Fenix::getSkinUrl('js/bootstrap.bundle.min.js'); ?>"></script>
+        <!-- Slick JS -->
+        <script async src="<?php echo Fenix::getSkinUrl('js/slick.min.js'); ?>"></script>
+        <!-- Countdown JS -->
+        <script async src="<?php echo Fenix::getSkinUrl('js/jquery.countdown.min.js'); ?>"></script>
+
+        <!-- Fancybox JS -->
+        <script async src="<?php echo Fenix::getSkinUrl('js/jquery.fancybox.min.js'); ?>"></script>        
+        <!-- Regalia JS -->
+        <script defer src="<?php echo Fenix::getSkinUrl('js/fenix.js'); ?>"></script>
+        <script async src="<?php echo Fenix::getSkinUrl('js/regalia.js'); ?>"></script>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        </script>
+</body>
+
+</html>
+
+<?php if(Fenix::isDev() === true) {
+		
+		echo '<div class="container-fluid">';
+		echo '<div class="row">';
+		echo '<div class="col">';
+		echo Fenix_Debug::fetch();
+		
+		echo '<div class="alert alert-info">';
+		$profiler = Zend_Registry::get('db')->getProfiler();
+		$totalTime = $profiler->getTotalElapsedSecs();
+		$queryCount = $profiler->getTotalNumQueries();
+		$longestTime = 0;
+		$longestQuery = null;
+		$list = array();
+		foreach($profiler->getQueryProfiles() as $query) {
+			if($query->getElapsedSecs() > $longestTime) {
+				$longestTime = $query->getElapsedSecs();
+				$longestQuery = $query->getQuery();
+			}
+			$list[ (string)$query->getElapsedSecs() ] = $query->getQuery();
+		}
+		$result = 'Выполнено <strong>' . $queryCount . '</strong> запросов за <strong>' . $totalTime . '</strong>  секунд' . "<br />\n";
+		$result .= 'Среднее время выполнения запроса: <strong>' . $totalTime / $queryCount . '</strong> секунд' . "<br />\n";
+		$result .= 'Запросов в секунду: <strong>' . $queryCount / $totalTime . "</strong><br />\n";
+		echo $result;
+		echo '</div>';
+		echo '<div class="alert alert-danger">';
+		$result = 'Самое длительное время запроса: <strong>' . $longestTime . "</strong><br />\n";
+		$result .= "Самый длительный запрос:<br /> \n<strong>" . $longestQuery . "</strong>\n";
+		echo $result;
+		echo '</div>';
+		ksort($list);
+		foreach($list as $key => $value) {
+			echo '----</br>';
+			echo $key;
+			echo '</br>';
+			echo $value;
+			echo '</br>----</br>';
+		}
+		
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
+		
+	}

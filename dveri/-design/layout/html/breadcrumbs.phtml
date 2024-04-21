@@ -1,0 +1,61 @@
+<?php $separator = $this->navigation()->breadcrumbs()->getSeparator() ?>
+<?php $container = $this->navigation()->breadcrumbs()->getContainer() ?>
+<?php
+$is_mobile_device = Fenix::check_mobile_device();
+$style = '';
+$pagesCount = sizeof($container->getPages()) ?>
+<?php if ($container->count() > 0): ?>
+<section class="aboutpage-v2-breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ol class="breadcrumb aboutpage-v2-innerpage-breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <?php $i = 1;
+                foreach ($container AS $breadcrumb): ?>
+                        
+                        <?php if ($i == 1): ?>
+                        <li class="breadcrumb-item" itemscope itemtype="http://schema.org/ListItem">
+                            <a href="<?php echo $breadcrumb->uri ?>" itemprop="item">
+                                <span itemprop="name"><?php echo $breadcrumb->label ?></span>
+                            </a>
+                            <meta itemprop="position" content="<?php echo $i; ?>" />
+                        </li>
+                        <?php elseif ($i < $pagesCount): ?>
+                        <li class="breadcrumb-item " itemscope itemtype="http://schema.org/ListItem">
+                            <a href="<?php echo $breadcrumb->uri ?>" itemprop="item">
+                                <span itemprop="name"><?php if ($_SERVER['REQUEST_URI'] == '/blog') {
+           echo Fenix::lang("Новости");
+        }
+        else {
+            echo $breadcrumb->label;
+        } ?></span>
+                            </a>
+                            <meta itemprop="position" content="<?php echo $i; ?>" />
+                        </li>
+                        <?php else: 
+                            if ($is_mobile_device){ 
+                                $style = 'style="display:none"';
+                            }
+                            ?>
+                        <li class="breadcrumb-item active" <?php echo $style;?> itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <link rel="" itemprop=""
+                                href="<?php echo($breadcrumb->uri != '/' ? $breadcrumb->uri : Fenix::getUrl(Fenix::getRequest()->getRequestUri())) ?>" />
+                            <span itemprop="name"><?php if ($_SERVER['REQUEST_URI'] == '/blog') {
+           echo Fenix::lang("Новости");
+        }
+        else {
+            echo $breadcrumb->label;
+        } ?></span>
+                            <meta itemprop="position" content="<?php echo $i; ?>" />
+                        </li>
+                        <?php endif ?>
+                        <?php $i++; endforeach ?>
+                    </ol>
+                
+            </div>
+        </div>
+    </div>
+</section>
+<?php endif ?>
+
+

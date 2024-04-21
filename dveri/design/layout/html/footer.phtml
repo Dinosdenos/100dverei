@@ -1,0 +1,173 @@
+<section class="homepage-v7-free-shipping green-bg" style="margin-top:15px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="homepage-v7-free-shipping-content d-flex justify-content-center align-items-center">
+                    <div style="min-width: 320px;">
+                        <h4 class="homepage-v7-free-shipping-title"><i class="fas fa-pencil-ruler"></i>*<?php echo Fenix::lang('БЕСПЛАТНЫЙ ЗАМЕР')?></h4>
+                    </div>
+                    <div >
+                        <p style="max-width: 500px;" class="homepage-v7-free-shipping-text">*<?php echo Fenix::lang('при покупке дверей у нас в магазине, сумма оплаченная Вами за замер возвращается скидкой в чек.')?>
+                        </p>
+                    </div>
+                    <div>
+
+                        <form style="display: flex;padding: 10px; align-items: center!important;" id="doormasterfoo" class="common-form footers" method="POST" action="https://<?php echo $_SERVER['HTTP_HOST'];?>/feedback/calldoormaster"
+                        style="padding: 10px" novalidate="novalidate">
+                        <div class="form-group" style="display: inline-flex; min-width: 220px;">
+                            <input style="color: #fff; margin: 0 0 0 0;" type="text" class="form-control" name="firstname" placeholder="<?php echo Fenix::lang('Ваше имя')?>">
+                        </div>
+                        <div class="form-group" style="display: inline-flex; min-width: 220px;">
+                            <input style="color: #fff; margin: 0 0 0 0;" type="text" class="form-control" name="phone"
+                                placeholder="<?php echo Fenix::lang('Введите Ваш номер телефона')?>">
+                        </div>
+                        <div class="form-group" >
+                            <input type="hidden" name="url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+                        </div>
+                        <div class="form-group" >
+                            <input type="hidden" name="ip" value="<?php echo Fenix::getIp(); ?>">
+                        </div>
+                        <button style="color: #fff; height: 66px; border: 2px solid #ffffff;" type="submit" style="display: inline-flex; min-width: 157px;" class="common-btn1-hover-small modal-box-call"
+                            id="sendDoormaster"><?php echo Fenix::lang('Вызвать замерщика')?></button>
+                    </form>
+      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- HomePage v7 Footer -->
+  <footer class="footer-main-7">
+            <div class="gray-bg4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 footer-widget-logo-7">
+                            <?php echo Fenix::getHelper('core/service_setting')->renderLogoInFooter(); ?>
+                            <p class="footer-desc-7"></p>
+                            <div class="footer-social-media-7">
+                                <a href="javascript:void(0)" class="nav-link">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="nav-link">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="nav-link">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 footer-widget-quicklinks-7">
+                            <h4 class="footer-heading-7"><?php echo Fenix::lang('Общая информация')?></h4>
+                            <ul class="footer-menu-7">
+                                <?php echo Fenix::getHelper('core/service_menu')->renderSimpleMenuFooter('footer.menu'); ?>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3 footer-widget-ourinformation-7">
+                            <h4 class="footer-heading-7"><?php echo Fenix::lang('График работы')?></h4>
+                            <ul class="footer-menu-7">
+                                <li><a href="/contacts" class="nav-link"><i class="fas fa-angle-right"></i><?php echo Fenix::lang('Понедельник с 9.00 до 18.00')?></a></li>
+                                <li><a href="/contacts" class="nav-link"><i class="fas fa-angle-right"></i><?php echo Fenix::lang('Вторник с 9.00 до 18.00')?></a></li>
+                                <li><a href="/contacts" class="nav-link"><i class="fas fa-angle-right"></i><?php echo Fenix::lang('Среда с 9.00 до 18.00')?></a></li>
+                                <li><a href="/contacts" class="nav-link"><i class="fas fa-angle-right"></i><?php echo Fenix::lang('Четверг с 9.00 до 18.00')?></a></li>
+                                <li><a href="/contacts" class="nav-link"><i class="fas fa-angle-right"></i><?php echo Fenix::lang('Пятница с 9.00 до 18.00')?></a></li>
+                                <li><a href="/contacts" class="nav-link"><i class="fas fa-angle-right"></i><?php echo Fenix::lang('Суббота с 9.00 до 15.00')?></a></li>
+                                <li><a href="/contacts" class="nav-link"><i class="fas fa-angle-right"></i><?php echo Fenix::lang('Воскресенье с 9.00 до 12.00')?></a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3 footer-widget-topcategories-7">
+                            <h4 class="footer-heading-7"><?php echo Fenix::lang('Каталог')?></h4>
+                            <ul class="footer-menu-7">
+                                <?php echo Fenix::getHelper('catalog/service_categories')->renderColumnMenuFuter(); ?>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3 footer-widget-storeinformation-7">
+                            <h4 class="footer-heading-7"><?php echo Fenix::lang('Контакты')?></h4>
+                            <ul class="footer-store-information-7">
+                                <li><a href="https://goo.gl/maps/FsZhe8g3wXZjAjfy6?coh=178572&entry=tt" class="nav-link"><?php echo Fenix::lang('г. Днепр')?><br> <?php echo Fenix::lang('ул. Гладкова, 25')?></a></li>
+                                <li><a href="tel:<?php echo Fenix::getConfig('general/project/kyivstar');?>" class="nav-link">Kyivstar: <?php echo Fenix::getConfig('general/project/kyivstar');?></a></li>
+                                <li><a href="tel:<?php echo Fenix::getConfig('general/project/vodafone');?>" class="nav-link">Vodafone: <?php echo Fenix::getConfig('general/project/vodafone');?></a></li>
+                                <!--<li><a href="mailto:demo@example.com" class="nav-link nav-link-m-b-0">Email : demo@example.com</a></li>-->
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="white-bg footer-copyright-7 p-y-27">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <p class="footer-copyright-text-7 text-center">2023 © <?php echo Fenix::lang('Интернет-магазин 100dverei - вы выбираете модель двери, остальное выполнит наша команда!')?>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- HomePage v7 Footer -->
+
+        <!-- HomePage v7 Quick View -->
+        
+        <!-- HomePage v7 Quick View -->
+
+        <!-- Single Product v1 Page Description Video -->
+        
+        <!-- Single Product v1 Page Description Video -->
+
+        <!-- HomePage v7 Back To Top Button -->
+        <div class="footer-to-top">
+            <div class="footer-to-top-img">
+                <a href="javascript:void(0)"><img src="<?php echo Fenix::getSkinUrl('images/top-arrow-v7.png'); ?>" class="mw-100" alt="Regalia" /></a>
+            </div>
+        </div>
+        <!-- HomePage v7 Back To Top Button -->
+        <nav id="circle-nav-wrapper" class="circle-nav-wrapper">
+
+    <div class="circle-nav-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" stroke="#fff" fill="#ef1e1e" fill-opacity="1"
+            stroke-opacity="0.8" class="bi bi-chat-text-fill" viewBox="0 0 16 16">
+            <path
+                d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.5 5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z" />
+        </svg>
+    </div>
+    <?php
+    $is_mobile_device = Fenix::check_mobile_device();
+    if ($is_mobile_device == true){
+        $viberUrl = 'viber://add?number=380986429919';
+    } else {
+        $viberUrl = 'viber://chat?number=+380986429919';
+    }
+    
+    ?>
+    <div class="circle-nav-panel"></div>
+    <ul class="circle-nav-menu">
+        <li class="circle-nav-item circle-nav-item-1"><a onclick="cellChatTg();" href="<?php echo $viberUrl; ?>"><img style="width: 60px;"
+                src="<?php echo Fenix::getSkinUrl('icon/telegram.png'); ?>"></a></li>
+        <li class="circle-nav-item circle-nav-item-2"><a onclick="cellChatVb();" href="<?php echo $viberUrl; ?>"><img style="width: 60px;"
+                src="<?php echo Fenix::getSkinUrl('icon/viber.png'); ?>"></a></li>
+        <li class="circle-nav-item circle-nav-item-3"><a onclick="cellVodafone();" href="tel:<?php echo Fenix::getConfig('general/project/vodafone');?>"><img src="<?php echo Fenix::getSkinUrl('icon/vodafone.png'); ?>"></a>
+        </li>
+        <li class="circle-nav-item circle-nav-item-4"><a onclick="cellKyivstar();" href="tel:<?php echo Fenix::getConfig('general/project/kyivstar');?>"><img src="<?php echo Fenix::getSkinUrl('icon/kyivstar.png'); ?>"></a>
+        </li>
+        <li class="circle-nav-item circle-nav-item-5"><img data-bs-toggle="modal" onclick="send_form_callback();" data-bs-target="#callbackmodal" src="<?php echo Fenix::getSkinUrl('icon/callback.png'); ?>">
+        </li>
+    </ul>
+</nav>
+<script>
+function cellKyivstar() {
+    gtag('event', 'call_kyivstar');
+	window.clarity("event", "call_kyivstar");
+}
+function cellVodafone() {
+    gtag('event', 'call_vodafone');
+	window.clarity("event", "call_vodafone");
+}
+function cellChatTg() {
+    gtag('event', 'chat_tg');
+	window.clarity("event", "chat_tg");
+}
+function cellChatVb() {
+    gtag('event', 'chat_vb');
+	window.clarity("event", "chat_vb");
+}
+</script>

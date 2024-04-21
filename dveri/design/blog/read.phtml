@@ -1,0 +1,216 @@
+<!-- Breadcrumb Area start -->
+<?php 
+echo $this->render("layout/html/breadcrumbs.phtml"); 
+$image = $this->article->getImageAdapt(1576, 1000);
+$title = $this->article->getTitle();
+$h1 = $this->article->getSeoH1();
+$lastArticles = Fenix::getCollection('blog/blog')->getLastArticles2();
+$dbСonfigFile = ETC_DIR_ABSOLUTE . "database.xml";
+$database = new Zend_Config_Xml($dbСonfigFile, "database");
+try {
+    $dbh = new PDO("mysql:dbname=".$database->params->dbname.";host=".$database->params->host."", "".$database->params->username."", "".$database->params->password."", array(    // Наименование базы; Хост; Имя пользователя; Пароль.
+
+    ));
+}catch(PDOException $e){
+
+echo 'Подключение не удалось: ' . $e->getMessage();
+}
+
+if ($this->article->getCategory_in_art() !== '') {
+	//echo $_POST["search"];
+	$search = $this->article->getCategory_in_art();
+        $search_words = explode(',',$search);
+        foreach($search_words as $word)
+        {
+                $pre_array[] = "`fe_catalog`.`id` = ".$word."";
+        }
+        $search_string = implode (' OR ',$pre_array);
+		$sth1 = $dbh->prepare("SELECT `fe_catalog`.`image` as `imagecat`, `fe_catalog`.`title_". Fenix_Language::getInstance()->getCurrentLanguage()->name ."` as `title_russian`, `fe_catalog`.`url_key` as `url_key`, `fe_catalog`.`id` as `id` FROM `fe_catalog` WHERE ".$search_string." and `fe_catalog`.`is_public` = '1';");
+		
+	$sth1->execute();
+
+	$result2 = $sth1->fetchAll(PDO::FETCH_ASSOC);
+}
+/************************************* */        
+if ($this->article->getProduct_in_art() !== '') {
+	//echo $_POST["search"];
+
+	$search2 = $this->article->getProduct_in_art();
+        $search_words2 = explode(',',$search2);
+        foreach($search_words2 as $word2)
+        {
+                $pre_array2[] = "`fe_catalog_products`.`sku` = ".$word2."";
+        }
+        $search_string2 = implode (' OR ',$pre_array2);
+		$sth12 = $dbh->prepare("SELECT `fe_catalog_products`.`image` as `imagecat2`, `fe_catalog_products`.`title_". Fenix_Language::getInstance()->getCurrentLanguage()->name ."` as `title_russian2`, `fe_catalog_products`.`url_key` as `url_key2`, `fe_catalog_products`.`sku` as `id2`, `fe_catalog_products`.`price` as `price2`, `fe_catalog_products`.`id` as `pid2` FROM `fe_catalog_products` WHERE ".$search_string2.";");
+		
+	$sth12->execute();
+
+	$result22 = $sth12->fetchAll(PDO::FETCH_ASSOC);
+
+	}	
+		
+?>
+<!-- Breadcrumb Area End -->
+
+<section class="page-content p-t-50 p-b-120">
+    <div class="container">
+        <div class="d-flex flex-wrap">
+            <div class="main-content blog">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="blog-details-v1-meta d-flex align-items-center">
+                            <div class="blog-details-v1-meta-right d-flex align-items-center justify-content-end">
+                                <div class="">
+                                    <p class="blog-details-v1-meta-text date">
+                                        <?php echo Fenix::getDate($this->article->getCreateDate())->format('d.m.Y'); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <h1 class="blog-details-v1-meta-title"><a href="javascript:void(0)"><?php echo $h1; ?></a></h1>
+                        <div class="blog-details-v1-img-main">
+                            <a data-fancybox href="<?php echo $image; ?>">
+                                <img src="<?php echo $image; ?>" class="object-fit-cover w-100 h-100"
+                                    alt="<?php echo $title; ?>" />
+                            </a>
+                        </div>
+                        <p class="blog-details-v1-meta-subdecs">
+                            <?php $content = str_replace('<img', '<img class="lazyload"', $this->article->getContent())?>
+                            <?php echo $content; ?></p>
+                    </div>
+                </div>
+                <!--<div class="row gx-3">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="blog-details-v1-img-main2">
+                                    <a data-fancybox href="images/blog-details-v1-images2.jpg">
+                                        <img src="images/blog-details-v1-images2.jpg" class="object-fit-cover w-100 h-100" alt="Regalia" />
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="blog-details-v1-img-main2">
+                                    <a data-fancybox href="images/blog-details-v1-images3.jpg">
+                                        <img src="images/blog-details-v1-images3.jpg" class="object-fit-cover w-100 h-100" alt="Regalia" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>-->
+            </div>
+            <?php if ($this->article->getCategory_in_art() !== '' or $this->article->getProduct_in_art() !== '') {?>
+            <aside class="sidebar right-sidebar blog-sidebar sidebar-fixed sticky-sidebar-wrapper">
+                <div class="blog-sidebar-box">
+                    <div class="sidebar-content">
+                        <div class="sticky-sidebar">
+                            <?php    if ($this->article->getCategory_in_art() !== '') { ?>
+                            <hr class="widget-shapret-line" />
+                            <div class="widget widget-posts">
+                                <h3 class="widget-title blogpage-title">
+                                    <?php echo Fenix::lang('Выбрать товар в категории')?></h3>
+                                <div class="widget-body widget-mb-0">
+                                    <?php 
+			                            $i = 0;
+			                            $categarray = array();
+			                            foreach ($result2 as $row1) {
+				                            if (in_array ($row1['title_russian'], $categarray)){
+					                            continue;
+				                            }
+				                            else {
+				                            	$categarray[] = $row1['title_russian'];
+				                            	$i++;
+				                            }
+                                            if ($i < '8') { ?>
+                                    <div class="blogpage-post-widget">
+                                        <figure class="blogpage-post-media">
+                                            <img src="https://<?php echo $_SERVER['HTTP_HOST']?>/<?php echo $row1['imagecat']; ?>"
+                                                class="object-fit-cover w-100 h-100"
+                                                alt="<?php echo $row1['title_russian']; ?>" />
+                                        </figure>
+                                        <div class="blogpage-post-details">
+                                            <h4 class="blogpage-post-title">
+                                                <a
+                                                    href="https://<?php echo $_SERVER['HTTP_HOST']?>/<?php echo $row1['url_key']; ?>"><?php echo $row1['title_russian']; ?></a>
+                                            </h4>
+                                        </div>
+                                    </div>
+
+                                    <?php    }
+                                        } 
+                                    ?>
+
+
+
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <?php  if ($this->article->getProduct_in_art() !== '') { ?>
+
+                            <hr class="widget-shapret-line" />
+                            <div class="widget widget-posts">
+                                <h3 class="widget-title blogpage-title"><?php echo Fenix::lang('Рекомендуемые товары')?>
+                                </h3>
+                                <div class="widget-body widget-mb-0">
+                                    <?php 
+			                        $i2 = 0;
+			                        $categarray2 = array();
+			                        foreach ($result22 as $row12) {
+			                        	if (in_array ($row12['title_russian2'], $categarray2)){
+			                        		continue;
+			                        	}
+			                        	else {
+			                        		$categarray2[] = $row12['title_russian2'];
+			                        		$i2++;
+			                        	}
+			                        	?>
+                                    <?php if ($i2 < '8') { ?>
+                                    <div class="blogpage-post-widget">
+                                        <figure class="blogpage-post-media">
+                                            <img src="<?php echo Fenix_Image::resize($row12['imagecat2'], 100, 100); ?>"
+                                                class="object-fit-cover w-100 h-100"
+                                                alt="<?php echo $row12['title_russian2']; ?>" />
+                                        </figure>
+                                        <div class="blogpage-post-details">
+                                            <h4 class="blogpage-post-title">
+                                                <a
+                                                    href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $row12['url_key2']; ?>"><?php echo $row12['title_russian2']; ?></a>
+                                            </h4>
+                                            <h4 class="blogpage-post-title">
+                                            <span style="color: #ff0000"><?php echo Fenix::lang('Цена')?>: </span><a
+                                                    href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $row12['url_key2']; ?>"><?php echo $row12['price2']; ?> UAH</a>
+                                            </h4>
+                                            <h4 class="blogpage-post-title">
+                                                <a onclick="return FenixCheckout.addProduct('https://100dverei.com.ua/checkout/process/add/pid/<?php echo $row12['pid2']; ?>/qty/1')"
+                                                    href="javascript: void(0);"><?php echo Fenix::lang('Добавить в корзину')?></a>
+                                            </h4>
+                                        </div>
+                                        
+
+                                        
+
+                                    </div>
+
+
+
+                                    <?php } ?>
+
+                                    <?php   } ?>
+                                </div>
+                            </div>
+                            <?php
+                                    } ?>
+
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <?php } ?>
+        </div>
+    </div>
+</section>
+<!-- Blog Details Page v1 Content -->
+
+
+
+
+
+<?php echo $this->render('blog/last.phtml') . PHP_EOL; ?>

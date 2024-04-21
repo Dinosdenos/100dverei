@@ -1,0 +1,29 @@
+<?php $order = Fenix::getCollection('checkout/order')->getOrderInfo() ?>
+<?php $products = Fenix::getCollection('checkout/order')->getProducts() ?>
+<?php $total = 0 ?>
+<?php if ($products->count() > 0) { ?>
+	<section class="cart confirm-order">
+		<div class="row align-items-center">
+			<div class="col-12 col-md-6 col-lg-8 d-none d-md-block">
+				<p class="h4"><?php echo Fenix::lang('Итого:') ?></p>
+                <?php foreach ($products AS $i => $_product) {
+                    $totalCost += ($_product->getOrderUnitPrice() * $_product->getOrderQty());
+                    $totalCost = number_format($totalCost, 2, ',', '');
+                 } ?>
+				<div id="checkoutTotalSum" class="total-cost">
+                    <?php
+                    echo $totalCost;
+                    ?>
+					<span>грн</span>
+				</div>
+			</div>
+
+		</div>
+        
+<?php } else { ?>
+    <?php echo Fenix::getCreatorUI()
+                    ->loadPlugin('Events')
+                    ->appendClass(Creator_Events::TYPE_INFO)
+                    ->setMessage("В корзине нет товаров")
+                    ->fetch() ?>
+<?php } ?> 

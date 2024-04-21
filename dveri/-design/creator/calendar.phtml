@@ -1,0 +1,93 @@
+<script>
+    $(function(){
+        var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		
+		$('#<?php echo $this->Plugin->getId() ?>').fullCalendar({
+			firstDay        : 1,
+            editable        : false,
+			events          : <?php echo Zend_Json::encode($this->Plugin->getEvents()) ?>,
+            defaultView     : 'agendaWeek',
+            allDaySlot      : true,
+            allDayText      : '<?php echo Fenix::lang("Весь день") ?>',
+            firstHour       : 8,
+            slotMinutes     : 30,
+            slotEventOverlap : false,
+            //defaultEventMinutes: 120,
+            axisFormat      : 'HH:mm',
+            timeFormat      : {
+                agenda: 'H:mm{ - H:mm}'
+            },
+            dragOpacity     : {
+                agenda: .5
+            },
+            minTime         : 8,
+            maxTime         : 23,
+            header          : {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+            buttonText      : {
+                prev:     '&lsaquo;', // <
+                next:     '&rsaquo;', // >
+                prevYear: '&laquo;',  // <<
+                nextYear: '&raquo;',  // >>
+                today:    '<?php echo Fenix::lang("Сегодня") ?>',
+                month:    '<?php echo Fenix::lang("Месяц") ?>',
+                week:     '<?php echo Fenix::lang("Неделя") ?>',
+                day:      '<?php echo Fenix::lang("День") ?>'
+            },
+            monthNames      : [
+                '<?php echo Fenix::lang("Январь") ?>', 
+                '<?php echo Fenix::lang("Февраль") ?>', 
+                '<?php echo Fenix::lang("Март") ?>', 
+                '<?php echo Fenix::lang("Апрель") ?>', 
+                '<?php echo Fenix::lang("Май") ?>', 
+                '<?php echo Fenix::lang("Июнь") ?>', 
+                '<?php echo Fenix::lang("Июль") ?>',
+                '<?php echo Fenix::lang("Август") ?>', 
+                '<?php echo Fenix::lang("Сентябрь") ?>', 
+                '<?php echo Fenix::lang("Октябрь") ?>', 
+                '<?php echo Fenix::lang("Ноябрь") ?>', 
+                '<?php echo Fenix::lang("Декабрь") ?>'
+            ],
+            monthNamesShort : [
+                '<?php echo Fenix::lang("Янв") ?>', 
+                '<?php echo Fenix::lang("Фев") ?>', 
+                '<?php echo Fenix::lang("Мрт") ?>', 
+                '<?php echo Fenix::lang("Апр") ?>', 
+                '<?php echo Fenix::lang("Май") ?>', 
+                '<?php echo Fenix::lang("Июн") ?>', 
+                '<?php echo Fenix::lang("Июл") ?>',
+                '<?php echo Fenix::lang("Авг") ?>', 
+                '<?php echo Fenix::lang("Сен") ?>', 
+                '<?php echo Fenix::lang("Окт") ?>', 
+                '<?php echo Fenix::lang("Ноя") ?>', 
+                '<?php echo Fenix::lang("Дек") ?>'
+            ],
+            dayNames        : [
+                '<?php echo Fenix::lang("Воскресенье") ?>', 
+                '<?php echo Fenix::lang("Понедельник") ?>', 
+                '<?php echo Fenix::lang("Вторник") ?>', 
+                '<?php echo Fenix::lang("Среда") ?>',
+                '<?php echo Fenix::lang("Четверг") ?>', 
+                '<?php echo Fenix::lang("Пятница") ?>', 
+                '<?php echo Fenix::lang("Суббота") ?>'
+            ],
+            dayNamesShort   : [
+                '<?php echo Fenix::lang("Вс") ?>', 
+                '<?php echo Fenix::lang("Пн") ?>', 
+                '<?php echo Fenix::lang("Вт") ?>', 
+                '<?php echo Fenix::lang("Ср") ?>', 
+                '<?php echo Fenix::lang("Чт") ?>', 
+                '<?php echo Fenix::lang("Пт") ?>', 
+                '<?php echo Fenix::lang("Сб") ?>'
+            ]
+        });
+    });
+</script>
+
+<div<?php echo $this->Plugin->getAttributeSet('creator.calendar') ?>></div>

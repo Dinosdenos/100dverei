@@ -1,0 +1,43 @@
+<div class="col-xxl-12 col-lg-6 col-md-12 col-sm-12">
+    <div class="review-form-wrapper-3">
+        <div class="title tab-pane-title h3ratting"><?php echo Fenix::lang('Добавьте свой отзыв') ?></div>
+        <p class=""><?php echo Fenix::lang('Ваш email не публикуется и не передается третьим лицам') ?></p>
+        <form action="<?php echo Fenix::getUrl('catalog/reviews') ?>" id="reviewsForm" method="POST"
+            class="review-form">
+            <div class="rating-form">
+                <label><?php echo Fenix::lang('Ваша оценка') ?>:</label>
+                <input class="ignore" type="hidden" name="rate" value="5" id="review-rate-value" />
+                <span class="rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star deactive"></i>
+                </span>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="text" class="form-control"
+                        value="<?php echo $this->escape(Fenix::getRequest()->getPost('name')) ?>"
+                        placeholder="<?php echo Fenix::lang('Представьтесь') ?>" name="name" id="author" />
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control"
+                        value="<?php echo $this->escape(Fenix::getRequest()->getPost('user_email')) ?>"
+                        placeholder="Email" id="email_1" name="user_email" />
+                </div>
+            </div>
+            <textarea cols="30" rows="6"
+                placeholder="<?php echo Fenix::lang('Ваш отзыв о товаре') ?> <?php echo $this->product->getTitle() ?>"
+                class="form-control" id="review"
+                <?php echo $this->escape(Fenix::getRequest()->getPost('review')) ?>></textarea>
+            <input class="ignore" type="hidden" value="<?php echo $this->product->id; ?>" name="product_id">
+            <input class="ignore" type="hidden" name="url"
+                value="<?php echo 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] ?>" />
+            <a class="common-btn2-hover-small btnsubmit" href="javascript:void(0)"
+                role="button"><span><?php echo Fenix::lang('Добавить отзыв') ?></span><img
+                    src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow.png'); ?>" class="mw-100"
+                    alt="Добавить отзыв"></a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,184 @@
+<?php
+$categoriestab = Fenix::getHelper('catalog/service_categories')->getCategoriesForTab();
+
+?>
+<script>
+gtag('event', page_view, {
+  send_to: 'AW-803037648',
+  user_id: '<?php echo Fenix::gaParseCookie(); ?>',
+  dynx_pagetype: 'home'
+});
+</script>
+<section class="categorytab-list">
+   <div class="container">
+      <div class="mine-top-h2">
+         <?php echo Fenix::lang('Популярные товары');?>
+      </div>
+      <div class="row">
+         <div class="cd-tabs">
+            <nav>
+               <ul class="cd-tabs-navigation">
+                  <?php
+$keys = array_keys( $categoriestab );
+foreach ($categoriestab as $key => $categorytab) { 
+?>
+                  <li class="tab-mine-li"><a data-content="<?php echo $categorytab['id'] ?>"
+                        class="<?php if ( $keys[0] === $key) { echo 'selected';} ?>"
+                        href="#0"><?php echo $categorytab['title'] ?></a></li>
+                  <?php } ?>
+               </ul> <!-- cd-tabs-navigation -->
+            </nav>
+
+            <ul class="cd-tabs-content">
+               <?php
+$keys = array_keys( $categoriestab );
+foreach ($categoriestab as $key => $categorytab) { 
+?>
+               <li data-content="<?php echo $categorytab['id'] ?>"
+                  class="<?php if ( $keys[0] === $key) { echo 'selected';} ?>">
+                  <div id="banerokinminecat">
+
+                     <?php
+if (strpos($_SERVER['REQUEST_URI'], '/ua') !== false) {
+?>
+                     <a href="<?php echo $categorytab['url_tab_mine']?>">
+					 <!--webp replace -->
+			<?php $imgwebpcat = str_replace('.jpg', '.webp', Fenix_Image::resize($categorytab['image4'],607,603));
+			if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei' , $imgwebpcat))) { ?>
+			<picture style="margin: auto;">
+			<source type="image/webp" srcset="<?php echo $imgwebpcat; ?>">
+			<img class="img-fluid lazyload banerokinminecatimg" src="<?php echo Fenix_Image::resize($categorytab['image4'],607,603); ?>"/>
+			</picture>
+			<?php } else { ?>
+            <img class="img-fluid lazyload banerokinminecatimg" src="<?php echo Fenix_Image::resize($categorytab['image4'],607,603); ?>"/>
+			<?php } ?></a>
+					 <!-- webp replace-->
+					 <!--<img class="banerokinminecatimg" src=" <?php echo Fenix_Image::resize($categorytab['image4'],607,603);?>">-->
+                     <?php
+}
+else {
+?>
+                     <a href="<?php echo $categorytab['url_tab_mine']?>">
+					 <?php $imgwebpcatua = str_replace('.jpg', '.webp', Fenix_Image::resize($categorytab['image3'],607,603));
+			if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei' , $imgwebpcatua))) { ?>
+			<picture style="margin: auto;">
+			<source type="image/webp" srcset="<?php echo $imgwebpcatua; ?>">
+			<img class="img-fluid lazyload banerokinminecatimg" src="<?php echo Fenix_Image::resize($categorytab['image3'],607,603); ?>"/>
+			</picture>
+			<?php } else { ?>
+            <img class="img-fluid lazyload banerokinminecatimg" src="<?php echo Fenix_Image::resize($categorytab['image3'],607,603); ?>"/>
+			<?php } ?></a>
+                     <?php }?>
+
+                  </div>
+                  <div class="tovar">
+                     <!-- Товар  -->
+                     <?php
+if ($categorytab['id'] !== '') {
+	//echo $_POST["search"];
+	try{
+    $dbh=new PDO ("mysql:dbname=dvereijl;host=localhost","u_dvereijl","7iF218IxALtA", array(    // Наименование базы; Хост; Имя пользователя; Пароль.
+
+    ));
+}catch(PDOException $e){
+  
+    echo 'Подключение не удалось: ' . $e->getMessage();
+}
+
+	$sth = $dbh->prepare("SELECT `fe_catalog_products`.`image` as `image`, `fe_catalog_products`.`price` as `price`, `fe_catalog_products`.`id` as `id`, `fe_catalog_products`.`title_". Fenix_Language::getInstance()->getCurrentLanguage()->name ."` as `title`, `fe_catalog_products`.`url_key` as `url`, `fe_catalog_products`.`sku` as `sku` FROM `fe_catalog_products` WHERE `fe_catalog_products`.`parent` = ".$categorytab['id']." AND `fe_catalog_products`.`tab_in_mine` = '1' OR `fe_catalog_products`.`parentfortab` = ".$categorytab['id']."  AND `fe_catalog_products`.`tab_in_mine` = '1';");
+		
+	$sth->execute();
+
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+	//echo $result;
+} ?>
+
+
+
+
+                     <?php 
+			$i = 0;
+			$categarray = array();
+			foreach ($result as $row) {
+				
+				if (in_array ($row['title'], $categarray)){
+					continue;
+					
+				}
+				else {
+					$categarray[] = $row['title'];
+					$i++;
+				}
+				 
+				?>
+
+                     <?php if ($i < '7') {?>
+
+                     <div class="card product mine">
+                        <div class="inner-product-container tab-inner rounded mine">
+                           <div class="d-flex flex-row mine">
+                              <div class="w-50 sku">
+                                 <?php echo $row['sku']; ?>
+                                 <!--                        <p class="delivery">-->
+                                 <!--</p>-->
+                              </div>
+                              <div class="w-50 text-right">
+                                 <p class="in-stock-mine"><?php echo Fenix::lang('Есть в наличии');?></p>
+                              </div>
+                           </div>
+                           <a href="https://dev.100dverei.com.ua/<?php echo $row['url']; ?>">
+                              
+					 <?php $imgwebpcattabprod = str_replace('.jpg', '.webp', Fenix_Image::resize($row['image'], 200, 200));
+			if (file_exists(str_replace('https://100dverei.com.ua', '/var/www/dverei' , $imgwebpcattabprod))) { ?>
+			<picture style="margin: auto;">
+			<source type="image/webp" srcset="<?php echo $imgwebpcattabprod; ?>">
+			<img class="rounded img-fluid lazyload" src="<?php echo Fenix_Image::resize($row['image'], 200, 200) ?> "/>
+			</picture>
+			<?php } else { ?>
+            <img class="rounded img-fluid lazyload" src="<?php echo Fenix_Image::resize($row['image'], 200, 200) ?> "/>
+			<?php } ?>
+
+	  
+			
+                           
+						   </a>
+                           <div class="card-body-mine">
+                              <!-- Заголовок-->
+
+                              <p class="h4-mine"><a
+                                    href="https://dev.100dverei.com.ua/<?php echo $row['url']; ?>"><strong><?php echo $row['title']; ?></strong></a>
+                              </p>
+
+                              <!-- Заголовок-->
+
+                              <div class="d-flex flex-row">
+                                 <div class="w-50 mine">
+                                    <p class="cost-mine" data-selector_amount="<?php echo $row['price']; ?>">
+                                       <?php echo $row['price']; ?><span>грн</span><span class="unit-price"></span></p>
+                                 </div>
+                                 <div class="w-50 mine">
+                                    <button class="btn-mine btn-to-cart" type="button"
+                                       onclick="return FenixCheckout.addProduct('https://dev.100dverei.com.ua/checkout/process/add/pid/<?php echo $row['id']; ?>/qty/1')">
+                                       <!--<i class="demo-icon icon-cart"></i>--><?php echo Fenix::lang('Купить');?>
+                                    </button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+
+                     <?php }} ?>
+
+
+
+                     <!--ТОвар конец -->
+                  </div>
+               </li>
+               <?php } ?>
+            </ul> <!-- cd-tabs-content -->
+         </div>
+
+      </div>
+   </div>
+</section>

@@ -1,0 +1,389 @@
+<?php
+			function langurl(){
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+					
+			//	$lang = 'uk';
+				$svitcher = 'checked="checked"';
+				$urlchange = 'https://'.$_SERVER['HTTP_HOST'] . str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+				echo $urlchange;
+			//	echo $lang;
+			//	echo $svitcher;
+			} else { 
+			//$lang = 'ru';
+			$urlchange = 'https://'.$_SERVER['HTTP_HOST'] . '/ru' . $_SERVER['REQUEST_URI'];
+			echo $urlchange;
+			//echo $lang;
+			}
+			}
+			function langhtml(){
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+				$lang = 'uk';
+				echo $lang;
+			} else { 
+			$lang = 'ru';
+			echo $lang;
+			}
+			}
+			function svitcher(){
+				if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false){
+						$svitcher = 'checked="checked"';
+				echo $svitcher;}
+			}
+?>
+<!doctype html>
+<html lang="<?php $thishtmllang = langhtml(); echo $thishtmllang;?>">
+<head>
+	<?php echo $this->headTitle(Fenix::getConfig('general/project/name'))
+	                ->setSeparator(Fenix::getConfig('general/title/separator')) ?>
+	<meta charset="utf-8">
+	<?php echo $this->headMeta() ?>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<?php
+			if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false) { 
+				$alternateua = 'https://'.$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+				$alternateru = 'https://'.$_SERVER['HTTP_HOST'] . str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+			} else { 
+				$alternateru = 'https://' .$_SERVER['HTTP_HOST']. str_replace('/ru', '', $_SERVER['REQUEST_URI']);
+				$alternateua = 'https://'.$_SERVER['HTTP_HOST'].'/ru' . $_SERVER['REQUEST_URI'];
+			}
+	?>
+	<!--<link rel="alternate" href="<?php echo $alternateru; ?>" hreflang="ru-UA">
+	<link rel="alternate" href="<?php echo $alternateua; ?>" hreflang="uk-UA">-->
+	<!--<link rel="preload" href="../var/themes/modern171130/skin/fonts/fenix.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="../var/themes/modern171130/skin/fonts/ProximaNova-Bold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="../var/themes/modern171130/skin/fonts/ProximaNova-Extrabld.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="../var/themes/modern171130/skin/fonts/ProximaNova-Regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="../var/themes/modern171130/skin/fonts/ProximaNova-Semibold.woff2" as="font" type="font/woff2" crossorigin>-->
+	<link rel="stylesheet" href="<?php echo Fenix::getSkinUrl('bootstrap/css/bootstrap.min.css'); ?>">
+	<?php echo $this->headLink(); ?>
+	<link rel="stylesheet"
+	      href="<?php echo Fenix::getSkinUrl('css/common.min.css'); ?>?v=<?php echo rand(0, 1000000) ?>">
+	
+	<?php
+$url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$url = explode('?', $url);
+$url = $url[0];
+
+    echo '<link rel="canonical" href="'.$url.'"/>';
+	?>
+	
+	<?php //echo Fenix::getHelper('core/service_seo')->renderLinkCanonical(); ?>
+	
+	<?php if(Fenix::isDev() === false) { ?>
+	<!--<script type="text/javascript" src="https://apis.google.com/js/plusone.js">{
+		lang: 'ru'
+	}</script>-->
+	<?php echo $this->render('layout/blocks/google.phtml') ?>
+	<?php } ?>
+	<!--<link rel='stylesheet'
+	      href='https://apimgmtstorelinmtekiynqw.blob.core.windows.net/content/MediaLibrary/Widget/Tracking/styles/tracking.css'/>-->
+	<script>
+		(function(w, d, u) {
+			w.readyQ     = [];
+			w.bindReadyQ = [];
+			
+			function p(x, y) {
+				if(x == "ready") {
+					w.bindReadyQ.push(y);
+				} else {
+					w.readyQ.push(x);
+				}
+			}
+			
+			var a = {
+				ready : p,
+				bind  : p
+			};
+			w.$   = w.jQuery = function(f) {
+				if(f === d || f === u) {
+					return a
+				} else {
+					p(f)
+				}
+			}
+		})(window, document)
+	</script>
+	<script>
+		$(function() {
+			$.favicon('<?php echo Fenix::getModel('core/themes')->getFavicon() ?>');
+		});
+	</script>
+	<script type="text/javascript"> (function() {
+		if(typeof carrotquest === 'undefined') {
+			var s   = document.createElement('script');
+			s.type  = 'text/javascript';
+			s.async = true;
+			//s.src   = '//cdn.carrotquest.io/api.min.js';
+			var x   = document.getElementsByTagName('head')[0];
+			x.appendChild(s);
+			carrotquest             = {};
+			window.carrotquestasync = [];
+			carrotquest.settings    = {};
+			m                       = ['connect',
+			                           'track',
+			                           'identify',
+			                           'auth',
+			                           'open',
+			                           'onReady',
+			                           'addCallback',
+			                           'removeCallback',
+			                           'trackMessageInteraction'];
+			
+			function Build(name, args) {return function() {window.carrotquestasync.push(name, arguments);} }
+			
+			for(var i = 0; i < m.length; i++) {
+				carrotquest[m[i]] = Build(m[i]);
+			}
+		}
+	})();
+	</script>
+<script src="<?php echo Fenix::getSkinUrl('js/lazysizes.min.js'); ?>"></script>
+</head>
+
+<?php
+$classBody = '';
+if($this->isMain) {
+	$classBody = ' class="main"';
+} ?>
+<body<?php echo $classBody; ?>>
+
+<?php echo $this->render('layout/html/header.phtml') . PHP_EOL; ?>
+
+<section style="max-width: 800px;    margin: 0 auto;    margin-top: 3%;">
+<H1> <?php echo Fenix::lang ('Произошла ошибка, данной страницы не существует! Воспользуйтесь поиском или свяжитесь с нами удобным Вам способом.'); ?></H1>
+<img style="    width: 100%;" class=" lazyloaded" data-src="https://<?php echo $_SERVER['HTTP_HOST'];?>/404.jpg" src="https://<?php echo $_SERVER['HTTP_HOST'];?>/404.jpg">
+<!--LIB/FEN/EXEPTION-->
+</section>
+
+<?php echo $this->layout()->content . PHP_EOL; ?>
+
+<?php echo $this->render('layout/html/footer.phtml') . PHP_EOL; ?>
+
+<script src="<?php echo Fenix::getSkinUrl('jquery/jquery-3.2.1.min.js'); ?>"></script>
+<?php if (strpos($_SERVER['REQUEST_URI'], '/ru') !== true){ ?>
+<script>
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	
+	$('#search').on('keyup', function(){
+		var search = $(this).val();
+		if ((search != '') && (search.length > 1)){
+			$.ajax({
+				type: "POST",
+				url: "https://"<?php echo $_SERVER['HTTP_HOST'];?>"/ajax-searchproua.php",
+				data: {'q': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});
+		 } else {
+			$result.html('');
+			$result.fadeOut(100);
+		 }
+	});
+
+	$(document).on('click', function(e){
+		if (!$(e.target).closest('.search_box').length){
+			$result.html('');
+			$result.fadeOut(100);
+		}
+	});
+});
+</script>
+<?php } else { ?>
+<script>
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	
+	$('#search').on('keyup', function(){
+		var search = $(this).val();
+		if ((search != '') && (search.length > 1)){
+			$.ajax({
+				type: "POST",
+				url: "https://<?php echo $_SERVER['HTTP_HOST'];?>/ajax-searchpro.php",
+				data: {'q': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});
+		 } else {
+			$result.html('');
+			$result.fadeOut(100);
+		 }
+	});
+
+	$(document).on('click', function(e){
+		if (!$(e.target).closest('.search_box').length){
+			$result.html('');
+			$result.fadeOut(100);
+		}
+	});
+});
+</script>
+<?php } ?>
+<script async src="<?php echo Fenix::getSkinUrl('jquery/jquery-migrate-3.0.0.min.js'); ?>"></script>
+<script async src="<?php echo Fenix::getSkinUrl('popper/popper.min.js'); ?>"></script>
+<script async src="<?php echo Fenix::getSkinUrl('bootstrap/js/bootstrap.min.js'); ?>"></script>
+<script async src="<?php echo Fenix::getSkinUrl('js/plugins.js'); ?>"></script>
+
+<?php if (strpos($_SERVER['REQUEST_URI'], '/ua') !== false) { ?>
+<script src="<?php echo Fenix::getSkinUrl('js/allua.min.js'); ?>"></script>
+<?php } else {?>
+<script src="<?php echo Fenix::getSkinUrl('js/all.min.js'); ?>"></script>
+<?php }?>
+
+<script src="<?php echo Fenix::getSkinUrl('js/script.min.js'); ?>"></script>
+<?php
+//if(isset($this->current) && $this->current->url_key == 'contacts') {
+?>
+<!--<script>
+	function initMap() {
+		/* Google Map
+			========================================================*/
+		(function($) {
+			var o = document.getElementById("googleMap");
+			if(o) {
+				$(document).ready(function() {
+					var o = $("#googleMap");
+					
+					if(o.length > 0) {
+						o.googleMap();
+					}
+				});
+			}
+		})
+		(jQuery);
+	}
+</script>
+<script async defer
+        src="https://maps.google.com/maps/api/js?key=AIzaSyB7_XxBwQOlJibNLNzf-aXADoGVL1mYXHw&language=ru&callback=initMap"></script>
+<script src="<?php //echo Fenix::getSkinUrl('js/jquery.google_map.js'); ?>"></script>-->
+<?php // } ?>
+
+<?php echo $this->render('layout/html/forms.phtml') . PHP_EOL; ?>
+
+<?php //if(Fenix::isDev() === false) { ?>
+<?php //echo $this->render('layout/blocks/yandex.phtml')
+?>
+
+<?php // } ?>
+<script>
+	(function($, d) {
+		$.each(readyQ, function(i, f) {
+			$(f)
+		});
+		$.each(bindReadyQ, function(i, f) {
+			$(d).bind("ready", f)
+		})
+	})(jQuery, document)
+</script>
+<!--<div id="backTop" class="back-to-top">
+	<i class="icon-arrow_down" aria-hidden="true"></i>
+</div>-->
+<!--<script type='text/javascript'
+        id='track'
+        charset='utf-8'
+        data-lang='ru'
+        apiKey='a0d80fd43cbef6faef56a74fb62b225f'
+        data-town='city-not-default'
+        data-town-name='undefined'
+        data-town-id='undefined'
+        src='https://apimgmtstorelinmtekiynqw.blob.core.windows.net/content/MediaLibrary/Widget/Tracking/dist/track.min.js'></script>-->
+
+
+<DIV ID="toTop" class="icon-arrow_down"> </DIV >
+<!--Кнопка поднятия вверх -->
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+<script>
+$("#open").click(function(){ 
+    $("#opisanie").toggleClass('opisanie_opened');
+});
+</script>
+<script type="text/javascript">
+ 
+$(function() {
+ 
+$(window).scroll(function() {
+ 
+if($(this).scrollTop() != 0) {
+ 
+$('#toTop').fadeIn();
+ 
+} else {
+ 
+$('#toTop').fadeOut();
+ 
+}
+ 
+});
+ 
+$('#toTop').click(function() {
+ 
+$('body,html').animate({scrollTop:0},800);
+ 
+});
+ 
+});
+ 
+</script>
+<!-- Конец кнопки -->
+</body>
+</html>
+<?php
+//include $_SERVER['DOCUMENT_ROOT']."/stat.php"; // $_SERVER['DOCUMENT_ROOT'] - указывает корневую директорию сайта
+?>	
+	<?php if(Fenix::isDev() === true) {
+		
+		echo '<div class="container-fluid">';
+		echo '<div class="row">';
+		echo '<div class="col">';
+		echo Fenix_Debug::fetch();
+		
+		echo '<div class="alert alert-info">';
+		$profiler = Zend_Registry::get('db')->getProfiler();
+		$totalTime = $profiler->getTotalElapsedSecs();
+		$queryCount = $profiler->getTotalNumQueries();
+		$longestTime = 0;
+		$longestQuery = null;
+		$list = array();
+		foreach($profiler->getQueryProfiles() as $query) {
+			if($query->getElapsedSecs() > $longestTime) {
+				$longestTime = $query->getElapsedSecs();
+				$longestQuery = $query->getQuery();
+			}
+			$list[ (string)$query->getElapsedSecs() ] = $query->getQuery();
+		}
+		$result = 'Выполнено <strong>' . $queryCount . '</strong> запросов за <strong>' . $totalTime . '</strong>  секунд' . "<br />\n";
+		$result .= 'Среднее время выполнения запроса: <strong>' . $totalTime / $queryCount . '</strong> секунд' . "<br />\n";
+		$result .= 'Запросов в секунду: <strong>' . $queryCount / $totalTime . "</strong><br />\n";
+		echo $result;
+		echo '</div>';
+		echo '<div class="alert alert-danger">';
+		$result = 'Самое длительное время запроса: <strong>' . $longestTime . "</strong><br />\n";
+		$result .= "Самый длительный запрос:<br /> \n<strong>" . $longestQuery . "</strong>\n";
+		echo $result;
+		echo '</div>';
+		ksort($list);
+		foreach($list as $key => $value) {
+			echo '----</br>';
+			echo $key;
+			echo '</br>';
+			echo $value;
+			echo '</br>----</br>';
+		}
+		
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
+		
+	}

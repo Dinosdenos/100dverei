@@ -1,0 +1,25 @@
+<?php
+if ( ! $this->article) {
+    return '';
+}
+$article = $this->article;
+$image = $article->getImageAdapt(100, 60);
+$title = $article->getTitle();
+$announce = $article->getContent();
+$date = $article->getCreateDate();
+?>
+
+<div class="blogpage-post-widget">
+                                        <figure class="blogpage-post-media">
+                                            <img src="<?php echo $image;?>"
+                                                class="object-fit-cover w-100 h-100" alt="<?php echo $title; ?>" />
+                                        </figure>
+                                        <div class="blogpage-post-details">
+                                            <h4 class="blogpage-post-title">
+                                                <a href="<?php echo $article->getUrl()?>"><?php echo $title; ?></a>
+                                            </h4>
+                                            <div class="blogpage-post-meta">
+                                                <a href="javascript:void(0)" class="blogpage-post-date"><?php echo $date;?></a>
+                                            </div>
+                                        </div>
+                                    </div>

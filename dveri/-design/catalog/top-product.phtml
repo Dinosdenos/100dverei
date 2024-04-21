@@ -1,0 +1,121 @@
+<?php
+$newprods = Fenix::getHelper('catalog/service_categories')->getNewProduct();
+?>
+
+<section class="homepage-v7-featured-products">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-6">
+                <div class="homepage-v7-featured-products-title-main">
+                    <div class="common-title2"><?php echo Fenix::lang('Последние поступления') ?></div>
+                </div>
+            </div>
+            <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-6">
+                <div class="d-flex justify-content-end clearfix homepage-v7-featured-products-slicknavholdercustom">
+                    <div
+                        class="homepage-v7-featured-products-slicknavbtnbig homepage-v7-featured-products-slicknavbtnprev">
+                        <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-prev.png'); ?>"
+                            class="mw-100" alt="prev" />
+                    </div>
+                    <div
+                        class="homepage-v7-featured-products-slicknavbtnbig homepage-v7-featured-products-slicknavbtnnext">
+                        <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-next.png'); ?>"
+                            class="mw-100" alt="next" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="homepage-v7-featured-products-wrap">
+
+            <!--Product card-->
+            <?php 
+            foreach ($newprods as $newprod) { 
+                $img = Fenix_Image::adapt($newprod['image'], 0, 360);
+        ?>
+            <div class="homepage-v7-featured-products-item">
+                <div class="homepage-v7-popular-products-shop-layout">
+                    <div class="homepage-v7-popular-products-shop-image-wrap">
+                        <div class="homepage-v7-popular-products-shop-image-main">
+                            <div class="homepage-v7-popular-products-shop-image">
+                                <a href="<?php echo $newprod['url']; ?>">
+                                    <img data-src="<?php echo $img; ?>" class="object-fit-cover w-100 h-100 lazyload"
+                                        alt="<?php echo $newprod['title']; ?>" />
+                                    <div class="homepage-v7-popular-products-shop-image-x">
+                                        <img data-src="<?php echo $img; ?>"
+                                            class="object-fit-cover w-100 h-100 lazyload"
+                                            alt="<?php echo $newprod['title']; ?>" />
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <?php if ($newprod['sale'] == 1 or $newprod['recomend'] == 1 or $newprod['is_new'] == 1 or $newprod['install'] == 1) { ?>
+                        <ul class="homepage-v7-popular-products-badge-group-main">
+                            <?php if ($newprod['sale'] == 1) { ?>
+                            <li class="homepage-v7-popular-products-badge-group"><span
+                                    class="homepage-v7-sale-products-badge"><?php echo Fenix::lang('Aкция') ?></span></li>
+                            <?php } ?>
+                            <?php if ($newprod['recomend'] == 1) { ?>
+                            <li class="homepage-v7-popular-products-badge-group"><span
+                                    class="homepage-v7-recomend-products-badge"><?php echo Fenix::lang('Мы рекомендуем') ?></span></li>
+                            <?php } ?>
+                            <?php if ($newprod['is_new'] == 1) { ?>
+                            <li class="homepage-v7-popular-products-badge-group"><span
+                                    class="homepage-v7-new-products-badge"><?php echo Fenix::lang('Новинка') ?></span></li>
+                            <?php } ?>
+                            <?php if ($newprod['install'] == 1) { ?>
+                            <li class="homepage-v7-popular-products-badge-group"><span
+                                    class="homepage-v7-install-products-badge"><?php echo Fenix::lang('Монтаж на завтра') ?></span></li>
+                            <?php } ?>
+                        </ul>
+                        <?php } ?>
+                        <ul class="homepage-v7-popular-products-action-btns-group">
+                            <!--<li class="homepage-v7-popular-products-action-btns">
+                                <a class="homepage-v7-popular-products-action" data-bs-toggle="tooltip"
+                                    data-bs-placement="Top" title="" href="wishlist.html"
+                                    data-bs-original-title="Whishlist" aria-label="Whishlist"><i
+                                        class="fas fa-heart"></i></a>
+                            </li>-->
+                            <li class="homepage-v7-popular-products-action-btns" data-bs-toggle="modal">
+                                <a class="homepage-v7-popular-products-action" data-bs-toggle="modal"
+                                    data-bs-target="#modalindex"
+                                    onclick="return FenixCheckout.quickview('<?php echo $newprod['url']; ?>')"
+                                    data-bs-placement="Top" title="<?php echo $newprod['title']; ?>"
+                                    href="javascript:void(0)" data-bs-original-title="Быстрый просмотр"
+                                    aria-label="Быстрый просмотр"><i class="fas fa-search"></i></a>
+                            </li>
+                            <li class="homepage-v7-popular-products-action-btns" data-bs-toggle="modal">
+                                <a class="homepage-v7-popular-products-action" data-bs-toggle="modal"
+                                    data-bs-target="#modalindex"
+                                    onclick="return FenixCheckout.quickview('<?php echo $newprod['url']; ?>')"
+                                    data-bs-placement="Top" title="<?php echo $newprod['title']; ?>"
+                                    onclick="return FenixCheckout.addProduct('https://<?php echo $_SERVER['HTTP_HOST'];?>/checkout/process/add/pid/<?php echo $newprod['id']; ?>/qty/1')"
+                                    href="javascript: void(0);" data-bs-original-title="Добавить в корзину"
+                                    aria-label="Добавить в корзину"><i class="fas fa-shopping-cart"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="shop-content">
+                        <ul class="homepage-v7-popular-products-rating-star">
+                            <?php 
+                            for ($a = 0; $a < $newprod['rating']; $a++) { ?>
+                            <li class="active"><i class="fas fa-star"></i></li>
+                            <?php } ?>
+                        </ul>
+                        <div class="homepage-v7-popular-products-shop-title-main">
+                            <a class="homepage-v7-popular-products-shop-title"
+                                href="<?php echo $newprod['url']; ?>"><?php echo $newprod['title']; ?></a>
+                        </div>
+
+                        <div class="homepage-v7-popular-products-shop-price">
+                            <?php echo ($newprod['price_old'] <= 0 or $newprod['price_old'] <= $newprod['price']) ? '<span class="homepage-v7-popular-products-sale-price">'.$newprod['price'].' UAH</span>' : '<del>'.$newprod['price_old'].'</del><span class="homepage-v7-popular-products-sale-price">'.$newprod['price'].' UAH</span>';?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END PRODUCT CARD-->
+            <?php
+            }
+            ?>
+        </div>
+    </div>
+</section>

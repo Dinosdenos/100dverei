@@ -1,0 +1,215 @@
+<?php
+   $availableAttributes = Fenix::getHelper('catalog/service_filter')->getAttributeInLeftBlock($this->category);
+   $haveFilters = false;
+   $catalogFilterModel = Fenix::getModel('catalog/filter');
+   ?>
+<aside class="sidebar shop-sidebar sticky-sidebar-wrapper sidebar-fixed">
+    <div class="sidebar-overlay"></div>
+    <a class="sidebar-close" href="javascript:void(0)"><i class="close-icon"></i></a>
+    <div class="sidebar-content scrollable">
+        <div class="sticky-sidebar">
+            <div class="filter-actions">
+                <label><?php echo Fenix::lang('Фильтр товаров') ?></label>
+                <a href="<?php echo Fenix::getUrl($this->category->url_key) ?>" class="btn filter-clear"><?php echo Fenix::lang('Сбросить фильтры'); ?></a>
+            </div>
+            <?php
+                                        if (isset($this->bannerToCategory)) {
+                                            echo '<div class="filter-actions">';
+                                            echo $this->bannerToCategory;
+                                            echo '</div>';
+                                            //echo '<br>';
+                                        }
+            ?>
+            <div class="accordion" id="accordionExample">
+
+                <?php foreach ($availableAttributes as $_attribute) { ?>
+                <?php if ($_attribute->is_range) { ?>
+                <?php $range = $catalogFilterModel->getRangeData($this->category, $_attribute) ?>
+                <?php 
+
+            ?>
+                <?php if ($range->min < $range->max) {
+               $haveFilters = true;
+            ?>
+                <div class="accordion-item widget widget-collapsible">
+                    <div class="accordion-header" id="headingTwo">
+                        <div class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                            aria-controls="collapseTwo">
+                            <div class="widget-title"><label><?php echo $_attribute->title; ?></label></div>
+                        </div>
+                    </div>
+                    <script>
+                    /*----------------- Shop Page v1 Sidebar Filter Price Range slider -----------------*/
+                    $(function() {
+                        $("#slider-range-01").slider({
+                            range: true,
+                            min: <?php echo (float) $range->min ?>,
+                            max: <?php echo (float) $range->max ?>,
+                            values: [<?php echo (float) $range->selected_min ?>,
+                                <?php echo (float) $range->selected_max ?>
+                            ],
+                            slide: function(event, ui) {
+                                $("#amount-01").val(ui.values[0] + " UAH " + " - " + ui.values[1] + " UAH ");
+                            },
+                            stop: function(event, ui) {
+                                $.post('', {
+                                    'action': 'updateFilter',
+                                    'attribute': '<?php echo $_attribute->sys_title ?>',
+                                    'min': ui.values[0],
+                                    'max': ui.values[1]
+                                }, function(data) {
+                                    if (data != '')
+                                        self.location.href = data;
+                                });
+                            }
+                        });
+                        $("#amount-01").val($("#slider-range-01").slider("values", 0) + " UAH " + " - " +
+                            $("#slider-range-01").slider("values", 1) + " UAH ");
+                    });
+                    </script>
+
+
+
+                    <div id="collapseTwo" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="widget-body item-price price-range-slider-01">
+                                <div id="slider-range-01" class="range-bar"></div>
+                                <div class="range-value">
+                                    <input type="text" id="amount-01" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+                <?php } else { ?>
+                <?php $_values = $catalogFilterModel->getAvailableValues($this->category, $_attribute);
+            
+        
+                if ($_values->count() > 0) {
+                    if ($_values->count() < 20) {
+                        $showcollapse = 'show';
+                        $collapsed = '';
+                    } else {
+                        $showcollapse = '';
+                        $collapsed = 'collapsed';
+                    }
+                        
+                    
+                    
+                    $haveFilters = true;
+                    $attributes_title = $_attribute->title;
+                ?>
+                <div class="accordion-item widget widget-collapsible">
+                    <div class="accordion-header" id="heading<?php echo $_attribute->sys_title?>">
+                        <div class="accordion-button <?php echo $collapsed; ?>" data-bs-toggle="collapse"
+                            data-bs-target="#collapse<?php echo $_attribute->sys_title?>"
+                            aria-controls="collapse<?php echo $_attribute->sys_title?>">
+                            <div class="widget-title"><label><?php echo Fenix::lang($attributes_title); ?></label></div>
+                        </div>
+                    </div>
+                    <div id="collapse<?php echo $_attribute->sys_title?>" class="accordion-collapse collapse <?php echo $showcollapse; ?>">
+                        <div class="accordion-body">
+                            <ul class="widget-body item-brand-01">
+
+
+                                <?php 
+                                foreach ($_values as $_value) { 
+                            if ($_value->count > 0) {
+                                
+                                ?>
+                                <?php
+                        $isSelected = $catalogFilterModel->isAttributeSelected($_attribute, $_value);
+                        $onClick = '';
+                        $disabled = ' disabled="disabled"';
+                        $checked = '';
+                        $link = '';
+                        $display = '';
+                        $hide = '';
+                        $controlplus = '';
+                        $inSitemap = '';
+                        //$display = 'none';
+
+                        if ($_value->count > 0) {
+                           $link = $catalogFilterModel->prepareFilterUrl($_attribute, $_value);
+                           //$link = Fenix::translitRuEngFileter($link);
+                           $link = str_replace(' ', '%20', $link);
+                           $onClick = 'onclick="window.location.href=\'' . $link . '\'"';
+                           $disabled = '';
+                           $inSitemap = '';
+                           //$display = '';
+                        }
+
+                        if ($isSelected) {
+                           $checked = ' active';
+                        }
+                        ?>
+                                <?php
+                        /*$myArr = array(1,2,3,4,5);
+                        foreach($myArr as $key => $item){
+                            if ($item == 3){
+                              unset($myArr[$key]);
+                            }
+                        }*/
+                        /*Исключение из фильтра данных */
+                        $reled_filter_arr = explode(',', $this->category->related_filter);
+                        foreach($reled_filter_arr as $key => $reled_filter){
+                            if ($_value->value == $reled_filter) {
+                                $display = 'style="display: none;"';
+                                $controlplus = 'hide';
+                            }
+                        }
+                        $hide_filter_arr = explode(',', $this->category->hide_filter);
+                        foreach($hide_filter_arr as $key => $hide_filter){
+                            if ($_value->value == $hide_filter) {
+                                $display = 'style="display: none;"';
+                                $inSitemap = 'rel="nofollow"';
+                                $controlplus = 'hide';
+                            }
+                        }
+                        /*Конец исключения из фильтра */
+                        ?>
+
+                                <?
+                        if ($display != 'style="display: none;"') { ?>
+                                <li class="brand-01 <?php echo $checked ?>"><a
+                                        href="<?php echo $link ?>"><?php echo Fenix::lang($_value->value); ?>
+                                        (<?php echo $_value->count ?>)</a></li>
+                                <?php }
+
+                        
+
+
+                        
+                    }
+
+                     } ?>
+                                <!--/************ */-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <?php 
+                        }
+                    }
+                    
+                        }
+                        ?>
+
+            </div>
+            <!--<div class="widget widget-collapsible widget-two-btn">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a href="javascript:void(0)" class="common-btn2-hover-small w-100"><span
+                                class="w-100 m-0">Apply</span></a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="javascript:void(0)"
+                            class="common-btn2-hover-small common-btn2-hover-small2 w-100"><span
+                                class="w-100 m-0">Cancel</span></a>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</aside>

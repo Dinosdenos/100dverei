@@ -1,0 +1,194 @@
+<?php
+$categoriestab = Fenix::getHelper('catalog/service_categories')->getCategoriesForTab();
+
+if ( ! $categoriestab) {
+    return '';
+}
+?>
+<section class="categorytab-list">
+    <div class="container">
+	<div class="mine-top-h2">
+<?php echo Fenix::lang('Популярные товары');?>
+</div>
+        <div class="row">
+
+				<div class="tab-container">
+				<div class="tab-wrapper">
+				<?php
+				$keys = array_keys( $categoriestab );
+				foreach ($categoriestab as $key => $categorytab) { 
+				?>
+    
+        <input type="radio" name="tab" id="tab<?php echo $categorytab['id'] ?>" <?php if ( $keys[0] === $key) { echo 'checked';} ?>/>
+        <label class="tab-label" for="tab<?php echo $categorytab['id'] ?>" nth="<?php echo $categorytab['id'] ?>"><?php echo $categorytab['title'] ?></label>
+        <div class="tab-item" id="tab-content<?php echo $categorytab['id'] ?>">
+		<div id="banerokinminecat">
+
+		<?php
+		if (strpos($_SERVER['REQUEST_URI'], '/ua') !== false) {
+		?>
+		<a href="<?php echo $categorytab['url_tab_mine']?>"><img class="banerokinminecatimg" src=" <?php echo Fenix_Image::resize($categorytab['image4'],607,603);?>"></a>
+		<?php
+}
+else {
+	?>
+<a href="<?php echo $categorytab['url_tab_mine']?>"><img class="banerokinminecatimg" src=" <?php echo Fenix_Image::resize($categorytab['image3'],607,603);?>"></a>
+<?php }?>
+		
+		</div>
+		<div class="tovar">
+		<!-- Товар  -->
+<?php
+if ($categorytab['id'] !== '') {
+	
+mb_internal_encoding("UTF-8");
+
+//session_save_path("tmp");
+
+// Корневая директория
+define("DS", DIRECTORY_SEPARATOR);
+define("BASE_DIR", dirname(__FILE__) . DS);
+
+require_once 'etc/Const.php';
+require_once LIB_DIR_ABSOLUTE . 'Fenix.php';
+require_once __DIR__ . '/vendor/autoload.php';
+// Указываем список директорий, в которых будем искать файлы
+$includePath = implode(PATH_SEPARATOR, array(
+    BASE_DIR,
+    APP_DIR_ABSOLUTE,
+    LIB_DIR_ABSOLUTE
+));
+
+if (function_exists("date_default_timezone_set") && function_exists("date_default_timezone_get")) {
+    @date_default_timezone_set(@date_default_timezone_get());
+}
+
+$includePath .= get_include_path();
+set_include_path($includePath);
+
+// Регистрация автозагрузчика
+try {
+    $autoloaderScript = 'Zend/Loader/Autoloader.php';
+
+    if ( ! file_exists(LIB_DIR_ABSOLUTE . $autoloaderScript)) {
+        throw new Exception("Автозагрузчик не найден <strong>" . $autoloaderScript . "</strong>");
+    }
+
+    require_once $autoloaderScript;
+
+    $autoloader = Zend_Loader_Autoloader::getInstance();
+    $autoloader->registerNamespace("Fenix_");
+    $autoloader->setFallbackAutoloader(true);
+}
+catch (Exception $e) {
+    require_once('Fenix/Exception.php');
+    new Fenix_Exception($e);
+}
+
+// Стартуем сессию
+Zend_Session::start();
+
+if (Fenix::isDev() === true) {
+// Стартуем Xhprof
+    define('XHPROF_ENABLED', Fenix_Xhprof::start());
+}
+
+// Коннектимся к базе данных
+
+    $dbСonfigFile = ETC_DIR_ABSOLUTE . "database.xml";
+    $database = new Zend_Config_Xml($dbСonfigFile, "database");
+/*
+    echo $database->params->host;
+    echo $database->params->username;
+    echo $database->params->password;
+    echo $database->params->dbname;
+	*/
+            try {
+                $dbh = new PDO("mysql:dbname=".$database->params->dbname.";host=".$database->params->host."", "".$database->params->username."", "".$database->params->password."", array(    // Наименование базы; Хост; Имя пользователя; Пароль.
+
+                ));
+}catch(PDOException $e){
+  
+    echo 'Подключение не удалось: ' . $e->getMessage();
+}
+
+	$sth = $dbh->prepare("SELECT `fe_catalog_products`.`image` as `image`, `fe_catalog_products`.`price` as `price`, `fe_catalog_products`.`id` as `id`, `fe_catalog_products`.`title_". Fenix_Language::getInstance()->getCurrentLanguage()->name ."` as `title`, `fe_catalog_products`.`url_key` as `url`, `fe_catalog_products`.`sku` as `sku` FROM `fe_catalog_products` WHERE `fe_catalog_products`.`parent` = ".$categorytab['id']." AND `fe_catalog_products`.`tab_in_mine` = '1' OR `fe_catalog_products`.`parentfortab` = ".$categorytab['id']."  AND `fe_catalog_products`.`tab_in_mine` = '1';");
+		
+	$sth->execute();
+
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+	//echo $result;
+} ?>
+
+
+
+
+			<?php 
+			$i = 0;
+			$categarray = array();
+			foreach ($result as $row) {
+				
+				if (in_array ($row['title'], $categarray)){
+					continue;
+					
+				}
+				else {
+					$categarray[] = $row['title'];
+					$i++;
+				}
+				 
+				?>
+				
+				<?php if ($i < '7') {?>
+
+<div class="card product mine">    
+<div class="inner-product-container rounded mine">
+                    <div class="d-flex flex-row mine">
+                <div class="w-50 sku">
+                                            <?php echo $row['sku']; ?>
+                                                    <!--                        <p class="delivery">--><!--</p>-->
+                                                            </div>
+                <div class="w-50 text-right">
+				<p class="in-stock-mine"><?php echo Fenix::lang('Есть в наличии');?></p>
+                                                        </div>
+            </div>
+        <a href="https://dev.100dverei.com.ua/<?php echo $row['url']; ?>">
+			<img class="rounded img-fluid lazyloaded" title="<?php echo $row['title']; ?>" src="<?php echo Fenix_Image::resize($row['image'], 200, 200) ?>">
+			        </a>
+        <div class="card-body-mine">
+		<!-- Заголовок-->
+		 		 
+            <p class="h4-mine"><a href="https://dev.100dverei.com.ua/<?php echo $row['url']; ?>"><strong><?php echo $row['title']; ?></strong></a>
+            </p>
+			
+                    			<!-- Заголовок-->
+
+            <div class="d-flex flex-row">
+                <div class="w-50 mine">
+                                            <p class="cost-mine" data-selector_amount="<?php echo $row['price']; ?>"><?php echo $row['price']; ?><span>грн</span><span class="unit-price"></span></p>
+                                    </div>
+                <div class="w-50 mine">
+                                            <button class="btn-mine btn-to-cart" type="button" onclick="return FenixCheckout.addProduct('https://dev.100dverei.com.ua/checkout/process/add/pid/<?php echo $row['id']; ?>/qty/1')"><!--<i class="demo-icon icon-cart"></i>--><?php echo Fenix::lang('Купить');?>                      </button>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+				
+				<?php }} ?>
+
+
+
+<!--ТОвар конец -->					
+		</div>
+		</div>
+        
+		
+
+            <?php } ?>
+			    </div>
+	</div>	
+        </div>
+    </div>
+</section>

@@ -1,0 +1,104 @@
+<?php $req = Fenix::getRequest() ?>
+<?php if($this->orderInfo === false) { ?>
+        <p class="alert alert-info"><?php echo Fenix::lang('Ваша корзина пуста'); ?></p>
+        <?php } else { ?>
+
+<div class="table-content table-responsive cart-table-content offcanvas-cart">
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo Fenix::lang('Картинка')?></th>
+                <th><?php echo Fenix::lang('Товар')?></th>
+                <th><?php echo Fenix::lang('Цена')?></th>
+                <th><?php echo Fenix::lang('Кол-во')?></th>
+                <th><?php echo Fenix::lang('Сумма')?></th>
+            </tr>
+        </thead>
+        <tbody id="checkinfotb">
+        <?php foreach ($this->products as $i => $_product) { ?>
+            <tr class="tr_subtotal tr_product">
+                <td class="product-thumbnail">
+                    <a href="<?php echo $_product->getUrl() ?>"><img class="lazyload" data-src="<?php echo $_product->getImageAdapt(98, 98) ?>" alt="<?php echo $_product->getTitle() ?>" /></a>
+                </td>
+                <td class="product-name"><a href="<?php echo $_product->getUrl() ?>"><?php echo $_product->getTitle() ?></a></td>
+                <td class="product-price-cart"><span class="amountcart"><?php echo $_product->getOrderUnitPrice() ?></span> UAH</td>
+                <td class="product-quantity">
+                <div class="qty-block" style="border: 0px solid #e8e8e8;    display: block;    height: auto;    overflow: hidden;    padding: 0;    position: relative;    width: 80px;">
+                <?php echo $_product->getOrderQty() ?><?php echo $_product->getUnitForCart(); ?>
+                </div>
+                </td>
+                <td class="product-subtotal"><span class="product_subtotal"><?php echo $_product->getOrderUnitPrice() * $_product->getOrderQty(); ?></span> UAH</td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<script>
+gtag('event', 'purchase', {
+    currency: 'UAH',
+    items: [<?php
+                $s = 0;
+                foreach ($this->products as $i => $_product) {
+                    if ($s <= 0) {
+                        $s++;
+                        echo "{
+				id: '" . $_product->getSku() . "', \n			
+                item_id: '" . $_product->getSku() . "', \n
+                item_name: '" . $_product->getTitle() . "', \n
+                price: " . $_product->getPrice() . " , \n
+                currency: 'UAH', \n
+                quantity: " . $_product->getOrderQty() . " \n
+                } ";
+                    } else {
+                        echo ", {
+				id: '" . $_product->getSku() . "', \n			
+                item_id: '" . $_product->getSku() . "', \n
+                item_name: '" . $_product->getTitle() . "', \n
+                price: " . $_product->getPrice() . " , \n
+                currency: 'UAH', \n
+                quantity: " . $_product->getOrderQty() . " \n
+                }";
+                    }
+                }
+                ?>],
+    transaction_id: '<?php echo $this->orderInfo->getId(); ?>',
+    value: <?php echo $this->orderInfo->total_price; ?>
+})
+</script>
+<script>
+gtag('event', 'page_view', {
+  dynx_itemid: [<?php
+                    $s = 0;
+                    foreach ($this->products as $i => $_product) {
+                        if ($s <= 0) {
+                            $s++;
+                            echo "'" .$_product->getSku()."'";
+                        } else {
+                            echo ", '" . $_product->getSku() ."'";
+                        }
+                    }
+                    ?>],
+  dynx_pagetype: 'conversion',
+  dynx_totalvalue: <?php echo $this->orderInfo->total_price; ?>
+  
+});
+</script>
+<script>
+    gtag('event', 'page_view', {
+  ecomm_pagetype: 'purchase',
+  ecomm_prodid: [<?php
+                    $s = 0;
+                    foreach ($this->products as $i => $_product) {
+                        if ($s <= 0) {
+                            $s++;
+                            echo $_product->getSku();
+                        } else {
+                            echo ", '" . $_product->getSku() ."'";
+                        }
+                    }
+                    ?>],
+  ecomm_totalvalue: <?php echo $this->orderInfo->total_price; ?>
+
+});
+</script>
+<?php }?>

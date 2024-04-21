@@ -1,0 +1,9 @@
+<div class="form-error">
+    <ul class="reset-list">
+        <?php foreach ((array) $this->Error AS $_error): ?>
+            <?php foreach ($_error->getErrors() AS $_errorCode): ?>
+                <li><?php echo $_error->getPrefix() . $_error->getMessages()->{$_errorCode} ?></li>
+            <?php endforeach ?>
+        <?php endforeach ?>
+    </ul>
+</div>

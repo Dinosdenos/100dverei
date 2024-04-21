@@ -1,0 +1,23 @@
+<?php
+if ( ! $this->article) {
+    return '';
+}
+$article = $this->article;
+$image = $article->getImageAdapt(305, 238);
+$title = $article->getTitle();
+$announce = $article->getContent();
+?>
+<div class="homepage-v7-latest-blog-item">
+    <div class="homepage-v7-latest-blog-images">
+        <a href="<?php echo $article->getUrl() ?>">
+            <img data-src="<?php echo $image; ?>" class="lazyload object-fit-cover w-100 h-100"
+                alt="<?php echo $title; ?>" />
+        </a>
+    </div>
+    <div class="homepage-v7-latest-blog-content">
+        <a href="<?php echo $article->getUrl() ?>">
+            <span class="homepage-v7-latest-blog-title"><?php echo Fenix::getDate($article->getCreateDate())->format('d.m.Y'); ?> <br> <?php echo $title; ?></span>
+            <div class="homepage-v7-latest-blog-text"><?php echo Fenix::getHelper('core/service_text')->characterLimiter(strip_tags($announce), 350); ?></div>
+        </a>
+    </div>
+</div>

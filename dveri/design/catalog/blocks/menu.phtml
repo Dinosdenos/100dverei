@@ -1,0 +1,99 @@
+<?php $req = Fenix::getRequest() ?>
+<?php $rootCategoriesList = Fenix::getCollection('catalog/categories')->getCategoriesList(1) ?>
+<?php if ($rootCategoriesList->count() > 0): ?>
+    <ul id="categoriesMenu" class="categories-menu reset-list">
+        <?php foreach ($rootCategoriesList AS $i => $category): ?>
+            <?php //Fenix::dump($rootCategoriesList->count(),$category->getTitle()) ?>
+            <?php $subCategoriesList = Fenix::getCollection('catalog/categories')->getCategoriesList($category->getId()) ?>
+            <?php $isRight   = $i > ($rootCategoriesList->count() / 2) ?>
+            <?php $isWide    = (bool) $category->is_wide ?>
+            <?php $rootWidth = (100 / $rootCategoriesList->count()) ?>
+            
+            <li class="<?php echo ($isWide ? ' wide' : null) ?><?php echo ($category->getUrlKey() == $req->getUriSegment(1) ? ' current' : null) . ($isRight ? ' right' : null) ?>" style="width: <?php echo $rootWidth ?>%;">
+                <a href="<?php echo $category->getUrl() ?>"><table><tr><td><?php echo $category->getTitle() ?></td></tr></table><span class="separator"></span></a>
+                <?php if ($subCategoriesList instanceof Fenix_Object_Rowset && $subCategoriesList->count() > 0): ?>
+                    <div class="dropdown">
+                        
+                        <?php if ($isWide): ?>
+                            <?php $result = array() ?>
+                            <?php for ($i = 0, $j = 0; $i < $subCategoriesList->count(); $i++, $j++): ?>
+                                <?php if ($j == 5) $j = 0;   ?>
+                                <?php $result[$j][] = $subCategoriesList->offsetGet($i) ?>
+                            <?php endfor ?>
+                            
+    
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <?php foreach ($result AS $_col): ?>
+                                        <td style="width:20%;vertical-align:top;">
+                                            <?php foreach ($_col AS $subCategory): ?>
+                                                <ul class="reset-list">
+                                                    <li>
+                                                        <a onclick="return $.fenix().filter().flushNredirect($(this), {category : <?php echo $subCategory->getId() ?>})" href="<?php echo $subCategory->getUrl() ?>"><?php echo $subCategory->getTitle() ?></a>
+                                                        <?php $thirdCategoriesList = Fenix::getCollection('catalog/categories')->getCategoriesList($subCategory->getId()) ?>
+                                                        <?php if ($thirdCategoriesList instanceof Fenix_Object_Rowset): ?>
+                                                            <ul class="reset-list">
+                                                                <?php foreach ($thirdCategoriesList AS $thirdCategory): ?>
+                                                                    <li><a href="<?php echo $thirdCategory->getUrl() ?>"><?php echo $thirdCategory->getTitle() ?></a></li>
+                                                                    <!--<li><a onclick="return $.fenix().filter().flushNredirect($(this), {category : <?php //echo $thirdCategory->getId() ?>})" href="<?php //echo $thirdCategory->getUrl() ?>"><?php //echo $thirdCategory->getTitle() ?></a></li>-->
+                                                                <?php endforeach ?>
+                                                            </ul>
+                                                        <?php endif ?>
+                                                    </li>
+                                                </ul>
+                                            <?php endforeach ?>
+                                        </td>
+                                    <?php endforeach ?>
+                                </tr>
+                            </table>
+                            
+                            <? /* 
+                            <table border="1" width="100%">
+                                <tr>
+                                    <td>
+                                        <?php foreach ($subCategoriesList AS $subCategory): ?>
+                                            <ul class="reset-list">
+                                                <li>
+                                                    <a href="<?php echo Fenix::getModel('store/categories')->getUri($subCategory) ?>"><?php echo $subCategory->title ?></a>
+                                                    <?php $thirdCategoriesList = Fenix::getModel('store/categories')->getCategoriesList($subCategory->id) ?>
+                                                    <?php if ($thirdCategoriesList instanceof Zend_Db_Table_Rowset): ?>
+                                                        <ul class="reset-list">
+                                                            <?php foreach ($thirdCategoriesList AS $thirdCategory): ?>
+                                                                <li><a href="<?php echo Fenix::getModel('store/categories')->getUri($thirdCategory) ?>"><?php echo $thirdCategory->title ?></a></li>
+                                                            <?php endforeach ?>
+                                                        </ul>
+                                                    <?php endif ?>
+                                                </li>
+                                            </ul>
+                                        <?php endforeach ?>
+                                    </td>
+                                </tr>
+                            </table>
+                            */?>
+                        <?php else: ?>
+                            <ul class="reset-list">
+                                <?php foreach ($subCategoriesList AS $subCategory): ?>
+                                    <li>
+                                        <a href="<?php echo $subCategory->getUrl() ?>"><?php echo $subCategory->getTitle() ?></a>
+                                        <!--<a onclick="return $.fenix().filter().flushNredirect($(this), {category : <?php echo $subCategory->id ?>})" href="<?php echo $subCategory->getUrl() ?>"><?php echo $subCategory->getTitle() ?></a>-->
+                                        <?php $thirdCategoriesList = Fenix::getCollection('catalog/categories')->getCategoriesList($subCategory->getId()) ?>
+                                        <?php if ($thirdCategoriesList instanceof Fenix_Object_Rowset): ?>
+                                            <ul class="reset-list">
+                                                <?php foreach ($thirdCategoriesList AS $thirdCategory): ?>
+                                                    <li><a href="<?php echo $thirdCategory->getUrl() ?>"><?php echo $thirdCategory->getTitle() ?></a></li>
+                                                    <!--<li><a onclick="return $.fenix().filter().flushNredirect($(this), {category : <?php echo $thirdCategory->getId() ?>})" href="<?php echo $thirdCategory->getUrl() ?>"><?php echo $thirdCategory->getTitle() ?></a></li>-->
+                                                <?php endforeach ?>
+                                            </ul>
+                                        <?php endif ?>
+                                    </li>
+                                <?php endforeach ?>
+                                </ul>
+                        <?php endif ?>
+                        <div class="shadow"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                <?php endif ?>
+            </li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>

@@ -1,0 +1,30 @@
+<?php
+$lastArticles = Fenix::getCollection('blog/blog')->getLastArticles();
+
+if ($lastArticles->count() <= 0) {
+    return '';
+}
+?>
+<section class="blog-area mb-30px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <!-- Section title -->
+                <div class="section-title underline-shape">
+                    <div><?php echo Fenix::lang('Блог') ?></div>
+                    <p><?php echo Fenix::lang('Последние статьи в блоге') ?></p>
+                </div>
+                <!-- Section title -->
+            </div>
+        </div>
+        <!-- Blog Slider Start -->
+        <div class="blog-slider-active owl-carousel owl-nav-style-3">
+            <!-- single item -->
+            <?php foreach ($lastArticles AS $article) { ?>
+                    <?php echo $this->partial('blog/blocks/article-slide.phtml', ['article' => $article]) ?>
+            <?php } ?>
+            <!-- single item -->
+        </div>
+        <!-- Blog Slider Start -->
+    </div>
+</section>

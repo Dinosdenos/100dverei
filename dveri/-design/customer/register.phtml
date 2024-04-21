@@ -1,0 +1,18 @@
+<section class="one-column wrapper-980 customer-register">
+    <article>
+        <?php echo $this->Form->fetch() ?>
+        <div style="display: none" id="dialog-register-rules">
+            <?php echo $this->block('register-rules')->content ?>
+        </div>
+    </article>
+</section>
+<script type="text/javascript">
+    $(function(){
+       $('#dialog-register-rules-trigger').click(function(){
+            $('#dialog-register-rules').dialog({
+                modal: true,
+                title: '<?php echo $this->block('register-rules')->title ?>'
+            })
+        });
+    });
+</script>

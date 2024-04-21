@@ -1,0 +1,105 @@
+<div class="col-12">
+<?php
+mb_internal_encoding("UTF-8");
+
+//session_save_path("tmp");
+
+// Корневая директория
+define("DS", DIRECTORY_SEPARATOR);
+define("BASE_DIR", dirname(__FILE__) . DS);
+
+require_once 'etc/Const.php';
+require_once LIB_DIR_ABSOLUTE . 'Fenix.php';
+require_once __DIR__ . '/vendor/autoload.php';
+// Указываем список директорий, в которых будем искать файлы
+$includePath = implode(PATH_SEPARATOR, array(
+    BASE_DIR,
+    APP_DIR_ABSOLUTE,
+    LIB_DIR_ABSOLUTE
+));
+
+if (function_exists("date_default_timezone_set") && function_exists("date_default_timezone_get")) {
+    @date_default_timezone_set(@date_default_timezone_get());
+}
+
+$includePath .= get_include_path();
+set_include_path($includePath);
+
+// Регистрация автозагрузчика
+try {
+    $autoloaderScript = 'Zend/Loader/Autoloader.php';
+
+    if ( ! file_exists(LIB_DIR_ABSOLUTE . $autoloaderScript)) {
+        throw new Exception("Автозагрузчик не найден <strong>" . $autoloaderScript . "</strong>");
+    }
+
+    require_once $autoloaderScript;
+
+    $autoloader = Zend_Loader_Autoloader::getInstance();
+    $autoloader->registerNamespace("Fenix_");
+    $autoloader->setFallbackAutoloader(true);
+}
+catch (Exception $e) {
+    require_once('Fenix/Exception.php');
+    new Fenix_Exception($e);
+}
+
+// Стартуем сессию
+Zend_Session::start();
+
+if (Fenix::isDev() === true) {
+// Стартуем Xhprof
+    define('XHPROF_ENABLED', Fenix_Xhprof::start());
+}
+
+// Коннектимся к базе данных
+
+    $dbСonfigFile = ETC_DIR_ABSOLUTE . "database.xml";
+    $database = new Zend_Config_Xml($dbСonfigFile, "database");
+/*
+    echo $database->params->host;
+    echo $database->params->username;
+    echo $database->params->password;
+    echo $database->params->dbname;
+	*/
+$link = mysqli_connect($database->params->host, $database->params->username, $database->params->password, $database->params->dbname);
+if ($this->product->getVariableSku() != '') {
+	$variable = mysqli_query($link,"SELECT * FROM `fe_catalog_products` where `variable_sku` = '".$this->product->getVariableSku()."' or `sku` = '".$this->product->getVariableSku()."' ORDER BY `fe_catalog_products`.`width` ASC LIMIT 4");
+} else {
+$variable = mysqli_query($link,"SELECT * FROM `fe_catalog_products` where `variable_sku` = '".$this->product->getSku()."' or `sku` = '".$this->product->getSku()."' ORDER BY `fe_catalog_products`.`width` ASC LIMIT 4");
+}
+?>
+    <div class='button-selected'>
+        <?php
+
+foreach  ($variable as $resultvar) {
+	$selected = 'class="button2-big"';
+	if ($resultvar['sku'] == $this->product->getSku()){
+		$selected = 'class="button3-big"';
+	}
+    #добавление условий параметров вариативности
+    if ($resultvar['variable_settings'] == 'default' || $resultvar['variable_settings'] == '') {
+        ?>
+        <a <?php echo $selected;?>href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $resultvar['url_key']; ?>">
+            <? echo $resultvar['width'];?>
+        </a>
+        <?php
+    } elseif ($resultvar['variable_settings'] == 'цвет') { ?>
+        <a <?php echo $selected;?>href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $resultvar['url_key']; ?>">
+            <? echo $resultvar['color'];?>
+        </a>
+        <?php } elseif ($resultvar['variable_settings'] == 'свой параметр') { ?>
+        <a <?php echo $selected;?>href="https://<?php echo $_SERVER['HTTP_HOST'];?>/<?php echo $resultvar['url_key']; ?>">
+            <? echo $resultvar['my_param_variable'];?>
+        </a>
+        <?php } ?>
+
+        <?php
+    }
+	?>
+
+    </div>
+</div>
+<?php
+mysqli_close($link)
+?>

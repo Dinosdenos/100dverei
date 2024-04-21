@@ -1,0 +1,78 @@
+<?php $locale = new Zend_Locale('ru_RU') ;
+$ratingproduct = $this->product->total_rating; 
+$reviewsCount = $this->product->getReviews()->count();
+if ($ratingproduct < '1'){
+    $ratingproduct = '5';
+}
+if ($reviewsCount < '1') {
+	$reviewsCount = '1';
+}
+//echo $ratingproduct;
+?>
+<?php $reviewsList = $this->product->getReviews(); ?>
+
+<div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating" style="display: none;">
+    Рейтинг товара <span itemprop="ratingValue"><?php echo $ratingproduct;?></span>
+    <span
+        itemprop="reviewCount"><?php echo $reviewsCount; ?></span><?php echo Fenix::declination($reviewsCount, array('отзывов', 'отзыв', 'отзыва'))?>
+</div>
+
+<div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12">
+<?php if ($reviewsList->count() > 0) { ?>
+    <ul class="comments-3">
+    <?php foreach ($reviewsList AS $review) { ?>
+        <li class="comment">
+            <div class="comment-body">
+                <figure class="comment-avatar">
+                    <img data-src="<?php echo Fenix::getSkinUrl('images/single-product-v3-page-tab-eviews-1.jpg'); ?>" class="object-fit-cover w-100 h-100"
+                        alt="<?php echo htmlspecialchars($review->user_name); ?>" />
+                </figure>
+                <div class="comment-content">
+                    <h4 class="comment-author">
+                        <a href="javascript:void(0)"><?php echo htmlspecialchars($review->user_name); ?></a>
+                        <span class="comment-date"><?php echo Fenix::getDate($review->review_date)->format('d.m.Y'); ?></span>
+                    </h4>
+                    <?php if ($review->rating > 0) { ?>
+                    <div class="ratings-container comment-rating">
+                        <div class="ratings-full">
+                        
+                        <?php for ($i = 0; $i < $review->rating; $i++) { ?>
+                            <i class="fas fa-star"></i>
+                        <?php } ?>
+                        
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <p><?php echo $review->review; ?></p>
+                </div>
+            </div>
+        </li>
+        <?php if ($review->reply_to_feedback != '') { ?>
+            <li class="comment">
+            <div class="comment-body">
+                <figure class="comment-avatar">
+                    <img data-src="<?php echo Fenix::getSkinUrl('images/single-product-v3-page-tab-eviews-1.jpg'); ?>" class="object-fit-cover w-100 h-100"
+                        alt="<?php echo  'Адміністрація ' . $_SERVER['HTTP_HOST']; ?>" />
+                </figure>
+                <div class="comment-content">
+                    <h4 class="comment-author">
+                        <a href="javascript:void(0)"><?php echo  'Адміністрація ' . $_SERVER['HTTP_HOST']; ?></a>
+                    </h4>
+                    <p><?php echo $review->reply_to_feedback; ?></p>
+                </div>
+            </div>
+        </li>
+<?php } ?>
+<?php } ?>
+    </ul>
+    <?php } else { ?>
+<?php
+            $Event = Fenix::getCreatorUI()
+                ->loadPlugin('Events')
+                ->setType(Creator_Events::TYPE_OK)
+                ->setMessage(Fenix::lang("Отзывов о товаре еще нет. Вы можете оставить свой заполнив форму."));
+            echo $Event->fetch();
+            ?>
+<?php } ?>
+</div>
+

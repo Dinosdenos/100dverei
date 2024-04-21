@@ -1,0 +1,247 @@
+<?php
+$ratingproduct = $this->product->total_rating;
+$brandproduct = $this->product->brand_name;
+$producttitle = $this->product->title;
+$sku = $this->product->sku;
+$price = $this->product->price;
+$oldprice = $this->product->price_old;
+$video = Fenix::getYouTubeVideoId(trim(strip_tags($this->product->video)));
+$imageMain = Fenix_Image::adapt($this->product->image, 0, 476);
+$nameImage = stristr($imageMain, 'no_image.png');
+$images = Fenix::getHelper('catalog/service_product')->setProduct($this->product)->getImages();
+$productDescription = Fenix::getHelper('catalog/service_product')
+->setProduct($this->product)
+->getContent();
+$stock = '';
+if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) {
+    if ($this->product->getPreorder() == 0){ 
+        $stock = Fenix::lang('Есть в наличии');
+        $check = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: green;" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+      </svg>';
+      $style = 'style="color: green;;font-weight: 700;"';
+    } else {
+        $stock = Fenix::lang('Ожидается через 7 дней');
+        $style = 'style="color: red;font-weight: 700;"';
+        $check = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: green;" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+      </svg>';
+    }
+    } else {
+        $stock = Fenix::lang('Нет в наличии');
+        $style = 'style="color: red;font-weight: 700;"';
+        $check = '';
+    }
+   $reviewsList = $this->product->getReviews(); 
+   $reviewsCount = $reviewsList->count();
+    
+//echo $brandproduct;
+?>
+<!-- Modal -->
+
+<div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+</div>
+<div class="modal-body">
+    <div class="quickview-product-popup">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="homepage-v1-quickview-slider-main open">
+                    <div class="quickview-slider-img">
+                        <img src="<?php echo $imageMain; ?>" id="zoom_01" data-zoom-image="<?php echo $imageMain; ?>"
+                            class="homepage-v1-quickview-slider-img mw-100 slide-popup" alt="<?php echo $producttitle; ?>">
+                    </div>
+                    <div class="slider homepage-v1-quickview-slider-nav slick-initialized slick-slider">
+                        <div class="slick-list draggable">
+                            <div class="slick-track"
+                                style="opacity: 1; width: 1246px; transform: translate3d(-356px, 0px, 0px);">
+
+                                <?php 
+                                $ii = 1;
+                                foreach ($images as $image) {
+                                    $ii++; ?>
+                                <div class="quickview-slider-item slick-slide slick-cloned" data-slick-index="-4" id=""
+                                    aria-hidden="true" tabindex="-1" style="width: 89px;">
+                                    <div class="quickview-slider-thumbal">
+                                        <img src="<?php echo Fenix_Image::adapt($image->image, 0, 476); ?>"
+                                            class="object-fit-cover w-100 h-100 slide-popup"
+                                            alt="<?php echo $producttitle . '_' . $ii; ?>">
+                                    </div>
+                                </div>
+                                <?php } ?>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="<?php echo $this->product->getUrlKey(); ?>"
+                    class="common-btn2-hover common-btn2-hover-small-2-padding2 w-100"><span class="m-0"><?php echo Fenix::lang('Детальнее'); ?></span></a>
+                    <div class="quickview-product-single-info-list_01">
+                        <div class="quickview-product-sku_01">КОД: <span><span> <?php echo $sku; ?></span></div>
+                        <!--<div class="quickview-product-tags_01">
+                            Tags: <span><a href="javascript:void(0)">Wearable</a></span>
+                        </div>-->
+                    </div>
+                    <!--<div class="quickview-product-color-swatch_01">
+                        <div class="color-title_01">
+                            Color:
+                            <span class="color-title_01-val">Black</span>
+                        </div>
+
+                        <div class="flex-wrap d-flex align-items-center">
+                            <a href="javascript:void(0)" class="color_01" style="background-color: #fb5d5d;"><span
+                                    class="tt-text_01">Yellow</span></a>
+                            <a href="javascript:void(0)" class="color_01" style="background-color: #ca6d00;"><span
+                                    class="tt-text_01">Red</span></a>
+                            <a href="javascript:void(0)" class="color_01" style="background-color: #1c93cb;"><span
+                                    class="tt-text_01">Blue</span></a>
+                            <a href="javascript:void(0)" class="color_01" style="background-color: #cccccc;"><span
+                                    class="tt-text_01">Gray</span></a>
+                            <a href="javascript:void(0)" class="color_01 active"
+                                style="background-color: #333333;"><span class="tt-text_01">Black</span></a>
+                        </div>
+                    </div>
+                    <div class="quickview-product-size-swatch_01">
+                        <div class="size-title_01">
+                            Size:
+                            <span class="size-title_01-val">S</span>
+                        </div>
+                        <div class="flex-wrap d-flex align-items-center">
+                            <a href="javascript:void(0)" class="size_01 active">S</a>
+                            <a href="javascript:void(0)" class="size_01">M</a>
+                            <a href="javascript:void(0)" class="size_01">XS</a>
+                            <a href="javascript:void(0)" class="size_01">L</a>
+                            <a href="javascript:void(0)" class="size_01">XL</a>
+                        </div>
+                    </div>-->
+                    <div class="quickview-product-form_01">
+                        <div class="d-flex quickview-product-action_01">
+                            <div class="control_01">
+                                <button class="bttn bttn-left" id="minus">
+                                    <span>-</span>
+                                </button>
+                                <input type="number" class="input input-center cart-plus-minus-box" id="input">
+                                <button class="bttn bttn-right" id="plus">
+                                    <span>+</span>
+                                </button>
+                            </div>
+                            <a href="javascript: void(0);" onclick="f<?php echo $this->product->sku; ?>();f<?php echo $this->product->getId();?>();" class="common-btn1-hover-small d-flex align-items-center"><span><?php echo Fenix::lang('Добавить в корзину') ?></span></a>
+                        </div>
+                    </div>
+                    <?php 
+                    $urlProductFacebook = 'https://www.facebook.com/sharer.php?u=https://' . $_SERVER['HTTP_HOST'] . '/' . $this->product->getUrlKey() . '&t=' . $this->product->title . '';
+                    $urlProductTwitter = 'https://twitter.com/share?url=' . $_SERVER['HTTP_HOST'] . '/' . $this->product->getUrlKey() . '&text=' . $this->product->title . '&hashtags=Самоклеющаяся_пленка"';
+                    $urlProductInstagramm = 'https://www.instagram.com/?url=' . $_SERVER['HTTP_HOST'] . '/' . $this->product->getUrlKey() . '';
+                    ?>
+                    <!--<div class="d-lg-flex quickview-product-single-share_01">
+                        <div class="social-icons_01">
+                            <a href="<?php echo $urlProductFacebook; ?>" class="social-button_01 icon-facebook"><i
+                                    class="fab fa-facebook-f"></i></a>
+                            <a href="<?php echo $urlProductTwitter; ?>" class="social-button_01 icon-twitter"><i
+                                    class="fab fa-twitter"></i></a>
+                            <a href="<?php echo $urlProductInstagramm; ?>" class="social-button_01 icon-instagram"><i
+                                    class="fab fa-instagram"></i></a>
+                         </div>
+                        <a href="wishlist.html" class="quickview-product-add-to-wishlist_01"><i
+                                class="far fa-heart"></i><span>Add to Wishlist</span></a>
+                    </div>-->
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="quickview-product-details">
+                    <div class="quickview-product-title_01"><?php echo $producttitle; ?></div>
+                    <div class="d-flex ratings-container_01">
+                    
+                    <div class="categories-3">
+                        <?php echo Fenix::lang('Наличие') ?>:
+                            <span <?php echo $style; ?>><?php echo $check; ?><?php echo $stock; ?></span>
+                        </div>
+                        <ul class="ratings-full_01">
+                        <?php 
+                            for ($a = 0; $a < $ratingproduct; $a++) { ?>
+                       <li class="ratings_01"><i class="fas fa-star"></i></li>
+                        <?php } ?>
+                        </ul>
+                    </div>
+                    <div class="quickview-product-price_01">
+                    <?php echo ($oldprice <= 0 or $oldprice <= $price) ? '<span class="text-price_01">'.$price.' UAH</span>' : '<span class="text-price_01"><del>'.$oldprice.'</del></span><span class="text-price_01">'.$price.' UAH</span>';?>
+                    </div>
+                    <div class="quickview-product-short-desc_01">
+                        <p><?php echo $productDescription; ?></p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Main Activation JS -->
+<script>
+function f<?php echo $this->product->sku; ?>() {
+    return FenixCheckout.addProduct('<?php echo $this->product->getBuy() ?>/qty/' + $('.cart-plus-minus-box').val());
+}
+
+/*----------------- Home Page v7 Quick View Quantity -----------------*/
+$(document).ready(function() {
+    var quantity = 1;
+    $(".input-center").val(quantity);
+    $(".bttn-left").click(function(event) {
+        if (quantity > 1) {
+            quantity--;
+            $(this).siblings(".input-center").val(quantity);
+        }
+    });
+    $(".bttn-right").click(function(event) {
+        quantity++;
+        $(this).siblings(".input-center").val(quantity);
+    });
+});
+</script>
+
+
+<script>
+gtag('event', 'view_item', {
+    currency: 'UAH',
+    items: [{
+        id: '<?php echo $this->product->sku; ?>',
+        item_id: '<?php echo $this->product->sku; ?>',
+        item_name: '<?php echo $this->product->title; ?>',
+        price: <?php echo $this->product->getPrice(); ?>,
+        currency: 'UAH',
+        quantity: 1
+    }],
+    value: <?php echo $this->product->getPrice(); ?>
+});
+</script>
+<script>
+gtag('event', 'page_view', {
+    ecomm_pagetype: 'product',
+    ecomm_prodid: <?php echo $this->product->sku; ?>,
+    ecomm_totalvalue: <?php echo $this->product->getPrice(); ?>,
+    isSaleItem: <?php if ($this->product->price_old > 0) { 
+echo 'true';
+  } else {
+      echo 'false';
+  }?>
+});
+</script>
+<script>
+gtag('event', 'page_view', {
+    dynx_itemid: '<?php echo $this->product->sku; ?>',
+    dynx_pagetype: 'offerdetail',
+    dynx_totalvalue: <?php echo $this->product->getPrice(); ?>
+});
+</script>
+<script>
+gtag('event', 'page_view', {
+    'value': '<?php echo $this->product->getPrice(); ?>',
+    'items': [{
+        'id': '<?php echo $this->product->sku; ?>',
+        'google_business_vertical': 'retail'
+    }, {
+        'id': '<?php echo $this->product->sku; ?>',
+        'google_business_vertical': 'custom'
+    }]
+});
+</script>

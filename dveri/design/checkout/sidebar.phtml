@@ -1,0 +1,19 @@
+<?php $orderInfo = Fenix::getCollection('checkout/order')->getOrderInfo(); ?>
+                     
+                                    <!--<a href="compare.html" class="count-cart color-black random">
+                                        <span class="item-quantity-tag">0</span>
+                                    </a>
+                                    <a href="wishlist.html" class="count-cart color-black heart">
+                                        <span class="item-quantity-tag">0</span>
+                                    </a>-->
+                             
+                                        
+                                        <?php if ($orderInfo !== false) { ?>
+                                            <span id="checkoutSidebarQty" class="cart-count"><?php echo $orderInfo->getTotalQty() ?></span>
+                                            <!--<span id="checkoutSidebarTotal" class="amount-tag"><?php echo round($orderInfo->getTotalSum(), 2) ?> UAH</span>
+                                            <span id="checkoutSidebarQty" class="item-quantity-tag"><?php echo $orderInfo->getTotalQty() ?></span>-->
+                                            <?php } else { ?>
+                                                
+                                                <span id="checkoutSidebarQty" class="cart-count">0</span>
+                                            <?php } ?>
+                                            

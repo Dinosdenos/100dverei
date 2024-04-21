@@ -1,0 +1,25 @@
+<?php if ($this->Error != null): ?>
+    <?php echo $this->render('creator/form/error.phtml') ?>
+<?php endif ?>
+    
+<?php if ($this->Plugin->getDetails() != null): ?>
+    <div class="gui-field-details-container">
+<?php endif ?>        
+        
+<?php if ($this->Plugin->getId() != null): ?>
+    <script>
+        $(function(){
+            $('#<?php echo $this->Plugin->getId() ?>').styler();
+        });
+    </script>
+<?php endif ?>
+<select<?php echo $this->Plugin->getAttributeSet('creator.form.select') ?>>
+    <?php foreach ($this->Plugin->getOptions() AS $_option): ?>
+        <option<?php echo ($this->Plugin->getSelected() == $_option['key'] ? ' selected="selected"' : null) ?> value="<?php echo $_option['key'] ?>"><?php echo $_option['value'] ?></option>
+    <?php endforeach ?>
+</select>    
+
+<?php if ($this->Plugin->getDetails() != null): ?>
+        <div class="gui-details"><?php echo $this->Plugin->getDetails() ?></div>
+    </div>
+<?php endif ?>

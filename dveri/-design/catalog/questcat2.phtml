@@ -1,0 +1,22 @@
+<?php 
+$questcat2 = $this->category->getSeo()->getQuestioncat2();
+$answecat2 = $this->category->getSeo()->getAnswercat2();
+$searchp = array("<p>", "</p>");
+$removep   = array("", "");
+$newquestcat2 = str_replace($searchp, $removep, $questcat2);
+?>	
+
+<div class="accordion-item">
+    <div class="accordion-header" id="headingOne2">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseOne2" aria-expanded="false" aria-controls="collapseOne2">
+            <span class="number-title">2.</span><span class="me-3"><span>🥇 </span> <?php echo $newquestcat2;?></span>
+        </button>
+    </div>
+    <div id="collapseOne2" class="accordion-collapse collapse" aria-labelledby="headingOne2"
+        data-bs-parent="#accordionExample2">
+        <div class="accordion-body">
+        <?php echo $answecat2;?>
+        </div>
+    </div>
+</div>

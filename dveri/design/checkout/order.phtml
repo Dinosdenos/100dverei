@@ -1,0 +1,432 @@
+<?php
+$req = Fenix::getRequest();
+?>
+<script>
+$(function() {
+    jQuery.validator.addMethod("phone", function(phone_number, element) {
+        phone_number = phone_number.replace(/\s+/g, "");
+        return this.optional(element) || phone_number.length > 9 &&
+            phone_number.match(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
+    }, "Введите номер телефона");
+
+    $("#orderForm").validate({
+        rules: {
+            cellphone: {
+                required: true,
+                phone: true
+            }
+        },
+        ignore: "div:hidden input, div:hidden select",
+        messages: {
+            cellphone: {
+                required: "Введите номер телефона"
+            }
+        }
+    });
+
+    $('input[name=cellphone]').inputmask({
+        mask: "+38 (099) 999 99 99",
+        clearMaskOnLostFocus: false
+    });
+});
+</script>
+<!-- checkout area start -->
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+<div class="checkout-area mt-60px mb-40px">
+    <div class="container">
+        <div class="row" id="FenixCart">
+            <div class="col-lg-8">
+                <?php echo $this->render('checkout/table-info.phtml') . PHP_EOL; ?>
+
+                <div class="billing-info-wrap">
+                    <h3><?php echo Fenix::lang('Укажите свои данные')?></h3>
+
+                    <form class="order-form common-form" method="post" id="orderForm">
+                        <div class="row">
+                            <div class="col-lg-12 nameblock" style="display: none;">
+                                <div class="billing-info mb-20px">
+                                    <label for="userName"><?php echo Fenix::lang('Фамилия, имя') ?>:</label>
+                                    <input class="form-control" type="text" name="name" id="userName"
+                                        placeholder="Ваша фамилия и имя"
+                                        value="<?php echo $this->escape($req->getPost('name')) ?>">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="billing-info mb-20px">
+                                    <label for="userPhone"
+                                        class="required"><?php echo Fenix::lang('Номер телефона (обязательное поле*)') ?>:</label>
+                                    <input class="form-control" type="text" name="cellphone" id="userPhone"
+                                        placeholder="Ваш телефон"
+                                        value="<?php echo $this->escape($req->getPost('cellphone')) ?>">
+                                </div>
+                            </div>
+                            <div class="col-lg-12 emailblock" style="display: none;">
+                                <div class="billing-info mb-20px">
+                                    <label for="inputEmail">Email:</label>
+                                    <input class="form-control" type="email" id="inputEmail" placeholder="Ваш email"
+                                        name="email" value="<?php echo $this->escape($req->getPost('email')) ?>">
+                                </div>
+                            </div>
+                            <div class="col-lg-12 deliveryblock" style="display: none;">
+                                <div class="billing-select mb-20px">
+                                    <label
+                                        for="delivery_type"><?php echo Fenix::lang('Выберите способ доставки') ?>:</label>
+                                    <select id="delivery_type" class="gui-form-select chzn-done form-select" size="1"
+                                        name="delivery_type">
+                                        <option value="pickup"><?php echo Fenix::lang('Самовывоз') ?>
+                                        <option selected value="city">
+                                            <?php echo Fenix::lang('Доставка по Днепру курьером') ?>
+                                        </option>
+                                        <!--<option value="np"><?php echo Fenix::lang('Доставка НП') ?></option>-->
+                                        <!--<option value="npcurer">
+                                            <?php echo Fenix::lang('Доставка курьером') ?></option>-->
+                                    </select>
+                                </div>
+                            </div>
+                            <!------------------------------------>
+                            <script type="text/javascript">
+                            $(function() {
+                                $('#delivery_type').change(function() {
+                                    $('.pickup').show();
+
+                                    $('#' + $(this).val()).hide();
+                                });
+                            });
+                            </script>
+
+                            <div id="pickup" class="pickup" style="display: none;">
+                                <!--<div class="col-lg-12">
+                                    <div class="billing-select mb-20px">
+                                        <label for="inputEmail"><?php echo Fenix::lang('Населенный пункт') ?>:</label>
+                                        <input class="form-control" type="text" id="delivery_city"
+                                            placeholder="<?php echo Fenix::lang('Укажите населенный пункт') ?>"
+                                            name="delivery_city"
+                                            value="<?php echo $this->escape($req->getPost('delivery_city')) ?>">
+                                    </div>
+                                </div>-->
+                                <div class="col-lg-12">
+                                    <div class="billing-select mb-20px">
+                                        <label for="inputEmail"><?php echo Fenix::lang('Адрес доставки') ?>:</label>
+                                        <input class="form-control" type="text" id="address"
+                                            placeholder="<?php echo Fenix::lang('Адрес доставки') ?>" name="address"
+                                            value="<?php echo $this->escape($req->getPost('address')) ?>">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!------------------->
+                            <div class="col-lg-12 payblock" style="display: none;">
+                                <div class="billing-info mb-20px">
+                                    <label
+                                        for="orderComment"><?php echo Fenix::lang('Выберите способ оплаты') ?>:</label>
+                                    <select id="payvariant" class="gui-form-select chzn-done form-select" size="1"
+                                        name="pay_variants">
+                                        <option selected value="cardprivat">
+                                            <?php echo Fenix::lang('Оплата на карту').' - '. Fenix::getConfig('general/bank');?>
+                                        </option>
+                                        <!--<option value="nalogka"><?php echo Fenix::lang('Наложенный платеж') ?></option>-->
+                                        <!--<option value="privat24"><?php echo Fenix::lang('Онлайн оплата Liqpay (тестовый режим)') ?></option>-->
+                                        <option value="anypay"><?php echo Fenix::lang('Другой способ оплаты') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 cardprivatblock" style="display: none;">
+                                <div id="cardprivat" class="cardprivat" style="display:none">
+                                    <p><?php echo Fenix::lang('Реквизиты для оплаты на карту доступны после подтверждения заказа') ?>
+                                    </p>
+                                    <!--<p><?php echo Fenix::lang('ФИО получателя') ?>:
+                                <?php echo Fenix::getConfig('general/fiocard');?></p>
+                                <p><?php echo Fenix::lang('НОМЕР КАРТЫ') ?>: <span style="cursor: pointer;"
+                                class="numbercard-btn"
+                                id="numbercard"><?php echo Fenix::getConfig('general/numbercard');?></span><img
+                                style="margin-left: 10px; cursor: pointer;" width="20"
+                                src="https://dev.100dverei.com.ua/images/copmin.png" class="numbercard-btn"></p>
+
+                                <p class="coupon-alert"><?php echo Fenix::lang('Номер карты скопирован успешно!') ?></p>-->
+                                </div>
+                            </div>
+                            <div class="additional-info-wrap" style="display: none;">
+                                <!--<h4>Additional information</h4>-->
+                                <div class="additional-info">
+                                    <label for="orderComment"><?php echo Fenix::lang('Комментарий') ?>:</label>
+                                    <textarea name="comment" class="form-control"
+                                        id="orderComment"><?php echo $this->escape($req->getPost('comment')) ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                <div class="login-register-wrapper">
+                    <div class="login-register-tab-list nav">
+                        <a class="but-order order" data-bs-toggle="tab" href="javascript:void(0)">
+                            <h4><?php echo Fenix::lang('Детальное оформление заказа')?></h4>
+                        </a>
+                        <a data-bs-toggle="tab" href="javascript:void(0)" class="but-order-fast fast-order active">
+                            <h4><?php echo Fenix::lang('Быстрое оформление заказа')?></h4>
+                        </a>
+                    </div>
+                </div>
+                    <!--<div class="checkout-account mb-50px">
+                        <input class="checkout-toggle2" type="checkbox" />
+                        <label>Create an account?</label>
+                    </div>
+                    <div class="checkout-account-toggle open-toggle2 mb-30">
+                        <input placeholder="Email address" type="email" />
+                        <input placeholder="Password" type="password" />
+                        <button class="btn-hover checkout-btn" type="submit">register</button>
+                    </div>-->
+                    <!--<div class="checkout-account mt-25">
+                        <input class="checkout-toggle" type="checkbox" />
+                        <label>Ship to a different address?</label>
+                    </div>-->
+                    <!--<div class="different-address open-toggle mt-30">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-20px">
+                                    <label>First Name</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-20px">
+                                    <label>Last Name</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="billing-info mb-20px">
+                                    <label>Company Name</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="billing-select mb-20px">
+                                    <label>Country</label>
+                                    <select>
+                                        <option>Select a country</option>
+                                        <option>Azerbaijan</option>
+                                        <option>Bahamas</option>
+                                        <option>Bahrain</option>
+                                        <option>Bangladesh</option>
+                                        <option>Barbados</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="billing-info mb-20px">
+                                    <label>Street Address</label>
+                                    <input class="billing-address" placeholder="House number and street name"
+                                        type="text" />
+                                    <input placeholder="Apartment, suite, unit etc." type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="billing-info mb-20px">
+                                    <label>Town / City</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-20px">
+                                    <label>State / County</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-20px">
+                                    <label>Postcode / ZIP</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-20px">
+                                    <label>Phone</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-20px">
+                                    <label>Email Address</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+
+            </div>
+            <?php $products = Fenix::getCollection('checkout/order')->getProducts() ?>
+            <?php $total = 0 ?>
+            <?php foreach ($products as $i => $_product) { ?>
+            <?php $total += ($_product->getOrderUnitPrice() * $_product->getOrderQty()) ?>
+            <?php } ?>
+            <div class="col-lg-4">
+                <div class="cart-page-v2-pricing-table">
+                    <h3 class="cart-page-v2-table-title checkout-page-table-title">
+                        <?php echo Fenix::lang('Оформление заказа')?></h3>
+                    <ul class="cart-page-v2-ul-total-cost checkout-page-ul-total-cost">
+                        <li class="cart-page-v2-li-total-cost"><span><?php echo Fenix::lang('Сумма заказа')?>:</span>
+                            <span class="total-sum"><?php echo $total;?> UAH</span></li>
+                    </ul>
+                    <?php $is_mobile_device = Fenix::check_mobile_device();
+                                    if (!$is_mobile_device) { 
+                                    ?>
+                    <div class="accordion checkout-page-payment-accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="headingOne">
+                                <button class=""
+                                    style="color: var(--white-color);    background-color: transparent;    box-shadow: none;"
+                                    type="button"><?php echo Fenix::lang('Оплата')?></button>
+                            </div>
+                            <div class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <?php echo Fenix::lang('При оплате на карту может взыматься дополнительная плата по условиям Вашего банка. Оплата терминалом при самовывозе - комисия отсутсвует.')?>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="headingTwo">
+                                <button class="" type="button"
+                                    style="color: var(--white-color);    background-color: transparent;    box-shadow: none;"
+                                    type="button"><?php echo Fenix::lang('Доставка')?></button>
+                            </div>
+                            <div id="" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <?php echo Fenix::lang('Стоимость доставки согласно тарифов перевозчика (курьера), точную стоимость доставки сообщит менеджер при подтверждении заказа.')?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                                    }
+                    ?>
+                    <div class="cart-page-v2-check-out-btn">
+                        <a class="common-large-btn1-hover w-100" href="javascript:void(0)"
+                            onsubmit="return orderFormOk();" onclick="return orderForm();"
+                            role="button"><span><?php echo Fenix::lang('Подтвердить заказ') ?></span><img
+                                src="<?php echo Fenix::getSkinUrl('images/common-btn-green-arrow.png'); ?>"
+                                class="mw-100" alt="Подтвердить заказ"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- checkout area end -->
+    <script type="text/javascript">
+    $(function() {
+        // copy content to clipboard
+        function copyToClipboard(element) {
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val($(element).text()).select();
+            document.execCommand("copy");
+            $temp.remove();
+        }
+
+        // copy coupone code to clipboard
+        $(".numbercard-btn").on("click", function() {
+            copyToClipboard("#numbercard");
+            $(".coupon-alert").fadeIn("slow");
+        });
+    });
+    </script>
+    <!--<script type="text/javascript">
+    $(function() {
+        $('#payvariant').change(function() {
+            $('.cardprivat').hide();
+            $('#' + $(this).val()).show();
+        });
+    });
+    </script>-->
+    <script>
+    function orderForm() {
+        function getcookie(a) {
+            var b = new RegExp(a + '=([^;]){1,}');
+            var c = b.exec(document.cookie);
+            if (c) c = c[0].split('=');
+            else return false;
+            return c[1] ? c[1] : false;
+        }
+        var orderscheck = getcookie("orderscheck");
+
+        if (orderscheck != "1") {
+            document.cookie = "orderscheck=1; max-age=300";
+            $('#orderForm').submit();
+
+        } else {
+            $('#orderForm').submit();
+            //var modal1 = document.getElementById("my_modal");
+            //var span = document.getElementsByClassName("close_modal_window")[0];
+
+            //document.getElementById("btn_modal_window");
+            //modal1.style.display = "block";
+
+
+            //span.onclick = function() {
+            //    modal1.style.display = "none";
+            //}
+
+            //window.onclick = function(event) {
+            //    if (event.target == modal1) {
+            //        modal1.style.display = "none";
+            //    }
+            //}
+        }
+    }
+    </script>
+
+
+    <script>
+    (function() {
+        var a = document.querySelector('.cart-page-v2-pricing-table'),
+            b = null,
+            P =
+            500; // если ноль заменить на число, то блок будет прилипать до того, как верхний край окна браузера дойдёт до верхнего края элемента. Может быть отрицательным числом
+        window.addEventListener('scroll', Ascroll, false);
+        document.body.addEventListener('scroll', Ascroll, false);
+
+        function Ascroll() {
+            if (b == null) {
+                var Sa = getComputedStyle(a, ''),
+                    s = '';
+                for (var i = 0; i < Sa.length; i++) {
+                    if (Sa[i].indexOf('overflow') == 0 || Sa[i].indexOf('padding') == 0 || Sa[i].indexOf(
+                        'border') == 0 || Sa[i].indexOf('outline') == 0 || Sa[i].indexOf('box-shadow') == 0 || Sa[i]
+                        .indexOf('background') == 0) {
+                        s += Sa[i] + ': ' + Sa.getPropertyValue(Sa[i]) + '; '
+                    }
+                }
+                b = document.createElement('div');
+                b.style.cssText = s + ' box-sizing: border-box; width: ' + a.offsetWidth + 'px;';
+                a.insertBefore(b, a.firstChild);
+                var l = a.childNodes.length;
+                for (var i = 1; i < l; i++) {
+                    b.appendChild(a.childNodes[1]);
+                }
+                a.style.height = b.getBoundingClientRect().height + 'px';
+                a.style.padding = '0';
+                a.style.border = '0';
+            }
+            var Ra = a.getBoundingClientRect(),
+                R = Math.round(Ra.top + b.getBoundingClientRect().height - document.querySelector('footer')
+                    .getBoundingClientRect().top + 0
+                    ); // селектор блока, при достижении верхнего края которого нужно открепить прилипающий элемент;  Math.round() только для IE; если ноль заменить на число, то блок будет прилипать до того, как нижний край элемента дойдёт до футера
+            if ((Ra.top - P) <= 0) {
+                if ((Ra.top - P) <= R) {
+                    b.className = 'stop';
+                    b.style.bottom = -R + 'px';
+                } else {
+                    b.className = 'sticky-scroll';
+                    b.style.bottom = 0 + 'px';
+                }
+            } else {
+                b.className = 'sticky-scroll';
+                b.style.bottom = 0 + 'px';
+            }
+            window.addEventListener('resize', function() {
+                a.children[0].style.width = getComputedStyle(a, '').width
+            }, false);
+        }
+    })()
+    </script>

@@ -1,0 +1,33 @@
+<?php $textarea = null ?>
+<?php if ($this->Plugin->getSplitByLang() === true): ?>
+<?php $lang = $this->Plugin->getLang() ?>
+    <?php $name = $this->Plugin->getName() ?>
+    <?php $id   = $this->Plugin->getName() ?>
+    
+    <?php $Tabs = $this->Plugin->loadPlugin('Tabs') ?>
+    <?php $Tabs ->setId($name . '_tabs') ?>
+    
+    <?php foreach ($lang->getLanguagesList() AS $_lang): ?>
+        <?php $this->Plugin->setName($name . '_' . $_lang->name) ?>
+        <?php $this->Plugin->setId($id . '_' . $_lang->name) ?>
+        <?php $this->Plugin->setValue($this->Plugin->getRequest()->getPost($this->Plugin->getName())) ?>
+        <?php $Tabs->addTab($name . '_' . $_lang->name . '_tab', $_lang->label, '<textarea' . $this->Plugin->getAttributeSet('creator.form.textarea') . '>' . $this->Plugin->getValue() . '</textarea>'); ?>
+    <?php endforeach ?>
+    	
+    <?php $textarea = $Tabs->fetch() ?>
+<?php else: ?>
+    <?php $textarea = '<textarea' . $this->Plugin->getAttributeSet('creator.form.textarea') . '>' . $this->Plugin->getValue() . '</textarea>' ?>
+<?php endif ?>
+
+<?php if ($this->Plugin->getDetails() != null): ?>
+    <div class="gui-field-details-container">
+        <?php echo $textarea ?><textarea<?php echo $this->Plugin->getAttributeSet('creator.form.textarea') ?>><?php echo $this->Plugin->getValue() ?></textarea>
+        <div class="gui-details"><?php echo $this->Plugin->getDetails() ?></div>
+    </div>
+<?php else: ?>
+    <?php echo $textarea ?>
+<?php endif ?>
+
+<?php if ($this->Error != null): ?>
+    <?php echo $this->render('creator/form/error.phtml') ?>
+<?php endif ?>

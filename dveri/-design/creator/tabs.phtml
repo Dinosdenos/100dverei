@@ -1,0 +1,21 @@
+<script>
+    $(function(){
+        $('#<?php echo $this->Plugin->getId() ?>').tab(<?php echo $this->Plugin->getOptionsJson() ?>);
+        $('#<?php echo $this->Plugin->getId() ?> a:first').tab('show');
+    });
+</script>
+
+
+<ul id="<?php echo $this->Plugin->getId() ?>" class="nav nav-tabs">
+    <?php foreach ($this->Plugin->getTabs() AS $_tab): ?>
+        <li><a data-toggle="tab" href="#<?php echo $this->Plugin->getId() ?>_<?php echo $_tab['id'] ?>"><span class="dotted"><?php echo $_tab['label'] ?></span></a></li>
+    <?php endforeach ?>
+</ul>
+
+<div class="tab-content">
+    <?php foreach ($this->Plugin->getTabs() AS $_tab): ?>
+        <div class="tab-pane" id="<?php echo $this->Plugin->getId() ?>_<?php echo $_tab['id'] ?>">
+            <?php echo $this->Plugin->renderContent($_tab['content']) ?>
+        </div>
+    <?php endforeach ?>
+</div>

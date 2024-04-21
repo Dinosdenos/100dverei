@@ -1,0 +1,124 @@
+<?php 
+$titleProduct = $this->product->getTitle(); 
+?>
+<div class="card product" id="pano" data-selector_name="<?php echo $this->product->title?>"
+   data-selector_url="<?php echo Fenix::getUrl($this->product->url_key);?>"
+   data-selector_img="<?php echo Fenix::getUploadImageUrl($this->product->image);?>">
+   <div class="inner-product-container rounded">
+      <?php
+        if ($this->product->is_promo > 0) { ?>
+      <span class="product-widget sale"><?php echo Fenix::lang('Акция') ?></span>
+      <?php }
+					if($this->product->real_foto > 0) { ?>
+      <span class="product-widget realfoto"><?php echo Fenix::lang('Фото в интерьере') ?></span>
+      <?php }
+        if ($this->product->is_bestseller > 0) { ?>
+      <span class="product-widget bestseller"><?php echo Fenix::lang('Хит продаж') ?></span>
+      <?php }
+
+        if ($this->product->is_new > 0) { ?>
+      <span class="product-widget new"><?php echo Fenix::lang('Новинка') ?></span>
+      <?php }
+
+        if ($this->product->is_discount > 0) { ?>
+      <span class="product-widget discount"><?php echo Fenix::lang('Скидки') ?></span>
+      <?php }
+
+        $video = trim($this->product->video);
+        if ($video != '') { ?>
+      <span class="product-widget video"><?php echo Fenix::lang('Есть видео') ?></span>
+      <?php } ?>
+
+      <a href="<?php echo $this->product->getUrl() ?>">
+         <?php 
+			$imgwebp = str_replace('.jpg', '.webp', $this->product->getImageResize(490, 240, false));
+			if (file_exists(str_replace('https://'. $_SERVER['HTTP_HOST'], $_SERVER['DOCUMENT_ROOT'] , $imgwebp))) { ?>
+         <picture style="margin: auto;">
+            <source type="image/webp" srcset="<?php echo $imgwebp; ?>">
+            <img class="rounded img-fluid lazyload"
+               src="<?php echo $this->product->getImageResize(490, 240, false); ?>"
+               title="<?php echo $titleProduct; ?>" alt="<?php echo $titleProduct; ?>" />
+         </picture>
+         <?php } else { ?>
+         <img class="rounded img-fluid lazyload"
+            src="<?php echo $this->product->getImageResize(490, 240, false); ?>"
+            title="<?php echo $titleProduct; ?>" alt="<?php echo $titleProduct; ?>" />
+         <?php } ?>
+      </a>
+      <?php
+        $freeShipping = $this->product->free_shipping;
+        if ($freeShipping > 0) { ?>
+      <span
+         class="free-shipping text-center text-uppercase d-inline-block"><?php echo Fenix::lang('Бесплатная доставка') ?></span>
+      <?php } ?>
+      <div class="card-body">
+         <!-- Заголовок-->
+         <?php if ($this->product->getInStock()) { ?>
+
+         <p class="h4"><a
+               href="<?php echo $this->product->getUrl() ?>"><strong><?php echo ucfirst($titleProduct); ?></strong></a>
+         </p>
+
+         <?php } else { ?>
+         <p id="noinstock" class="h4"><a
+               href="<?php echo $this->product->getUrl() ?>"><strong><?php echo ucfirst($titleProduct); ?></strong></a>
+         </p>
+         <?php } ?>
+         <!-- Заголовок-->
+         <div class="d-flex flex-row">
+            <div class="w-50">
+               <?php if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) { ?>
+               <p class="in-stock"><i class="icon-checkbox2"></i><?php echo Fenix::lang('Есть в наличии') ?></p>
+               <?php if ($this->product->getDelivery() != '') { ?>
+               <!--                        <p class="delivery">--><?php //echo $this->product->getDelivery() ?>
+               <!--</p>-->
+               <?php } ?>
+               <?php } else { ?>
+               <p class="no-in-stock"><?php echo Fenix::lang('Нет в наличии') ?></p>
+               <?php } ?>
+            </div>
+            <div class="w-50 text-right">
+               <?php $reviewsCount = $this->product->getReviews()->count(); ?>
+               <?php if ($reviewsCount) { ?>
+               <p class="review">
+                  <?php
+                            $average = $this->product->getRating()->average;
+                            for ($i = 0; $i < $average; $i++) { ?>
+                  <span class="star"></span>
+                  <?php } ?>
+                  <span><?php echo $reviewsCount . ' ' . Fenix::declination($reviewsCount, array('отзывов', 'отзыв', 'отзыва')) ?></span>
+               </p>
+               <?php } ?>
+            </div>
+         </div>
+         <div class="d-flex flex-row">
+            <div class="w-50">
+               <?php
+                    $unit = $this->product->getUnit();
+                    if ($this->product->getPriceOldFormatted() !== null) { ?>
+               <p class="price-old"><?php echo $this->product->getPriceOldFormatted(); ?></p>
+               <p class="cost" data-selector_amount="<?php echo $this->product->getPrice();?>">
+                  <?php echo $this->product->getPriceFormatted(); ?><?php echo $unit; ?></p>
+               <?php } else { ?>
+               <p class="cost" data-selector_amount="<?php echo $this->product->getPrice();?>">
+                  <?php echo $this->product->getPriceFormatted(); ?><?php echo $unit; ?></p>
+               <?php } ?>
+            </div>
+            <div class="w-50">
+               <?php if ($this->product->getInStock() & $this->product->getIsVisible() == '1'/*проверка на статус товара в наличии*/) { ?>
+               <button class="btn btn-to-cart" type="button"
+                  onclick="return FenixCheckout.addProduct('<?php echo $this->product->getBuy() ?>/qty/1')"
+                  type="button"><i class="demo-icon icon-cart"></i><?php echo Fenix::lang('Купить') ?>
+               </button>
+               <?php } else { ?>
+               <div class="qty">&nbsp;</div>
+               <button class="btn btn-notify"
+                  onclick="return FenixCheckout.notifyStockProduct(<?php echo $this->product->getId() ?>)">
+                  <?php echo Fenix::lang('Уведомить о наличии') ?>
+               </button>
+               <?php } ?>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

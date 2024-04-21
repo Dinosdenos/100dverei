@@ -1,0 +1,20 @@
+<?php
+if ( ! $this->article) {
+    return '';
+}
+$article = $this->article;
+$image = $article->getImageAdapt(100, 100);
+$title = $article->getTitle();
+$announce = $article->getContent();
+$date = $article->getCreateDate();
+?>
+<div class="recent-single-post d-flex">
+    <div class="thumb-side">
+        <a href="<?php echo $article->getUrl() ?>"><img class="lazyload" src="<?php echo $image;?>"
+                alt="<?php echo $title;?>" /></a>
+    </div>
+    <div class="media-side">
+        <h5><a href="<?php echo $article->getUrl() ?>"><?php echo $title; ?></a></h5>
+        <span class="date"><?php echo $date;?></span>
+    </div>
+</div>

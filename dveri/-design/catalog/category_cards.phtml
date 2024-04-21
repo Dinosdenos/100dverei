@@ -1,0 +1,52 @@
+<?php
+$categories = Fenix::getHelper('catalog/service_categories')->getCategoriesForCard();
+
+if ( ! $categories) {
+    return '';
+}
+?>
+<section class="category-list">
+    <div class="container">
+		<div class="mine-top-h2">
+<?php echo Fenix::lang('Категории');?>
+</div>
+        <div class="row">
+
+			<?php foreach ($categories as $category) { ?>
+                <div class="card">
+                    <?php if ($category['image']) { ?>
+                        <a class="parent-link" href="<?php echo $category['url']; ?>">
+                            
+											<?php 
+											$imgmaincatwebp = str_replace('.jpg', '.webp', $category['image']);
+											if (file_exists(str_replace('https://'. $_SERVER['HTTP_HOST'], $_SERVER['DOCUMENT_ROOT'] , $imgmaincatwebp))) { ?>
+											<picture>
+											<source type="image/webp" data-srcset="<?php echo $imgmaincatwebp; ?>">
+											<img class="img-fluid rounded lazyload" data-src="<?php echo $category['image']; ?>" alt="<?php echo $category['title'] ?>">
+											</picture>
+											<?php } else { ?>
+											<img class="img-fluid rounded lazyload" data-src="<?php echo $category['image']; ?>" alt="<?php echo $category['title'] ?>">
+											<?php } ?>
+                        </a>
+                    <?php } ?>
+                    <div class="card-body pr-0 pl-0">
+                        <p class="h4 text-uppercase"><a
+                                    href="<?php echo $category['url']; ?>"><?php echo $category['title'] ?></a>
+                        </p>
+                        <?php if ( ! empty($category['children'])) { ?>
+                            <div class="list-group list-group-flush">
+                                <?php foreach ($category['children'] as $children) {
+                                    ?>
+                                    <a href="<?php echo $children['url']; ?>"
+                                       class="list-group-item"><?php echo $children['title']; ?></a>
+                                    <?
+                                } ?>
+                            </div>
+                        <?php } ?>
+                        <a href="<?php echo $category['url'] ?>" class="btn btn-primary">Смотреть все</a>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+</section>

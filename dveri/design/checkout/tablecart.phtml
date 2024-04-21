@@ -1,0 +1,55 @@
+<?php $order = Fenix::getCollection('checkout/order')->getOrderInfo() ?>
+<?php $products = Fenix::getCollection('checkout/order')->getProducts() ?>
+<?php $total = 0 ?>
+<?php if ($products->count() > 0) { ?>
+<div class="table-content table-responsive cart-table-content offcanvas-cart">
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo Fenix::lang('Image') ?></th>
+                <th><?php echo Fenix::lang('Товар') ?></th>
+                <th><?php echo Fenix::lang('Цена') ?></th>
+                <th><?php echo Fenix::lang('Кол-во') ?></th>
+                <th><?php echo Fenix::lang('Сумма') ?></th>
+                <th><?php echo Fenix::lang('Удалить') ?></th>
+            </tr>
+        </thead>
+        <tbody id="checkinfotb">
+        <?php foreach ($products as $i => $_product) { ?>
+            
+            <?php 
+                $total = 0;
+                $total += ($_product->getOrderUnitPrice() * $_product->getOrderQty()) ?>
+            <tr class="tr_subtotal tr_product_<?php echo $_product->getOrderUnitId() ?>">
+                <td class="product-thumbnail">
+                    <a href="<?php echo $_product->getUrl() ?>"><img class="lazyload" src="<?php echo $_product->getImageAdapt(98, 98) ?>" alt="<?php echo $_product->getTitle() ?>" /></a>
+                </td>
+                <td class="product-name"><a href="<?php echo $_product->getUrl() ?>"><?php echo $_product->getTitle() ?></a></td>
+                <td class="product-price-cart"><span class="amountcart_<?php echo $_product->getOrderUnitId() ?>"><?php echo $_product->getOrderUnitPrice() ?></span> UAH</td>
+                <td class="product-quantity">
+                <div class="qty-block">
+                                    <div onclick="return FenixCheckout.minusQtyCart($('#qty_<?php echo $_product->getOrderUnitId() ?>'), $('#price_<?php echo $_product->getOrderUnitId() ?>'), '<?php echo $_product->getOrderUnitId() ?>')" class="dec qtybutton">-</div>
+                                    <!--<div class="dec qtybutton">-</div>-->
+                                    <input tabindex="<?php echo $i + 1 ?>" onkeyup="if (this.value < 0 || this.value == ''){return false;
+									       } if (this.value > 10000){this.value=10000;
+									       } if (this.value > 0 && this.value < 10000){FenixCheckout.updateCheckoutItemTotalCart($(this), $('#price_<?php echo $_product->getOrderUnitId() ?>'), '<?php echo $_product->getOrderUnitId() ?>');FenixCheckout.updateCheckoutTotalQtyCart()}" class="checkout-item-qty" data-unitid="<?php echo $_product->getOrderUnitId() ?>" data-unitprice="<?php echo $_product->getOrderUnitPrice() ?>" id="qty_<?php echo $_product->getOrderUnitId() ?>" type="text" name="qty[]" value="<?php echo $_product->getOrderQty() ?>" />
+                                    <div onclick="return FenixCheckout.plusQtyCart($('#qty_<?php echo $_product->getOrderUnitId() ?>'), $('#price_<?php echo $_product->getOrderUnitId() ?>'), '<?php echo $_product->getOrderUnitId() ?>')" class="inc qtybutton">+</div>
+                                    <!--<div class="inc qtybutton">+</div>-->
+                                </div>
+                </td>
+                <td class="product-subtotal"><span class="product_subtotal_<?php echo $_product->getOrderUnitId() ?>"><?php echo number_format($total, 2, '.', ''); ?></span> UAH</td>
+                <td class="product-remove">
+                    <a href="javascript: void(0);" onclick="return FenixCheckout.removeProductCart(<?php echo $_product->getOrderUnitId() ?>)"><i class="fa fa-times"></i></a>
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<?php } else { ?>
+<?php echo Fenix::getCreatorUI()
+        ->loadPlugin('Events')
+        ->appendClass(Creator_Events::TYPE_INFO)
+        ->setMessage("В корзине нет товаров")
+        ->fetch() ?>
+<?php } ?>

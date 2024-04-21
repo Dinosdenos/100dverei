@@ -1,0 +1,17 @@
+<div class="social-auth">
+    <div class="info">Войти используя:</div>
+    <div class="social">
+        <script>
+            var leftvar = (screen.width-607)/2;
+            var topvar = (screen.height-600)/2;
+        </script>
+        <a href="https://api.vk.com/oauth/authorize?client_id=<?php echo Fenix::getStaticConfig()->oauth->vk->id ?>&redirect_uri=<?php echo $this->getUrl('session/vk') ?>&display=page&scope=notify,friends,photos,audio,video,docs,notes,pages,offers,questions,wall,ads,offline" onclick='window.open(this.href,"vk","height=550,width=610,left=" + leftvar + ",top=" + topvar + ",scrollbars=yes"); return false;'><img src="<?php echo $this->getSkinUrl('images/icon-auth-vk.png') ?>" alt="" /></a>
+    </div>
+    <div class="social">
+        <a href="https://www.facebook.com/dialog/oauth?client_id=<?php echo Fenix::getStaticConfig()->oauth->fb->id ?>&redirect_uri=<?php echo $this->getUrl('session/fb') ?>&response_type=code&scope=email,user_about_me,user_birthday" onclick='window.open(this.href,"fb","height=550,width=610,left=" + leftvar + ",top=" + topvar + ",scrollbars=yes"); return false;'><img src="<?php echo $this->getSkinUrl('images/icon-auth-fb.png') ?>" alt="" /></a>
+    </div>
+
+    <div class="social">
+        <a href="<?php echo $this->getUrl('session/tw') ?>" onclick='window.open(this.href,"fb","height=550,width=610,left=" + leftvar + ",top=" + topvar + ",scrollbars=yes"); return false;'><img src="<?php echo $this->getSkinUrl('images/icon-auth-tw.png') ?>" alt="" /></a>
+    </div>
+</div>

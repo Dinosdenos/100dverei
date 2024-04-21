@@ -1,0 +1,37 @@
+<?php
+$lastArticles = Fenix::getCollection('blog/blog')->getLastArticles();
+
+if ($lastArticles->count() <= 0) {
+    return '';
+}
+?>
+
+<section class="homepage-v7-latest-blog">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-12 black-bg p-y-120">
+                <div class="homepage-v7-latest-blog-title-main">
+                    <div class="common-title text-white"><?php echo Fenix::lang('Блог') ?></div>
+                    <p class="common-subtitle-desc text-white"><?php echo Fenix::lang('Последние статьи в блоге') ?></p>
+                    <div class="d-flex clearfix homepage-v7-latest-blog-slicknavholdercustom">
+                        <div class="homepage-v7-latest-blog-slicknavbtnbig homepage-v7-latest-blog-slicknavbtnprev">
+                            <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-prev.png'); ?>" class="mw-100" alt="prev" />
+                        </div>
+                        <div class="homepage-v7-latest-blog-slicknavbtnbig homepage-v7-latest-blog-slicknavbtnnext">
+                            <img src="<?php echo Fenix::getSkinUrl('images/homepage-v7-categories-wrap-next.png'); ?>" class="mw-100" alt="next" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-10 col-xl-9 col-lg-9 col-md-9 col-sm-12 white-bg p-y-120">
+                <div class="homepage-v7-latest-blog-wrap">
+                    <!--card blog -->
+                    <?php foreach ($lastArticles AS $article) { ?>
+                    <?php echo $this->partial('blog/blocks/article-slide.phtml', ['article' => $article]) ?>
+                    <?php } ?>
+                    <!--end card block-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

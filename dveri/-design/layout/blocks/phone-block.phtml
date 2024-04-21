@@ -1,0 +1,27 @@
+<?php
+
+use App\Local\Core\Helper\DecoratorPhone;
+
+$phoneBlock = Fenix::getConfig('general/project/cellphone');
+$phoneBlock = trim($phoneBlock);
+if ($phoneBlock == '') {
+    return;
+}
+
+$phones = explode(chr(10), $phoneBlock);
+?>
+
+<?php if (count($phones) > 0) { ?>
+<div class="list-group phones">
+
+    <?php foreach ($phones as $phone) {
+            $phone = DecoratorPhone::decorate($phone);
+            echo $phone->getPhoneWithCssIcon();
+        }
+        ?>
+    <a href="javascript: void(0);" class="callback text-uppercase"
+        onclick="FenixUI.callbackDialog()"><?php echo Fenix::lang('Перезвоните мне') ?></a>
+
+</div>
+
+<?php } ?>

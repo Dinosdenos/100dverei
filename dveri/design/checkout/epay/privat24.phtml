@@ -1,0 +1,134 @@
+<?php $req = Fenix::getRequest() ?>
+<?php $orderInfo = Fenix::getCollection('checkout/order')->getOrderInfo() ?>
+<?php $products  = Fenix::getCollection('checkout/order')->getProducts() ?>
+           <?php foreach ($products AS $i => $_product) {
+                    $totalCost += ($_product->getOrderUnitPrice() * $_product->getOrderQty());
+                    $totalCost = number_format($totalCost, 2, ',', '');
+                 } ?>
+<?php 
+if (strpos($_SERVER['REQUEST_URI'], '/ua') !== false) { 
+				$lang = 'uk';
+			} else { 
+			$lang = 'ru';
+			}
+?>				 
+<?php
+include $_SERVER['DOCUMENT_ROOT'].'/sdk-php-master/LiqPay.php'; 
+
+	$public_key = 'i27245102376';
+	$private_key= '0heLcrLR0azyCgpbc9t6yMuhQRNXLQWCk6oieiLo';
+
+	$liqpay = new LiqPay($public_key, $private_key);
+    /*************card pay */
+	$html = $liqpay->cnb_form(array(
+	'version'=>'3',
+	'action'         => 'hold',
+	'amount'         => $orderInfo->getTotalPrice(), // сумма заказа
+	'currency'       => 'UAH',
+	'paytypes'		 => 'card',
+
+	/* перед этим мы ведь внесли заказ в  таблицу, 
+	$insert_id = $wpdb->query( 'insert into table_orders' );
+	*/
+	'description'    => 'Оплата заказа на сайте '.$_SERVER['HTTP_HOST'].' - № '.$orderInfo->getId(), 
+	'order_id'       => $orderInfo->getId(),
+	// если пользователь возжелает вернуться на сайт
+	'result_url'	=>	$this->getUrl('checkout/privat24/return'),
+	/*
+		если не вернулся, то Webhook LiqPay скинет нам сюда информацию из формы,
+		в частонсти все тот же order_id, чтобы заказ
+		 можно было обработать как оплаченый
+	*/
+	'server_url'	=>	$this->getUrl('checkout/privat24/return'),
+	'language'		=>	$lang // uk, en
+	//'sandbox'=>'1' // и куда же без песочницы,
+	// не на реальных же деньгах тестировать
+	));
+	
+        /*$res_arr = array("status"=>1, 'form'=>$html, 'order_num'=>$orderInfo->getId(), 'error'=>$error);
+	echo json_encode( $res_arr ); // вернем нашу сгенерированную форму для отправки
+				//покупателя на LiqPay*/
+                 /*************gpay pay */
+                $htmlgpay = $liqpay->cnb_form(array(
+                    'version'=>'3',
+                    'action'         => 'hold',
+                    'amount'         => $orderInfo->getTotalPrice(), // сумма заказа
+                    'currency'       => 'UAH',
+                    'paytypes'		 => 'gpay',
+                
+                    /* перед этим мы ведь внесли заказ в  таблицу, 
+                    $insert_id = $wpdb->query( 'insert into table_orders' );
+                    */
+                    'description'    => 'Оплата заказа на сайте '.$_SERVER['HTTP_HOST'].' - № '.$orderInfo->getId(), 
+                    'order_id'       => $orderInfo->getId(),
+                    // если пользователь возжелает вернуться на сайт
+                    'result_url'	=>	$this->getUrl('checkout/privat24/return'),
+                    /*
+                        если не вернулся, то Webhook LiqPay скинет нам сюда информацию из формы,
+                        в частонсти все тот же order_id, чтобы заказ
+                         можно было обработать как оплаченый
+                    */
+                    'server_url'	=>	$this->getUrl('checkout/privat24/return'),
+                    'language'		=>	$lang // uk, en
+                    //'sandbox'=>'1' // и куда же без песочницы,
+                    // не на реальных же деньгах тестировать
+                    ));                
+                    /*************privat24 pay */
+                    $htmlprivat24 = $liqpay->cnb_form(array(
+                        'version'=>'3',
+                        'action'         => 'hold',
+                        'amount'         => $orderInfo->getTotalPrice(), // сумма заказа
+                        'currency'       => 'UAH',
+                        'paytypes'		 => 'privat24',
+                    
+                        /* перед этим мы ведь внесли заказ в  таблицу, 
+                        $insert_id = $wpdb->query( 'insert into table_orders' );
+                        */
+                        'description'    => 'Оплата заказа на сайте '.$_SERVER['HTTP_HOST'].' - № '.$orderInfo->getId(), 
+                        'order_id'       => $orderInfo->getId(),
+                        // если пользователь возжелает вернуться на сайт
+                        'result_url'	=>	$this->getUrl('checkout/privat24/return'),
+                        /*
+                            если не вернулся, то Webhook LiqPay скинет нам сюда информацию из формы,
+                            в частонсти все тот же order_id, чтобы заказ
+                             можно было обработать как оплаченый
+                        */
+                        'server_url'	=>	$this->getUrl('checkout/privat24/return'),
+                        'language'		=>	$lang // uk, en
+                        //'sandbox'=>'1' // и куда же без песочницы,
+                        // не на реальных же деньгах тестировать
+                        ));  
+
+?>
+<section style="text-align: center;">
+    <h1 class="page-title"><span><?php echo Fenix::lang('Оформить заказ') ?></span></h1>
+    <article>
+        <div class="order-data">
+            <p><?php echo Fenix::lang('Для оплаты заказа') ?> <span style="color:red;">№<?php echo $orderInfo->getId() ?></span> <?php echo Fenix::lang('на сумму') ?> <strong><?php echo $totalCost; ?> грн.</strong> выберите удобный для Вас способ оплаты <strong>способ оплаты</strong> и <?php echo Fenix::lang('нажмите кнопку "Оплатить') ?>"</p>
+        </div>
+        <!--<div class="order-table" id="orderTable" style="padding-top: 0">
+            <?php echo $this->partial('checkout/table-info-privat24.phtml', array('products' => $products, 'orderInfo' => $orderInfo)); ?>
+        </div>-->
+        <div style="margin: 0 auto;">
+        <div style="display:inline-block; vertical-align: top;"><img alt="Оплата картой" src="https://<?php echo $_SERVER['HTTP_HOST']?>/home/pay/card.jpg"> </div>
+        <div style="display:inline-block;">
+        <?php echo $html; ?>
+        </div>
+        </div>
+        <div style="margin: 0 auto;">
+        <div style="display:inline-block; vertical-align: top;"><img alt="Оплата Gpay" src="https://<?php echo $_SERVER['HTTP_HOST']?>/home/pay/gpay.jpg"> </div>
+        <div style="display:inline-block;">
+        <?php echo $htmlgpay; ?>
+        </div>
+        </div>
+        <div style="margin: 0 auto;">
+        <div style="display:inline-block; vertical-align: top;"><img alt="Оплата приват 24" src="https://<?php echo $_SERVER['HTTP_HOST']?>/home/pay/privat24.jpg"> </div>
+        <div style="display:inline-block;">
+        <?php echo $htmlprivat24; ?>
+        </div>
+        </div>
+        
+        
+        <div class="clearfix"></div>
+    </article>
+</section>

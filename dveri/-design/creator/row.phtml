@@ -1,0 +1,13 @@
+
+    <?php if ($this->Plugin->getLabel() != ""): ?>
+        <label<?php echo $this->Plugin->getAttributeSet('creator.row.label') ?>>
+            <?php echo $this->Plugin->getLabel() ?>
+            
+            <?php if ($this->Plugin->getDetails() != null): ?>
+                <div<?php echo $this->Plugin->getAttributeSet('creator.row.details') ?>><?php echo $this->Plugin->getDetails() ?></div>
+            <?php endif ?>
+        </label>
+    <?php endif ?>
+    <?php if ($this->Plugin->getContent() != ""): ?>
+        <div<?php echo $this->Plugin->getAttributeSet('creator.row.content') ?>><?php echo $this->Plugin->renderContent($this->Plugin->getContent()) ?></div>
+    <?php endif ?>

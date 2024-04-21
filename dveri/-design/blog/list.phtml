@@ -1,0 +1,50 @@
+<?php
+if ($this->blog->count() < 1) {
+    return '';
+}
+?>
+<?php if ($this->rubric == null) {
+            $titleH1 = Fenix::lang("Новости");
+        }
+        else {
+            $titleH1 = $this->rubric->title;
+        } ?>
+<!-- Shop Category Area End -->
+<?php echo $this->render("layout/html/breadcrumbs.phtml"); ?>
+<section class="page-content" style="padding-top: 40px;">
+    <div class="container">
+        <div class="d-flex flex-wrap">
+            <div class="main-content blog">
+                <div class="row">
+                    <?php 
+                        $i = 0;
+                                    foreach ($this->blog AS $article) { ?>
+                    <?php
+                    $article = Fenix::getCollection('blog/article')->load($article, $this->rubric);
+                    if ($i == 0) {
+                     echo $this->partial('blog/blocks/articlebig.phtml', array('article' => $article, 'rubric' => $this->rubric));    
+                    } else {
+                    echo $this->partial('blog/blocks/article.phtml', array('article' => $article, 'rubric' => $this->rubric));    
+                    }
+                    $i++;
+                    ?>
+
+                    <?php } ?>
+
+
+
+
+                    <?php
+                    echo $this->paginationControl($this->blog, 'Sliding', 'layout/blocks/paginator.phtml',
+                        array(
+                            'uri' => Fenix::getUrl('blog' . ($this->rubric != null ? '/' . $this->rubric->getUrl() : null) . '?page=%s')
+                        ));
+                    ?>
+                </div>
+            </div>
+        <?php echo $this->render('blog/last-in-list.phtml') . PHP_EOL; ?>    
+        </div>
+    </div>
+</section>
+
+

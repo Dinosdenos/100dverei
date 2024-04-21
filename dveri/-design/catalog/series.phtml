@@ -1,0 +1,18 @@
+<section class="one-column wrapper-980">
+    <h1 class="page-title"><span>Все серии</span></h1>
+    <article>
+        <div class="all-series">
+            <?php foreach ($this->categories AS $_category): ?>
+                <?php if ($_category->image != null): ?>
+                    <?php $category = Fenix::getCollection('catalog/categories')->getCategoryById($_category->id) ?>
+                    <div class="series-block" style="height: 220px">
+                        <a href="<?php echo $category->getUrl() ?>">
+                            <img class="lazyload" data-src="<?php echo $category->getImage() ?>" alt="" height="190" /><br/>
+                            <?php echo $category->getTitle() ?>
+                        </a>
+                    </div>
+                <?php endif ?>
+            <?php endforeach ?>
+        </div>
+    </article>
+</section>

@@ -1,0 +1,327 @@
+<?php
+                                    if (strpos($_SERVER['REQUEST_URI'], '/ru') !== false){
+                                        $svitcherlang = '<a class="homev7-nav-link nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">RU <i class="fas fa-angle-down"></i></a>';
+										$svitcherlang2 = '<a href="#"><img lazyload src="'. Fenix::getSkinUrl('icon/rf.png') .'" alt="">Кацапский<i
+											class="ion-ios-arrow-down"></i></a>';
+                                        
+                                    } else {
+                                        $svitcherlang = '<a class="homev7-nav-link nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">UA <i class="fas fa-angle-down"></i></a>';
+										$svitcherlang2 = '<a href="#"><img lazyload src="'. Fenix::getSkinUrl('icon/ua.png') .'" alt="">Українська<i
+											class="ion-ios-arrow-down"></i></a>';
+                                    }
+                                    ?>
+                                    
+<?php 
+$req = Fenix::getRequest();
+$is_mobile_device = Fenix::check_mobile_device();
+?>
+<!-- HomePage v7 Header -->
+<div class="offcanvas-overlay"></div>
+<header class="homepage-v7-header sticky-top">
+    <nav class="header-v7 navbar navbar-expand-lg navbar-light">
+        <div class="container homepage-v7-header-border">
+            <?php echo Fenix::getHelper('core/service_setting')->renderLogoInHeader(); ?>
+            <?php if ($is_mobile_device == false){ ?>
+            <button class="nav-item homev7-pages roundbgcolor-box">
+                        <a class="homev7-nav-link nav-link round-box" style="font-weight: 700;" href="javascript:void(0)"
+                            data-bs-toggle="modal" data-bs-target="#doormasters">
+                            <?php echo Fenix::lang('Вызвать замерщика') ?></a>
+            </button >
+            <?php } ?>
+            <ul class="navbar-nav ms-auto flex-row">
+                <li class="nav-item dropdown homev7-search menu-large homev7-responsive-mobile">
+                    <a class="homev7-nav-link nav-link dropdown-toggle" href="javascript:void(0)"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="container">
+                            <div class="homev7-search-fullwidth">
+                                    <form class="d-flex" method="get" action="<?php echo Fenix::getUrl('search') ?>">
+                                        <input class="form-control me-2" type="search" aria-label="<?php echo Fenix::lang('Поиск') ?>" name="q" placeholder="<?php echo Fenix::lang('Поиск') ?>" type="text"
+                                            id="search" autocomplete="on"
+                                            value="<?php echo $this->escape($req->getQuery('q')) ?>" />
+                                        <button class="common-btn1-hover-small"
+                                            type="submit"><span><?php echo Fenix::lang('Поиск') ?></span></button>
+                                    </form>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown homev7-search menu-large homev7-responsive-mobile">
+                    <a class="homev7-nav-link nav-link dropdown-toggle" href="javascript:void(0)"
+                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="container">
+                            <div class="homev7-search-fullwidth">
+                            <ul>
+                            <li><a class="dropdown-item" onclick="cellKyivstar();"
+                                    href="tel:<?php echo Fenix::getConfig('general/project/kyivstar');?>">Kyivstar:
+                                    <?php echo Fenix::getConfig('general/project/kyivstar');?></a>
+                            </li>
+                            <li><a class="dropdown-item" onclick="cellVodafone();"
+                                    href="tel:<?php echo Fenix::getConfig('general/project/vodafone');?>">Vodafone:
+                                    <?php echo Fenix::getConfig('general/project/vodafone');?></a>
+                            </li>
+                            <li><a class="dropdown-item" href="javascript:void(0)"
+                            data-bs-toggle="modal" data-bs-target="#doormasters">
+                            <?php echo Fenix::lang('Вызвать замерщика') ?></a>
+                            </li>
+                        </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <?php
+
+if ($is_mobile_device == true){
+?>
+                <li class="nav-item dropdown homev7-shopping-basket homev7-responsive-mobile">
+                    <a class="homev7-nav-link nav-link dropdown-toggle roundbgcolor-7" id="offcanvas-cart2"
+                        onclick="return FenixCheckout.updateCheckoutTotalBlock();" href="javascript:void(0)">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="updatecart">
+                            <?php echo $this->render('checkout/sidebar.phtml') . PHP_EOL; ?>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right container" id="offcanvas-cart">
+                        <?php echo $this->render('checkout/minicart.phtml') . PHP_EOL; ?>
+                    </div>
+                </li>
+            </ul>
+            <?php } ?>
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="close"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <?php
+
+if ($is_mobile_device == false){
+?>
+                    <li class="nav-item dropdown homev7-pages">
+                        <a class="homev7-nav-link nav-link dropdown-toggle" href="javascript:void(0)"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <i class="fas fa-phone"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" onclick="cellKyivstar();"
+                                    href="tel:<?php echo Fenix::getConfig('general/project/kyivstar');?>">Kyivstar:
+                                    <?php echo Fenix::getConfig('general/project/kyivstar');?></a>
+                            </li>
+                            <li><a class="dropdown-item" onclick="cellVodafone();"
+                                    href="tel:<?php echo Fenix::getConfig('general/project/vodafone');?>">Vodafone:
+                                    <?php echo Fenix::getConfig('general/project/vodafone');?></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <?php } ?>
+                    <?php
+
+if ($is_mobile_device == true){
+?>
+                    <li class="nav-item homev7-pages">
+                        <a class="homev7-nav-link nav-link" href="javascript:void(0)"
+                            data-bs-toggle="modal" data-bs-target="#doormasters">
+                            <?php echo Fenix::lang('Вызвать замерщика') ?></a>
+                    </li>
+                    <li class="nav-item dropdown homev7-pages">
+                        <a class="homev7-nav-link nav-link dropdown-toggle show" href="javascript:void(0)"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true"> <i
+                                class="fas fa-phone"></i></a>
+                        <ul class="dropdown-menu show" data-bs-popper="none">
+                            <li><a class="dropdown-item" onclick="cellKyivstar();"
+                                    href="tel:<?php echo Fenix::getConfig('general/project/kyivstar');?>">Kyivstar:
+                                    <?php echo Fenix::getConfig('general/project/kyivstar');?></a>
+                            </li>
+                            <li><a class="dropdown-item" onclick="cellVodafone();"
+                                    href="tel:<?php echo Fenix::getConfig('general/project/vodafone');?>">Vodafone:
+                                    <?php echo Fenix::getConfig('general/project/vodafone');?></a>
+                            </li>
+                            
+                        </ul>
+                    </li>
+
+                    <?php } ?>
+
+                    <?php echo Fenix::getHelper('core/service_menu')->renderSimpleMenu('header.menu'); ?>
+                    <li class="nav-item dropdown homev7-pages">
+                        <?php echo $svitcherlang; ?>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item"
+                                    href="https://<?php echo $_SERVER['HTTP_HOST']?><?php echo str_replace('/ru', '', $_SERVER['REQUEST_URI']); ?>">UA</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                    href="https://<?php echo $_SERVER['HTTP_HOST']?>/ru<?php echo str_replace('/ru', '', $_SERVER['REQUEST_URI']); ?>">RU</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <!--------->
+
+
+
+                <!--------------------->
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown homev7-search menu-large">
+                        <a class="homev7-nav-link nav-link dropdown-toggle" href="javascript:void(0)"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <i class="fas fa-search"></i>
+                            <span class="search-mobile-name"><?php echo Fenix::lang('Поиск') ?></span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="container">
+                                <div class="homev7-search-fullwidth">
+                                    
+                                    <form class="d-flex" method="get" action="<?php echo Fenix::getUrl('search') ?>">
+                                        <input class="form-control me-2" type="search" aria-label="<?php echo Fenix::lang('Поиск') ?>" name="q" placeholder="<?php echo Fenix::lang('Поиск') ?>" type="text"
+                                            id="search" autocomplete="on"
+                                            value="<?php echo $this->escape($req->getQuery('q')) ?>" />
+                                        <button class="common-btn1-hover-small"
+                                            type="submit"><span><?php echo Fenix::lang('Поиск') ?></span></button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <?php
+                    $is_mobile_device = Fenix::check_mobile_device();
+                    if ($is_mobile_device == false){
+                    ?>
+                    <li class="nav-item dropdown homev7-shopping-basket">
+                        <a class="homev7-nav-link nav-link dropdown-toggle roundbgcolor-7" id="offcanvas-cart2"
+                            onclick="return FenixCheckout.updateCheckoutTotalBlock();" href="javascript:void(0)">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="updatecart">
+                                <?php echo $this->render('checkout/sidebar.phtml') . PHP_EOL; ?>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right container" id="offcanvas-cart">
+                            <?php echo $this->render('checkout/minicart.phtml') . PHP_EOL; ?>
+                        </div>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="modal fade" id="doormasters" tabindex="-1" aria-labelledby="doormastersLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="doormastersLabel"><?php echo Fenix::lang('Вызвать замерщика') ?></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="text error">
+                            <?php echo Fenix::lang('Оставьте свой номер телефона, и мы свяжемся с Вами в ближайшее время') ?>
+                        </div>
+                        <form id="doormaster" class="common-form" method="POST" action="https://<?php echo $_SERVER['HTTP_HOST'];?>/feedback/calldoormaster"
+                        style="padding: 10px" novalidate="novalidate">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="firstname" placeholder="<?php echo Fenix::lang('Ваше имя')?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="phone"
+                                placeholder="<?php echo Fenix::lang('Введите Ваш номер телефона')?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="ip" value="<?php echo Fenix::getIp(); ?>">
+                        </div>
+                        <button type="submit" class="common-btn1-hover-small modal-box-call"
+                            id="sendCallback"><?php echo Fenix::lang('Отправить')?></button>
+                    </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo Fenix::lang('Закрыть') ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="callbackmodal" tabindex="-1" aria-labelledby="callbackmodalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="callbackmodalLabel"><?php echo Fenix::lang('Обратный звонок') ?></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="text error">
+                            <?php echo Fenix::lang('Оставьте свой номер телефона, и мы свяжемся с Вами в ближайшее время') ?>
+                        </div>
+                        <form id="callback" class="common-form" method="POST" action="https://<?php echo $_SERVER['HTTP_HOST'];?>/feedback/callback"
+                        style="padding: 10px" novalidate="novalidate">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="firstname" placeholder="<?php echo Fenix::lang('Ваше имя')?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="phone"
+                                placeholder="<?php echo Fenix::lang('Введите Ваш номер телефона')?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="ip" value="<?php echo Fenix::getIp(); ?>">
+                        </div>
+                        <button type="submit" class="common-btn1-hover-small modal-box-call"
+                            id="sendCallback"><?php echo Fenix::lang('Отправить')?></button>
+                    </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo Fenix::lang('Закрыть') ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- HomePage v7 Header -->
+<div class="modal fade" id="doorvideos" tabindex="-1" aria-labelledby="doorvideoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="doorvideoLabel"><?php echo Fenix::lang('Заказать осмотр товара онлайн') ?></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="text error">
+                            <?php echo Fenix::lang('Оставьте свой номер телефона, для согласования времени видеоконференции') ?>
+                        </div>
+                        <form id="doorvideo" class="common-form" method="POST" action="https://<?php echo $_SERVER['HTTP_HOST'];?>/feedback/calldoorvideo"
+                        style="padding: 10px" novalidate="novalidate">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="firstname" placeholder="<?php echo Fenix::lang('Ваше имя')?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="phone"
+                                placeholder="<?php echo Fenix::lang('Введите Ваш номер телефона')?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="url" value="<?php echo $_SERVER['REQUEST_URI']?>">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="ip" value="<?php echo Fenix::getIp(); ?>">
+                        </div>
+                        <button type="submit" class="common-btn1-hover-small modal-box-call"
+                            id="sendDoorvideo"><?php echo Fenix::lang('Отправить')?></button>
+                    </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo Fenix::lang('Закрыть') ?></button>
+      </div>
+    </div>
+  </div>
+</div>

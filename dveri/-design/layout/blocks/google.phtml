@@ -1,0 +1,80 @@
+<?php 
+$title = str_replace(' - 100dverei.com.ua</title>', '', $this->headTitle(Fenix::getConfig('general/project/name')));
+$title = str_replace('<title>', '', $title);
+$meta = str_replace('<meta name="description" content="', '', $this->headMeta());
+$meta = str_replace('" >', '', $meta);
+$url = 'https://'. $_SERVER['HTTP_HOST'] .'' . $_SERVER['REQUEST_URI'];
+
+$urls = explode('?', $_SERVER['REQUEST_URI']);
+if ($_SERVER['REQUEST_URI'] != '/search' and $urls[0] != '/search' and $urls[0] != '/ru/search'){
+    if ($this->products != ''){
+        if ($this->category->getSeo()->getSeoText() != ''){
+
+        
+        $img = $this->category->getSeo()->getSeoText();
+        $img = stristr($img, 'src="');
+        $img = stristr($img, '.webp"', true);
+        $img = str_replace('src="', '',  $img);
+        $imgWebp = $img.'.webp';
+        } else {
+        $imgWebp = 'https://100dverei.com.ua/images/categ.jpg';
+        }
+        echo '<meta property="og:title" content="' . $title . '"/>';
+        echo '<meta property="og:site_name" content="100dverei.com.ua"/>';
+        echo '<meta property="og:url" content="' . $url . '"/>';
+        echo '<meta property="og:description" content="' . $meta . '"/>';
+        echo '<meta property="og:image" content="' . $imgWebp . '"/>';
+        echo '<meta property="og:image:secure_url" content="' . $imgWebp . '"/>';
+    }
+    if ($this->product != ''){
+
+        echo '<meta property="og:title" content="' . $title . '"/>';
+        echo '<meta property="og:site_name" content="100dverei.com.ua"/>';
+        echo '<meta property="og:url" content="' . $url . '"/>';
+        echo '<meta property="og:description" content="' . $meta . '"/>';
+        echo '<meta property="og:image" content="' . $this->product->getImageAdapt(690, 690) . '"/>';
+        echo '<meta property="og:image:secure_url" content="' . $this->product->getImageAdapt(690, 690) . '"/>';
+    }
+
+    if ($_SERVER['REQUEST_URI'] == '/' or $_SERVER['REQUEST_URI'] == '/ru') {
+        echo '<meta property="og:title" content="' . $title . '"/>';
+        echo '<meta property="og:site_name" content="100dverei.com.ua"/>';
+        echo '<meta property="og:url" content="' . $url . '"/>';
+        echo '<meta property="og:description" content="' . $meta . '"/>';
+        echo '<meta property="og:image" content="' . 'https://100dverei.com.ua/images/main.jpg' . '"/>';
+        echo '<meta property="og:image:secure_url" content="' . 'https://100dverei.com.ua/images/main.jpg' . '"/>';
+    }
+
+    if ($_SERVER['REQUEST_URI'] == '/contacts' or $_SERVER['REQUEST_URI'] == '/ru/contacts') {
+        //echo '<meta property="og:site_name" content="test main">';
+        echo '<meta property="og:title" content="' . $title . '"/>';
+        echo '<meta property="og:site_name" content="100dverei.com.ua"/>';
+        echo '<meta property="og:url" content="' . $url . '"/>';
+        echo '<meta property="og:description" content="' . $meta . '"/>';
+        echo '<meta property="og:image" content="' . 'https://100dverei.com.ua/images/maps.jpg' . '"/>';
+        echo '<meta property="og:image:secure_url" content="' . 'https://100dverei.com.ua/images/maps.jpg' . '"/>';
+    }
+    if ($_SERVER['REQUEST_URI'] == '/blog' or $_SERVER['REQUEST_URI'] == '/ru/blog') {
+
+        $lastArticles = Fenix::getModel('blog/blog')->getArticlesListImgLast();
+
+        echo '<meta property="og:title" content="' . $title . '"/>';
+        echo '<meta property="og:site_name" content="100dverei.com.ua"/>';
+        echo '<meta property="og:url" content="' . $url . '"/>';
+        echo '<meta property="og:description" content="' . $meta . '"/>';
+        echo '<meta property="og:image" content="' . Fenix_Image::adapt($lastArticles->image, 360, 360) . '"/>';
+        echo '<meta property="og:image:secure_url" content="' . Fenix_Image::adapt($lastArticles->image, 360, 360) . '"/>';
+    }
+    if ($this->article != null) {
+        echo '<meta property="og:title" content="' . $title . '"/>';
+        echo '<meta property="og:site_name" content="100dverei.com.ua"/>';
+        echo '<meta property="og:url" content="' . $url . '"/>';
+        echo '<meta property="og:description" content="' . $meta . '"/>';
+        echo '<meta property="og:image" content="' . $this->article->getImageAdapt(450, 277) . '"/>';
+        echo '<meta property="og:image:secure_url" content="' . $this->article->getImageAdapt(450, 277) . '"/>';
+    }
+
+}
+
+
+?>

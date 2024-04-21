@@ -1,0 +1,32 @@
+<?php if ($this->Error != null): ?>
+    <?php echo $this->render('creator/form/error.phtml') ?>
+<?php endif ?>
+
+<?php if ($this->Plugin->getId() != null): ?>
+    <script>
+        $(function(){
+            <?php foreach ($this->Plugin->getOptions() AS $i => $_option): ?>
+                $('#<?php echo $this->Plugin->getId() ?>_<?php echo $i ?>').styler();
+            <?php endforeach ?>
+        });
+    </script>
+<?php endif ?>
+
+<?php $id = $this->Plugin->getId() ?>
+<?php $this->Plugin->unsetId() ?>
+
+<?php if ($this->Plugin->getDetails() != null): ?>
+    <div class="gui-field-details-container">
+<?php endif ?>
+                
+<?php foreach ($this->Plugin->getOptions() AS $i => $_option): ?>
+    <input id="<?php echo $id . '_' . $i ?>" <?php echo $this->Plugin->getAttributeSet('creator.form.radio') ?> />
+    <?php if ($_option['value'] != null): ?>
+        <label for="<?php echo $id . '_' . $i ?>"><?php echo $_option['value'] ?></label>
+    <?php endif ?>
+<?php endforeach ?>
+        
+<?php if ($this->Plugin->getDetails() != null): ?>
+        <div class="gui-details"><?php echo $this->Plugin->getDetails() ?></div>
+    </div>
+<?php endif ?>

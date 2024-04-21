@@ -1,0 +1,1 @@
+<tr><td><?php echo $this->product->title; ?></td><td><?php echo ($this->product->price_old <= 0 or $this->product->price_old <= $this->product->price) ? $this->product->price.' UAH' : ''.$this->product->price_old.' UAH';?></td></tr>

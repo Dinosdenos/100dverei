@@ -1,0 +1,36 @@
+<?php if ($this->pageCount > 1) { ?>
+    <div class="toolbox toolbox-pagination justify-content-between">
+    <ul class="pagination">
+        <?php if (isset($this->previous)) { ?>
+            <!--<li class="page-item active"><a class="prev" href="<?php echo sprintf($this->uri, '1') ?>"><i class="ion-ios-arrow-left"></i><i
+                    class="ion-ios-arrow-left"></i></a></li>-->
+                    <li class="prev">
+                                    <a href="<?php echo sprintf($this->uri, $this->previous) ?>" aria-label="Назад" tabindex="-1" aria-disabled="true"> <img src="<?php echo Fenix::getSkinUrl('images/shop-pagination-prev-arrow.png'); ?>" alt="Назад" />Назад</a>
+                                </li>
+        <?php } else { ?>
+            <li class="prev disabled">
+                                    <a href="javascript:void(0);" aria-label="Назад" tabindex="-1" aria-disabled="true"> <img src="<?php echo Fenix::getSkinUrl('images/shop-pagination-prev-arrow.png'); ?>" alt="Назад" />Назад</a>
+                                </li>
+        <?php } ?>
+        <?php foreach ($this->pagesInRange as $page) { ?>
+        <?php if ($page != $this->current) { ?>
+            <li class="page-item"><a class="page-link" href="<?php echo sprintf($this->uri, $page) ?>"><?php echo $page ?></a></li>
+        <?php } else { ?>
+            <li class="page-item active"><a class="page-link" href="javascript:void(0);"><?php echo $page ?></a></li>
+        <?php } ?>
+        <?php }; ?>
+
+        <?php if (isset($this->next)) { ?>
+            <li class="next">
+                                    <a href="<?php echo sprintf($this->uri, $this->next) ?>" aria-label="Вперед"> Вперед<img src="<?php echo Fenix::getSkinUrl('images/shop-pagination-next-arrow.png'); ?>" alt="Вперед" /></a>
+                                </li>
+                               <!--<li class="page-item"><a class="next" href="<?php echo sprintf($this->uri, $this->pageCount) ?>"><i
+                    class="ion-ios-arrow-right"></i><i class="ion-ios-arrow-right"></i></a></li>-->
+        <?php } else { ?>
+            <li class="next disabled">
+                                    <a href="javascript:void(0);" aria-label="Вперед"> Вперед<img src="<?php echo Fenix::getSkinUrl('images/shop-pagination-next-arrow.png'); ?>" alt="Вперед" /></a>
+                                </li>
+        <?php } ?>
+    </ul>
+</div>
+<?php } ?>

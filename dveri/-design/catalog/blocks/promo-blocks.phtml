@@ -1,0 +1,84 @@
+<?php $blocks = Fenix::getCollection('catalog/promo')->loadAll();
+$lang = Fenix_Language::getInstance()->getCurrentLanguage()->name;
+
+foreach ($blocks as $blockValue) {
+    $block = $blockValue['name'];
+    $title = $blockValue['title_'.$lang.''];
+}
+
+
+?>
+
+
+<section class="homepage-v7-popular-products p-y-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-4 col-xl-4 col-lg-12 col-md-12 col-sm-12">
+                <div class="homepage-v7-popular-products-title-main">
+                    <div class="common-title2 homepage-v7-popular-products-title-inline-block"><?php echo Fenix::lang('Популярные продукты') ?></div>
+                </div>
+            </div>
+            <div class="col-xxl-8 col-xl-8 col-lg-12 col-md-12 col-sm-12">
+                <ul class="homepage-v7-popular-products-tabnav nav nav-pills" id="pills-tab" role="tablist">
+                <?php 
+                $i = 0;
+                
+            foreach ($blocks as $blockValue) {
+                $active = '';
+                $block = $blockValue['name'];
+                $title = $blockValue['title_'.$lang.''];
+                if ($i == 0){
+                    $active = 'active';
+                } 
+                ?>
+                    <li class="nav-item" role="presentation">
+                        <button class="homepage-v7-popular-products-nav-link nav-link <?php echo $active; ?>" id="<?php echo $block; ?>-tab"
+                            data-bs-toggle="pill" data-bs-target="#<?php echo $block; ?>" type="button" role="tab"
+                            aria-controls="<?php echo $block; ?>" aria-selected="true"><?php echo $title; ?></button>
+                    </li>
+
+            <?php
+
+            $i++;
+            }
+            
+            ?>
+                </ul>
+            </div>
+        </div>
+        <div class="tab-content" id="pills-tabContent">
+        <?php 
+                $i = 0;
+                
+            foreach ($blocks as $blockValue) {
+                $active = '';
+                $block = $blockValue['name'];
+                $title = $blockValue['title_'.$lang.''];
+                if ($i == 0){
+                    $active = 'active';
+                } 
+                ?>
+            <div class="tab-pane fade show <?php echo $active; ?>" id="<?php echo $block; ?>" role="tabpanel"
+                aria-labelledby="<?php echo $block; ?>-tab">
+                <div class="row">
+                    <?php
+                    $promoBlockProduct = Fenix::getCollection('catalog/promo')->load($block);
+                    foreach ($promoBlockProduct->getProducts() AS $i => $_product) {
+                        echo $this->partial('catalog/products/block-promo.phtml', array('i' => $i, 'product' => $_product, 'category' => null));
+                    }
+                    ?>
+                </div>
+            </div>
+            <?php
+
+            $i++;
+            }
+            
+            ?>
+        </div>
+        <!--<div class="homepage-v7-popular-products-load-more-btn text-center">
+            <a class="common-btn2-hover" href="shop-left-sidebar.html"><span>view all products</span> <img
+                    src="images/common-btn-green-arrow.png" class="mw-100" alt="Regalia" /></a>
+        </div>-->
+    </div>
+</section>

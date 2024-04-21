@@ -1,0 +1,87 @@
+<?php 
+$searchurl = $_SERVER['REQUEST_URI'];
+$region = urldecode(strstr($searchurl, '='));
+    $region = str_replace('=3Д панели ', '', $region);
+    
+    $maxprices = Fenix::getHelper('catalog/service_categories')->getMaxprice($this->category->id);
+    $maxprices = mysqli_fetch_array($maxprices);
+    $maxprices = array($maxprices);
+    foreach ($maxprices as $max){
+        $maxprice = $max['max'];
+        
+    }
+    $minprices = Fenix::getHelper('catalog/service_categories')->getMinprice($this->category->id);
+    $minprices = mysqli_fetch_array($minprices);
+    $minprices = array($minprices);
+    
+    foreach ($minprices as $min){
+        $minprice = $min['min'];
+        
+    }
+
+/*Вопросы и ответы */
+if (strpos($_SERVER['REQUEST_URI'], '/ua') !== false) { 
+    $quest1 = 'Яка ціна на 3D панелі в місті '. Fenix::lang($region) .'?';
+    $answe1 = '<p>Яка ціна на 3D панелі в городе '. Fenix::lang($region) . ' від - ' .$minprice.'грн. до - ' .$maxprice.'грн.</p>';
+    $quest2 = 'Які види панелей бувають?';
+    $answe2 = '<p>3D панелі бувають під дерево, цеглу, плитку та інші - використовуються як для облицювання стелі так і стін</p>';
+    $quest3 = 'Скільки часу займає доставка 3Д панелей?';
+    $answe3 = '<p>Швидкість доставки в місто '. Fenix::lang($region) .' залежить від часу замовлення і віддаленості від наших складів. Найчастіше доставка не перевищує 1-2 днів. Відправка замовлення здійснюється в день замовлення при оформленні його до 16.00 в будні, і до 12.00 у вихідні.</p>';
+    $quest4 = 'Як купити 3Д панелі?';
+    $answe4 = '<p>Купити 3Д панелі Ви можете оформивши замовлення через кошик або связавшьісь з менеджерами за телефонами, так само ви можете оформити зворотний дзвінок! Наші менеджери обов\'язково допоможуть Вам при виборі товару і дадуть відповідь на всі виниклі питання. Доставка здійснюється "Новою Поштою" як післяплатою, так і передоплатою через Приват24</p>';
+} else {
+$quest1 = 'Какая цена на 3D панели в городе '. Fenix::lang($region) .'?';
+$answe1 = '<p>Стоимость 3D панелей в городе '. Fenix::lang($region) . ' от - ' .$minprice.'грн. до - ' .$maxprice.'грн.</p>';
+$quest2 = 'Какие виды панелей бывают?';
+$answe2 = '<p>3D панели бывают под дерево, кирпчи, плитку и другие - используются как для облицовки потолка так и стен.</p>';
+$quest3 = 'Сколько времени занимает доставка 3Д панелей?';
+$answe3 = '<p>Скорость доставки в город '. Fenix::lang($region) .' зависит от времени заказа и удаленности от наших складов. Чаще всего доставка не превышает 1-2 дней. Отправка заказа производится в день заказа при оформлении его до 16.00 в будни, и до 12.00 в выходные.</p>';
+$quest4 = 'Как купить 3Д панели?';
+$answe4 = '<p>Купить 3Д панели Вы можете оформив заказ через корзину или связавшьись с менеджерами по телефонам, так же вы можете оформить обратный звонок! Наши менеджери обязательно помогут Вам при выборе товара и ответят на все возникшие вопросы. Доставка осуществляется "Новой Почтой" как наложенным платежом, так и предоплатой через Приват24</p>';
+}
+?>
+<br>
+<div class="voznikli" style="text-align: center;"><?php echo Fenix::lang('Ответы на часто задаваемые вопросы') ?></div>
+<br>
+<div itemscope itemtype="https://schema.org/FAQPage" class="accordion">
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-1" name="checkbox-1" />
+        <label for="checkbox-1" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest1;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe1;?></div>
+        </div>
+    </div>
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-2" name="checkbox-2" />
+        <label for="checkbox-2" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest2;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe2;?></div>
+        </div>
+    </div>
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-3" name="checkbox-3" />
+        <label for="checkbox-3" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest3;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe3;?></div>
+        </div>
+    </div>
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" class="trigger">
+        <input type="checkbox" id="checkbox-4" name="checkbox-4" />
+        <label for="checkbox-4" class="checkbox">
+            <span itemprop="name"><?php echo '🥇' . $quest4;?></span><i></i>
+        </label>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" class="content">
+            <div itemprop="text"><?php echo $answe4;?></div>
+        </div>
+    </div>
+    <?php
+
+?>
+</div>
+<script src="https://dev.100dverei.com.ua/var/themes/modern171130/skin/js/faq.js"></script>

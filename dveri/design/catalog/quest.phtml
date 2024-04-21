@@ -1,0 +1,131 @@
+<?php 
+$quest1 = $this->category->getSeo()->getQuestion1();
+$quest2 = $this->category->getSeo()->getQuestion2();
+$quest3 = $this->category->getSeo()->getQuestion3();
+$quest4 = $this->category->getSeo()->getQuestion4();
+$questcat1 = $this->category->getSeo()->getQuestioncat1();
+$questcat2 = $this->category->getSeo()->getQuestioncat2();
+$questcat3 = $this->category->getSeo()->getQuestioncat3();
+$questcat4 = $this->category->getSeo()->getQuestioncat4();
+?>
+ <div class="col-lg-12 col-md-12 col-sm-12 p-t-73">
+    <!-- account area start -->
+    <div class="common-small-title"><?php echo Fenix::lang('Ответы на часто задаваемые вопросы') ?></div>
+    <div class="accordion custom-accordion-faq" id="accordionExample2">
+        <?php 
+if ($quest1 != '') {
+	echo $this->render('catalog/quest1.phtml'); 
+	if ($this->category->getSeo()->getQuestion1() != ''){
+		$jsquest1 = $this->category->getSeo()->getQuestion1();
+		$jsanswer1 = $this->category->getSeo()->getAnswer1();
+	}
+}
+if ($quest2 != '') {
+	echo $this->render('catalog/quest2.phtml'); 
+	if ($this->category->getSeo()->getQuestion2() != ''){
+		$jsquest2 = $this->category->getSeo()->getQuestion2();
+		$jsanswer2 = $this->category->getSeo()->getAnswer2();
+	}
+}
+if ($quest3 != '') {
+	echo $this->render('catalog/quest3.phtml'); 
+	if ($this->category->getSeo()->getQuestion3() != ''){
+		$jsquest3 = $this->category->getSeo()->getQuestion3();
+		$jsanswer3 = $this->category->getSeo()->getAnswer3();
+	}
+}
+if ($quest4 != '') {
+	echo $this->render('catalog/quest4.phtml'); 
+	if ($this->category->getSeo()->getQuestion4() != ''){
+		$jsquest4 = $this->category->getSeo()->getQuestion4();
+		$jsanswer4 = $this->category->getSeo()->getAnswer4();
+	}
+}
+if ($questcat1 != ''){
+	echo $this->render('catalog/questcat1.phtml');
+	if ($this->category->getSeo()->getQuestioncat1() != '') {
+		$jsquest1 = $this->category->getSeo()->getQuestioncat1();
+		$jsanswer1 = $this->category->getSeo()->getAnswercat1();
+	}	
+}
+if ($questcat2 != ''){
+	echo $this->render('catalog/questcat2.phtml'); 
+	if ($this->category->getSeo()->getQuestioncat2() != '') {
+		$jsquest2 = $this->category->getSeo()->getQuestioncat2();
+		$jsanswer2 = $this->category->getSeo()->getAnswercat2();
+	}	
+}
+if ($questcat3 != ''){
+	echo $this->render('catalog/questcat3.phtml'); 
+	if ($this->category->getSeo()->getQuestioncat3() != '') {
+		$jsquest3 = $this->category->getSeo()->getQuestioncat3();
+		$jsanswer3 = $this->category->getSeo()->getAnswercat3();
+	}	
+}
+if ($questcat4 != ''){
+	echo $this->render('catalog/questcat4.phtml');
+	if ($this->category->getSeo()->getQuestioncat4() != '') {
+		$jsquest4 = $this->category->getSeo()->getQuestioncat4();
+		$jsanswer4 = $this->category->getSeo()->getAnswercat4();
+	}	
+}
+?>
+     
+
+    <!-- account area end -->
+    </div>
+    </div>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "<?php echo $jsquest1; ?>",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<?php echo $jsanswer1; ?>"
+        }
+      }
+	  <?php 
+	if ($jsquest2 != '') { ?> 
+		, {
+        "@type": "Question",
+        "name": "<?php echo $jsquest2; ?>",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<?php echo $jsanswer2; ?>"
+        }
+      }
+	<?php
+	}
+	  ?>
+	  	  <?php 
+	if ($jsquest3 != '') { ?> 
+	  , {
+        "@type": "Question",
+        "name": "<?php echo $jsquest3; ?>",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<?php echo $jsanswer3; ?>"
+        }
+      }
+	  	<?php
+	}
+	  ?>
+	   <?php 
+	if ($jsquest4 != '') { ?> 
+	, {
+        "@type": "Question",
+        "name": "<?php echo $jsquest4; ?>",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "<?php echo $jsanswer4; ?>"
+        }
+      }
+	  	<?php
+	}
+	  ?>
+	  ]
+    }
+    </script>

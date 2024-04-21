@@ -1,0 +1,21 @@
+<?php
+$activeParamSorting = Fenix::getRequest()->getQuery('sort');
+$activeParamSorting2 = Fenix::getRequest()->getQuery('sale');
+$activeParamSorting3 = Fenix::getRequest()->getQuery('sale-plast');
+
+$url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$url = explode('?', $url);
+$url = $url[0];
+?>
+                            
+
+
+                            <div class="toolbox-item select-box">
+                                    <label><?php echo Fenix::lang('Сортировка товаров') ?></label>
+                            <select onchange="window.location.href=this.options[this.selectedIndex].value" name="select">
+                                <option value="<?php echo $url ?>" <?php echo $activeParamSorting == 'def-desc' ? ' selected' : ''; ?>><?php echo Fenix::lang('Выберите тип сортировки') ?></option>
+                                <option value="<?php echo '?sort=rating-desc' ?>" <?php echo $activeParamSorting == 'rating-desc' ? ' selected' : ''; ?>><?php echo Fenix::lang('по популярности') ?></option>
+                                <option value="<?php echo '?sort=price-asc' ?>" <?php echo $activeParamSorting == 'price-asc' ? ' selected' : ''; ?>><?php echo Fenix::lang('по возрастанию цены') ?></option>
+                                <option value="<?php echo '?sort=price-desc' ?>" <?php echo $activeParamSorting == 'price-desc' ? ' selected' : ''; ?>><?php echo Fenix::lang('по убыванию цены') ?></option>
+                            </select>
+                                </div>

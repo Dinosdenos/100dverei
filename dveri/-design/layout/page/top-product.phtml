@@ -1,0 +1,107 @@
+<!-- Recent Add Product Area Start -->
+<?php
+$newprods = Fenix::getHelper('catalog/service_categories')->getNewProduct();
+
+?>
+<section class="recent-add-area mb-70px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <!-- Section Title -->
+                <div class="section-title underline-shape">
+                    <div>Последние поступления</div>
+                    <p>Новые продукты в нашем магазине</p>
+                </div>
+                <!-- Section Title -->
+            </div>
+        </div>
+        <!-- Recent Product slider Start -->
+        <div class="best-sell-slider owl-carousel owl-nav-style-3">
+            
+            <?php
+            $total = count($newprods);
+            $i = 0;
+            foreach ($newprods as $newprod) { ?>
+            <!-- Product Single Item -->
+            <?php
+            $i++;
+
+            if(($i % 2) != 0){
+                $blockstart = '<div class="product-inner-item">';
+                $mb = ' mb-30px';
+                $blockend = '';
+                if ($i == $total){
+                    $blockend = '</div>';
+                }
+            } else {
+                $mb = '';
+                $blockstart = '';
+                $blockend = '</div>';
+                if ($i == $total){
+                    $blockstart = '<div class="product-inner-item">';
+                }
+            }
+            echo $newprod['image'];
+            echo Fenix_Image::resize($newprod['image'], 360, 360);
+            //echo $img_a = str_replace('.jpg', 'a.jpg', Fenix_Image::resize($newprod['image'], 360, 360));
+            ?>
+                <?php 
+                echo $blockstart; 
+                ?>
+                
+                <article class="list-product<?php echo $mb;?>">
+                    <div class="img-block">
+                        <a href="<?php echo $newprod['url']; ?>" class="thumbnail">
+                            <img class="first-img"
+                                src="<?php echo $img; ?>" alt="<?php echo $newprod['title']; ?>" />
+                            <img class="second-img"
+                                src="<?php echo $img_a; ?>" alt="<?php echo $newprod['title']; ?>" />
+                        </a>
+                        <div class="add-to-link">
+                            <ul>
+                                <li>
+                                    <a href="#" title="Add to Cart"><i class="ion-bag"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#" data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal"><i class="ion-ios-search-strong"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <ul class="product-flag">
+                        <li class="new">New</li>
+                    </ul>
+                    <div class="product-decs text-center">
+                        <a class="inner-link" href="<?php echo $newprod['url']; ?>"><span><?php  echo $newprod['sku']; ?></span></a>
+                        <div><a href="single-product.html" class="product-link"><?php echo $newprod['title']; ?></a>
+                        </div>
+                        <div class="rating-product">
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                        </div>
+                        <div class="pricing-meta">
+                            <ul>
+                                <li class="old-price">€23.90</li>
+                                <li class="current-price"><?php echo $newprod['price']; ?></li>
+                                <!--<li class="discount-price">-10%</li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+                
+            <?php echo $blockend; ?>
+            <!-- Product Single Item -->
+            <?php    
+            }
+            ?>
+            
+            
+        </div>
+        <!-- Recent Area Slider End -->
+    </div>
+</section>
+<!-- Recent product area end -->

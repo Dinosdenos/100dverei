@@ -1,0 +1,13 @@
+<?php
+$socialList = Fenix::getCollection('core/social')->getList();
+
+if ( ! ($socialList->count() > 0)) {
+    return '';
+}
+?>
+<div class="social-icons">
+    <?php foreach ($socialList as $item) { ?>
+    <a href="<?php echo $item->getUrl() ?>" rel="nofollow" target="_blank"><img src="<?php echo $item->getImage() ?>"
+            alt="<?php echo $item->getTitle() ?>" /></a>
+    <?php } ?>
+</div>
