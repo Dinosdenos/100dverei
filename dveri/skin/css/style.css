@@ -4198,7 +4198,9 @@ span.homepage-v7-install-products-badge {
     align-items: center;
     width: 194px;
 }
-
+.homev7-search-fullwidth li {
+    list-style-type: none;
+}
 .footer-copyright-text-7 {
     font-size: 14px;
     font-weight: 400;
