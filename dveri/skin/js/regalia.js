@@ -285,45 +285,7 @@ function sliderInit() {
 
 sliderInit();
 
-/*********************************************************************************
-    Home Page v7 Categories JS 
-*********************************************************************************/
-$(".homepage-v7-categories-wrap").slick({
-    slidesToShow: 4,
-    arrows: false,
-    dots: false,
-    autoplay: false,
-    autoplaySpeed: 6000,
-    swipe: slick,
-    responsive: [{
-            breakpoint: 1400,
-            settings: {
-                slidesToShow: 3,
-                slidesToScroll: 1,
-            },
-        },
-        {
-            breakpoint: 992,
-            settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1,
-            },
-        },
-        {
-            breakpoint: 576,
-            settings: {
-                slidesToShow: 2,
-                slidesToScroll: 2,
-            },
-        },
-    ],
-});
-$(".homepage-v7-categories-wrap-slicknavbtnprev").on("click", function() {
-    $(".homepage-v7-categories-wrap").slick("slickPrev");
-});
-$(".homepage-v7-categories-wrap-slicknavbtnnext").on("click", function() {
-    $(".homepage-v7-categories-wrap").slick("slickNext");
-});
+
 
 /*********************************************************************************
     Home Page v7 Featured Products JS 
