@@ -294,7 +294,6 @@ $(".homepage-v7-categories-wrap").slick({
     dots: false,
     autoplay: false,
     autoplaySpeed: 6000,
-    touchMove: true,
     responsive: [{
             breakpoint: 1400,
             settings: {
